@@ -1,0 +1,73 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="slice">
+            <h2><span>Slice</span> {{slice.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Android Version</span></dt>
+                <dd>
+                    <span>{{slice.androidVersion}}</span>
+                </dd>
+                <dt><span>Android Class Name</span></dt>
+                <dd>
+                    <span>{{slice.androidClassName}}</span>
+                </dd>
+                <dt><span ngbTooltip="JSON-List with entry method names">Entry Methods</span></dt>
+                <dd>
+                    <span>{{slice.entryMethods}}</span>
+                </dd>
+                <dt><span ngbTooltip="JSON-List with seed statement names">Seed Statements</span></dt>
+                <dd>
+                    <span>{{slice.seedStatements}}</span>
+                </dd>
+                <dt><span>Slice</span></dt>
+                <dd>
+                    <span>{{slice.slice}}</span>
+                </dd>
+                <dt><span>Log</span></dt>
+                <dd>
+                    <span>{{slice.log}}</span>
+                </dd>
+                <dt><span>Thread Id</span></dt>
+                <dd>
+                    <span>{{slice.threadId}}</span>
+                </dd>
+                <dt><span>Running</span></dt>
+                <dd>
+                    <span>{{slice.running}}</span>
+                </dd>
+                <dt><span>Reflection Options</span></dt>
+                <dd>
+                    <div *ngIf="slice.reflectionOptions">
+                        <a [routerLink]="['/slicer-option', slice.reflectionOptions?.id, 'view']">{{slice.reflectionOptions?.key}}</a>
+                    </div>
+                </dd>
+                <dt><span>Data Dependence Options</span></dt>
+                <dd>
+                    <div *ngIf="slice.dataDependenceOptions">
+                        <a [routerLink]="['/slicer-option', slice.dataDependenceOptions?.id, 'view']">{{slice.dataDependenceOptions?.key}}</a>
+                    </div>
+                </dd>
+                <dt><span>Control Dependence Options</span></dt>
+                <dd>
+                    <div *ngIf="slice.controlDependenceOptions">
+                        <a [routerLink]="['/slicer-option', slice.controlDependenceOptions?.id, 'view']">{{slice.controlDependenceOptions?.key}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/slice', slice.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

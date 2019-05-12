@@ -1,0 +1,131 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-slice-heading">Create or edit a Slice</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!slice.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_androidVersion">Android Version</label>
+                    <input type="number" class="form-control" name="androidVersion" id="field_androidVersion"
+                           formControlName="androidVersion"/>
+                    <div *ngIf="editForm.get('androidVersion').invalid && (editForm.get('androidVersion').dirty || editForm.get('androidVersion').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('androidVersion').errors.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('androidVersion')?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_androidClassName">Android Class Name</label>
+                    <input type="text" class="form-control" name="androidClassName" id="field_androidClassName"
+                           formControlName="androidClassName"/>
+                    <div *ngIf="editForm.get('androidClassName').invalid && (editForm.get('androidClassName').dirty || editForm.get('androidClassName').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('androidClassName').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_entryMethods" ngbTooltip="JSON-List with entry method names">Entry Methods</label>
+                    <textarea class="form-control" name="entryMethods" id="field_entryMethods"
+                              formControlName="entryMethods"></textarea>
+                    <div *ngIf="editForm.get('entryMethods').invalid && (editForm.get('entryMethods').dirty || editForm.get('entryMethods').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('entryMethods').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_seedStatements" ngbTooltip="JSON-List with seed statement names">Seed Statements</label>
+                    <textarea class="form-control" name="seedStatements" id="field_seedStatements"
+                              formControlName="seedStatements"></textarea>
+                    <div *ngIf="editForm.get('seedStatements').invalid && (editForm.get('seedStatements').dirty || editForm.get('seedStatements').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('seedStatements').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_slice">Slice</label>
+                    <textarea class="form-control" name="slice" id="field_slice"
+                              formControlName="slice"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_log">Log</label>
+                    <textarea class="form-control" name="log" id="field_log"
+                              formControlName="log"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_threadId">Thread Id</label>
+                    <input type="text" class="form-control" name="threadId" id="field_threadId"
+                           formControlName="threadId"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_running">Running</label>
+                    <input type="checkbox" class="form-control" name="running" id="field_running"
+                           formControlName="running"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_reflectionOptions">Reflection Options</label>
+                    <select class="form-control" id="field_reflectionOptions" name="reflectionOptions" formControlName="reflectionOptions">
+                        <option *ngIf="!editForm.get('reflectionOptions').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="slicerOptionOption.id === editForm.get('reflectionOptions').value?.id ? editForm.get('reflectionOptions').value : slicerOptionOption" *ngFor="let slicerOptionOption of reflectionoptions; trackBy: trackSlicerOptionById">{{slicerOptionOption.key}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('reflectionOptions').invalid && (editForm.get('reflectionOptions').dirty || editForm.get('reflectionOptions').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('reflectionOptions').errors.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_dataDependenceOptions">Data Dependence Options</label>
+                    <select class="form-control" id="field_dataDependenceOptions" name="dataDependenceOptions" formControlName="dataDependenceOptions">
+                        <option *ngIf="!editForm.get('dataDependenceOptions').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="slicerOptionOption.id === editForm.get('dataDependenceOptions').value?.id ? editForm.get('dataDependenceOptions').value : slicerOptionOption" *ngFor="let slicerOptionOption of datadependenceoptions; trackBy: trackSlicerOptionById">{{slicerOptionOption.key}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('dataDependenceOptions').invalid && (editForm.get('dataDependenceOptions').dirty || editForm.get('dataDependenceOptions').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('dataDependenceOptions').errors.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_controlDependenceOptions">Control Dependence Options</label>
+                    <select class="form-control" id="field_controlDependenceOptions" name="controlDependenceOptions" formControlName="controlDependenceOptions">
+                        <option *ngIf="!editForm.get('controlDependenceOptions').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="slicerOptionOption.id === editForm.get('controlDependenceOptions').value?.id ? editForm.get('controlDependenceOptions').value : slicerOptionOption" *ngFor="let slicerOptionOption of controldependenceoptions; trackBy: trackSlicerOptionById">{{slicerOptionOption.key}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('controlDependenceOptions').invalid && (editForm.get('controlDependenceOptions').dirty || editForm.get('controlDependenceOptions').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('controlDependenceOptions').errors.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

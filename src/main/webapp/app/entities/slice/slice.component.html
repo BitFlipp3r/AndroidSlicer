@@ -1,0 +1,94 @@
+<div>
+    <h2 id="page-heading">
+        <span>Slice</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-slice" [routerLink]="['/slice/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span >
+            Create new Slice
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="slice">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="androidVersion"><span>Android Version</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="androidClassName"><span>Android Class Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="entryMethods"><span>Entry Methods</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="seedStatements"><span>Seed Statements</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="slice"><span>Slice</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="log"><span>Log</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="threadId"><span>Thread Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="running"><span>Running</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="reflectionOptions.key"><span>Reflection Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dataDependenceOptions.key"><span>Data Dependence Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="controlDependenceOptions.key"><span>Control Dependence Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let slice of slice ;trackBy: trackId">
+                <td><a [routerLink]="['/slice', slice.id, 'view' ]">{{slice.id}}</a></td>
+                <td>{{slice.androidVersion}}</td>
+                <td>{{slice.androidClassName}}</td>
+                <td>{{slice.entryMethods}}</td>
+                <td>{{slice.seedStatements}}</td>
+                <td>{{slice.slice}}</td>
+                <td>{{slice.log}}</td>
+                <td>{{slice.threadId}}</td>
+                <td>{{slice.running}}</td>
+                <td>
+                    <div *ngIf="slice.reflectionOptions">
+                        <a [routerLink]="['../slicer-option', slice.reflectionOptions?.id, 'view' ]" >{{slice.reflectionOptions?.key}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="slice.dataDependenceOptions">
+                        <a [routerLink]="['../slicer-option', slice.dataDependenceOptions?.id, 'view' ]" >{{slice.dataDependenceOptions?.key}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="slice.controlDependenceOptions">
+                        <a [routerLink]="['../slicer-option', slice.controlDependenceOptions?.id, 'view' ]" >{{slice.controlDependenceOptions?.key}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/slice', slice.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/slice', slice.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', 'slice', { outlets: { popup: slice.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="slice && slice.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

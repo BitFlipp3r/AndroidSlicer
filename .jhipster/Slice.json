@@ -1,0 +1,98 @@
+{
+    "name": "Slice",
+    "fields": [
+        {
+            "fieldName": "androidVersion",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "androidClassName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "entryMethods",
+            "javadoc": "JSON-List with entry method names",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "seedStatements",
+            "javadoc": "JSON-List with seed statement names",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "slice",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "log",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "threadId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "running",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "slicerOption",
+            "otherEntityRelationshipName": "slice",
+            "relationshipValidateRules": "required",
+            "javadoc": "SlicerOption must have type ReflectionOptions",
+            "relationshipName": "reflectionOptions",
+            "otherEntityField": "key",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "slicerOption",
+            "otherEntityRelationshipName": "slice",
+            "relationshipValidateRules": "required",
+            "javadoc": "SlicerOption must have type ReflectionOptions",
+            "relationshipName": "dataDependenceOptions",
+            "otherEntityField": "key",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "slicerOption",
+            "otherEntityRelationshipName": "slice",
+            "relationshipValidateRules": "required",
+            "javadoc": "SlicerOption must have type ReflectionOptions",
+            "relationshipName": "controlDependenceOptions",
+            "otherEntityField": "key",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190512080845",
+    "entityTableName": "slice",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": [
+        "AndroidSlicer"
+    ]
+}

@@ -1,0 +1,74 @@
+application {
+  config {
+    baseName AndroidSlicer,
+    applicationType monolith,
+    packageName org.unibremen.mcyl.androidslicer,
+ 	  cacheProvider ehcache,
+    enableHibernateCache false,
+    websocket false,
+    databaseType mongodb,
+    devDatabaseType mongodb,
+    prodDatabaseType mongodb,
+    serviceDiscoveryType false,
+    buildTool gradle,
+    clientFramework angularX,
+    useSass true,
+    clientPackageManager npm,
+    testFrameworks [gatling, cucumber, protractor],
+    enableTranslation false,
+    skipUserManagement true
+  }
+  entities *
+}
+
+entity Slice {
+  androidVersion Integer required,
+  androidClassName String required,
+  /** JSON-List with entry method names */
+  entryMethods TextBlob required,
+  /** JSON-List with seed statement names */
+  seedStatements TextBlob required,
+  slice TextBlob,
+  log TextBlob,
+  threadId String,
+  running Boolean
+}
+
+relationship OneToOne {
+  /** SlicerOption must have type ReflectionOptions */
+  Slice{reflectionOptions(key) required} 
+  to 
+  SlicerOption,
+  
+  /** SlicerOption must have type ReflectionOptions */
+  Slice{dataDependenceOptions(key) required} 
+  to 
+  SlicerOption, 
+  
+  /** SlicerOption must have type ReflectionOptions */ 
+  Slice{controlDependenceOptions(key) required} 
+  to 
+  SlicerOption 
+}
+
+entity SlicerSetting {
+  key String required,
+  value String required
+}
+
+entity SlicerOption {
+  type SlicerOptionType required,
+  key String required,
+  description TextBlob,
+   /** There can only be one default per SlicerOptionType. This handled during create/save process. */
+  isDefault Boolean 
+}
+
+enum SlicerOptionType {
+	ReflectionOptions,
+    DataDependenceOptions,
+    ControlDependenceOptions
+}
+
+paginate Slice, SlicerSetting, SlicerOption with pagination
+service Slice with serviceClass
