@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
-
+import java.util.Arrays;
 import java.util.List;
 
 import static org.unibremen.mcyl.androidslicer.web.rest.TestUtil.createFormattingConversionService;
@@ -39,22 +39,16 @@ public class SliceResourceIT {
     private static final Integer UPDATED_ANDROID_VERSION = 2;
 
     private static final String DEFAULT_ANDROID_CLASS_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_ANDROID_CLASS_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_ENTRY_METHODS = "AAAAAAAAAA";
-    private static final String UPDATED_ENTRY_METHODS = "BBBBBBBBBB";
+    private static final List<String> DEFAULT_ENTRY_METHODS = Arrays.asList("AAAAAAAAAA", "AAAAAAAAAA");
 
-    private static final String DEFAULT_SEED_STATEMENTS = "AAAAAAAAAA";
-    private static final String UPDATED_SEED_STATEMENTS = "BBBBBBBBBB";
+    private static final List<String> DEFAULT_SEED_STATEMENTS = Arrays.asList("AAAAAAAAAA", "AAAAAAAAAA");
 
     private static final String DEFAULT_SLICE = "AAAAAAAAAA";
-    private static final String UPDATED_SLICE = "BBBBBBBBBB";
 
     private static final String DEFAULT_LOG = "AAAAAAAAAA";
-    private static final String UPDATED_LOG = "BBBBBBBBBB";
 
     private static final String DEFAULT_THREAD_ID = "AAAAAAAAAA";
-    private static final String UPDATED_THREAD_ID = "BBBBBBBBBB";
 
     private static final Boolean DEFAULT_RUNNING = false;
     private static final Boolean UPDATED_RUNNING = true;
@@ -84,7 +78,7 @@ public class SliceResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SliceResource sliceResource = new SliceResource(sliceService);
+        final SliceResource sliceResource = new SliceResource(sliceService, sliceRepository);
         this.restSliceMockMvc = MockMvcBuilders.standaloneSetup(sliceResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,18 +104,13 @@ public class SliceResourceIT {
             .threadId(DEFAULT_THREAD_ID)
             .running(DEFAULT_RUNNING);
         // Add required entity
-        SlicerOption slicerOption;
-        if (TestUtil.findAll(em, SlicerOption.class).isEmpty()) {
-            slicerOption = SlicerOptionResourceIT.createEntity();
-            slicerOption.setId("fixed-id-for-tests");
-        } else {
-            slicerOption = TestUtil.findAll(em, SlicerOption.class).get(0);
-        }
-        slice.setReflectionOptions(slicerOption);
+        SlicerOption slicerOption = SlicerOptionResourceIT.createEntity();
+        slicerOption.setId("fixed-id-for-tests");
+        slice.setReflectionOption(slicerOption);
         // Add required entity
-        slice.setDataDependenceOptions(slicerOption);
+        slice.setDataDependenceOption(slicerOption);
         // Add required entity
-        slice.setControlDependenceOptions(slicerOption);
+        slice.setControlDependenceOption(slicerOption);
         return slice;
     }
     /**
@@ -130,31 +119,6 @@ public class SliceResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Slice createUpdatedEntity() {
-        Slice slice = new Slice()
-            .androidVersion(UPDATED_ANDROID_VERSION)
-            .androidClassName(UPDATED_ANDROID_CLASS_NAME)
-            .entryMethods(UPDATED_ENTRY_METHODS)
-            .seedStatements(UPDATED_SEED_STATEMENTS)
-            .slice(UPDATED_SLICE)
-            .log(UPDATED_LOG)
-            .threadId(UPDATED_THREAD_ID)
-            .running(UPDATED_RUNNING);
-        // Add required entity
-        SlicerOption slicerOption;
-        if (TestUtil.findAll(em, SlicerOption.class).isEmpty()) {
-            slicerOption = SlicerOptionResourceIT.createUpdatedEntity();
-            slicerOption.setId("fixed-id-for-tests");
-        } else {
-            slicerOption = TestUtil.findAll(em, SlicerOption.class).get(0);
-        }
-        slice.setReflectionOptions(slicerOption);
-        // Add required entity
-        slice.setDataDependenceOptions(slicerOption);
-        // Add required entity
-        slice.setControlDependenceOptions(slicerOption);
-        return slice;
-    }
 
     @BeforeEach
     public void initTest() {
@@ -287,64 +251,9 @@ public class SliceResourceIT {
     }
 
     @Test
-    public void updateSlice() throws Exception {
-        // Initialize the database
-        sliceService.save(slice);
-
-        int databaseSizeBeforeUpdate = sliceRepository.findAll().size();
-
-        // Update the slice
-        Slice updatedSlice = sliceRepository.findById(slice.getId()).get();
-        updatedSlice
-            .androidVersion(UPDATED_ANDROID_VERSION)
-            .androidClassName(UPDATED_ANDROID_CLASS_NAME)
-            .entryMethods(UPDATED_ENTRY_METHODS)
-            .seedStatements(UPDATED_SEED_STATEMENTS)
-            .slice(UPDATED_SLICE)
-            .log(UPDATED_LOG)
-            .threadId(UPDATED_THREAD_ID)
-            .running(UPDATED_RUNNING);
-
-        restSliceMockMvc.perform(put("/api/slice")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedSlice)))
-            .andExpect(status().isOk());
-
-        // Validate the Slice in the database
-        List<Slice> sliceList = sliceRepository.findAll();
-        assertThat(sliceList).hasSize(databaseSizeBeforeUpdate);
-        Slice testSlice = sliceList.get(sliceList.size() - 1);
-        assertThat(testSlice.getAndroidVersion()).isEqualTo(UPDATED_ANDROID_VERSION);
-        assertThat(testSlice.getAndroidClassName()).isEqualTo(UPDATED_ANDROID_CLASS_NAME);
-        assertThat(testSlice.getEntryMethods()).isEqualTo(UPDATED_ENTRY_METHODS);
-        assertThat(testSlice.getSeedStatements()).isEqualTo(UPDATED_SEED_STATEMENTS);
-        assertThat(testSlice.getSlice()).isEqualTo(UPDATED_SLICE);
-        assertThat(testSlice.getLog()).isEqualTo(UPDATED_LOG);
-        assertThat(testSlice.getThreadId()).isEqualTo(UPDATED_THREAD_ID);
-        assertThat(testSlice.isRunning()).isEqualTo(UPDATED_RUNNING);
-    }
-
-    @Test
-    public void updateNonExistingSlice() throws Exception {
-        int databaseSizeBeforeUpdate = sliceRepository.findAll().size();
-
-        // Create the Slice
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restSliceMockMvc.perform(put("/api/slice")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(slice)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Slice in the database
-        List<Slice> sliceList = sliceRepository.findAll();
-        assertThat(sliceList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
     public void deleteSlice() throws Exception {
         // Initialize the database
-        sliceService.save(slice);
+        sliceRepository.save(slice);
 
         int databaseSizeBeforeDelete = sliceRepository.findAll().size();
 

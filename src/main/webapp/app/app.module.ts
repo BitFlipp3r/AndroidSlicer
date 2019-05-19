@@ -2,6 +2,7 @@ import './vendor.ts';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { NgxWebstorageModule } from 'ngx-webstorage';
@@ -17,12 +18,19 @@ import { AndroidSlicerAppRoutingModule } from './app-routing.module';
 import { AndroidSlicerHomeModule } from './home/home.module';
 import { AndroidSlicerEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
+import { MonacoEditorModule, MonacoEditorOptions } from 'ngx-monaco';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent } from './layouts';
+
+const monacoConfig: MonacoEditorOptions = {
+  quickSuggestions: true,
+  scrollBeyondLastLine: false
+};
 
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-' }),
     NgJhipsterModule.forRoot({
       // set below to true to make alerts look like toast
@@ -32,6 +40,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     AndroidSlicerSharedModule.forRoot(),
     AndroidSlicerCoreModule,
     AndroidSlicerHomeModule,
+    MonacoEditorModule.forRoot({ options: monacoConfig }),
     // jhipster-needle-angular-add-module JHipster will add new module here
     AndroidSlicerEntityModule,
     AndroidSlicerAppRoutingModule

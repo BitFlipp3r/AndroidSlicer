@@ -1,6 +1,5 @@
 package org.unibremen.mcyl.androidslicer.domain;
 
-
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -9,6 +8,8 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -36,7 +37,7 @@ public class Slice implements Serializable {
     
     @ApiModelProperty(value = "JSON-List with entry method names", required = true)
     @Field("entry_methods")
-    private String entryMethods;
+    private List<String> entryMethods = new ArrayList<>();
 
     /**
      * JSON-List with seed statement names
@@ -44,7 +45,7 @@ public class Slice implements Serializable {
     
     @ApiModelProperty(value = "JSON-List with seed statement names", required = true)
     @Field("seed_statements")
-    private String seedStatements;
+    private List<String> seedStatements = new ArrayList<>();
 
     @Field("slice")
     private String slice;
@@ -61,26 +62,26 @@ public class Slice implements Serializable {
     /**
      * SlicerOption must have type ReflectionOptions
      */
-    @ApiModelProperty(value = "SlicerOption must have type ReflectionOptions")
+    @ApiModelProperty(value = "SlicerOption must have type ReflectionOption")
     @DBRef
     @Field("reflectionOptions")
-    private SlicerOption reflectionOptions;
+    private SlicerOption reflectionOption;
 
     /**
      * SlicerOption must have type ReflectionOptions
      */
-    @ApiModelProperty(value = "SlicerOption must have type ReflectionOptions")
+    @ApiModelProperty(value = "SlicerOption must have type ReflectionOption")
     @DBRef
-    @Field("dataDependenceOptions")
-    private SlicerOption dataDependenceOptions;
+    @Field("dataDependenceOption")
+    private SlicerOption dataDependenceOption;
 
     /**
      * SlicerOption must have type ReflectionOptions
      */
-    @ApiModelProperty(value = "SlicerOption must have type ReflectionOptions")
+    @ApiModelProperty(value = "SlicerOption must have type ReflectionOption")
     @DBRef
-    @Field("controlDependenceOptions")
-    private SlicerOption controlDependenceOptions;
+    @Field("controlDependenceOption")
+    private SlicerOption controlDependenceOption;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
@@ -117,29 +118,29 @@ public class Slice implements Serializable {
         this.androidClassName = androidClassName;
     }
 
-    public String getEntryMethods() {
+    public List<String> getEntryMethods() {
         return entryMethods;
     }
 
-    public Slice entryMethods(String entryMethods) {
+    public Slice entryMethods(List<String> entryMethods) {
         this.entryMethods = entryMethods;
         return this;
     }
 
-    public void setEntryMethods(String entryMethods) {
+    public void setEntryMethods(List<String> entryMethods) {
         this.entryMethods = entryMethods;
     }
 
-    public String getSeedStatements() {
+    public List<String> getSeedStatements() {
         return seedStatements;
     }
 
-    public Slice seedStatements(String seedStatements) {
+    public Slice seedStatements(List<String> seedStatements) {
         this.seedStatements = seedStatements;
         return this;
     }
 
-    public void setSeedStatements(String seedStatements) {
+    public void setSeedStatements(List<String> seedStatements) {
         this.seedStatements = seedStatements;
     }
 
@@ -195,43 +196,43 @@ public class Slice implements Serializable {
         this.running = running;
     }
 
-    public SlicerOption getReflectionOptions() {
-        return reflectionOptions;
+    public SlicerOption getReflectionOption() {
+        return reflectionOption;
     }
 
-    public Slice reflectionOptions(SlicerOption slicerOption) {
-        this.reflectionOptions = slicerOption;
+    public Slice reflectionOption(SlicerOption slicerOption) {
+        this.reflectionOption = slicerOption;
         return this;
     }
 
-    public void setReflectionOptions(SlicerOption slicerOption) {
-        this.reflectionOptions = slicerOption;
+    public void setReflectionOption(SlicerOption slicerOption) {
+        this.reflectionOption = slicerOption;
     }
 
-    public SlicerOption getDataDependenceOptions() {
-        return dataDependenceOptions;
+    public SlicerOption getDataDependenceOption() {
+        return dataDependenceOption;
     }
 
-    public Slice dataDependenceOptions(SlicerOption slicerOption) {
-        this.dataDependenceOptions = slicerOption;
+    public Slice dataDependenceOption(SlicerOption slicerOption) {
+        this.dataDependenceOption = slicerOption;
         return this;
     }
 
-    public void setDataDependenceOptions(SlicerOption slicerOption) {
-        this.dataDependenceOptions = slicerOption;
+    public void setDataDependenceOption(SlicerOption slicerOption) {
+        this.dataDependenceOption = slicerOption;
     }
 
-    public SlicerOption getControlDependenceOptions() {
-        return controlDependenceOptions;
+    public SlicerOption getControlDependenceOption() {
+        return controlDependenceOption;
     }
 
-    public Slice controlDependenceOptions(SlicerOption slicerOption) {
-        this.controlDependenceOptions = slicerOption;
+    public Slice controlDependenceOption(SlicerOption slicerOption) {
+        this.controlDependenceOption = slicerOption;
         return this;
     }
 
-    public void setControlDependenceOptions(SlicerOption slicerOption) {
-        this.controlDependenceOptions = slicerOption;
+    public void setControlDependenceOption(SlicerOption slicerOption) {
+        this.controlDependenceOption = slicerOption;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

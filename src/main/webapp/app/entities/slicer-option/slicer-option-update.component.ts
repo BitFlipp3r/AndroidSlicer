@@ -49,38 +49,6 @@ export class SlicerOptionUpdateComponent implements OnInit {
     });
   }
 
-  byteSize(field) {
-    return this.dataUtils.byteSize(field);
-  }
-
-  openFile(contentType, field) {
-    return this.dataUtils.openFile(contentType, field);
-  }
-
-  setFileData(event, field: string, isImage) {
-    return new Promise((resolve, reject) => {
-      if (event && event.target && event.target.files && event.target.files[0]) {
-        const file = event.target.files[0];
-        if (isImage && !/^image\//.test(file.type)) {
-          reject(`File was expected to be an image but was found to be ${file.type}`);
-        } else {
-          const filedContentType: string = field + 'ContentType';
-          this.dataUtils.toBase64(file, base64Data => {
-            this.editForm.patchValue({
-              [field]: base64Data,
-              [filedContentType]: file.type
-            });
-          });
-        }
-      } else {
-        reject(`Base64 data was not set as file could not be extracted from passed parameter: ${event}`);
-      }
-    }).then(
-      () => console.log('blob added'), // sucess
-      this.onError
-    );
-  }
-
   previousState() {
     window.history.back();
   }

@@ -39,7 +39,7 @@ export const slicerOptionRoute: Routes = [
     data: {
       authorities: ['ROLE_USER'],
       defaultSort: 'id,asc',
-      pageTitle: 'SlicerOptions'
+      pageTitle: 'Slicer Options'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -51,7 +51,7 @@ export const slicerOptionRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'SlicerOptions'
+      pageTitle: 'Slicer Option'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -63,7 +63,7 @@ export const slicerOptionRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'SlicerOptions'
+      pageTitle: 'Slicer Option'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -75,7 +75,7 @@ export const slicerOptionRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'SlicerOptions'
+      pageTitle: 'Slicer Option'
     },
     canActivate: [UserRouteAccessService]
   }
@@ -90,7 +90,7 @@ export const slicerOptionPopupRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'SlicerOptions'
+      pageTitle: 'Slicer Options'
     },
     canActivate: [UserRouteAccessService],
     outlet: 'popup'

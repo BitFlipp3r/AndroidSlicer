@@ -1,6 +1,7 @@
 package org.unibremen.mcyl.androidslicer.web.rest;
 
 import org.unibremen.mcyl.androidslicer.domain.Slice;
+import org.unibremen.mcyl.androidslicer.repository.SliceRepository;
 import org.unibremen.mcyl.androidslicer.service.SliceService;
 import org.unibremen.mcyl.androidslicer.web.rest.errors.BadRequestAlertException;
 
@@ -41,9 +42,11 @@ public class SliceResource {
     private String applicationName;
 
     private final SliceService sliceService;
+    private final SliceRepository sliceRepository;
 
-    public SliceResource(SliceService sliceService) {
+    public SliceResource(SliceService sliceService, SliceRepository sliceRepository) {
         this.sliceService = sliceService;
+        this.sliceRepository = sliceRepository;
     }
 
     /**
@@ -59,30 +62,14 @@ public class SliceResource {
         if (slice.getId() != null) {
             throw new BadRequestAlertException("A new slice cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Slice result = sliceService.save(slice);
+
+        slice.setRunning(true);
+        Slice result = sliceRepository.save(slice);
+
+        sliceService.process(slice); //async
+
         return ResponseEntity.created(new URI("/api/slice/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
-    }
-
-    /**
-     * {@code PUT  /slice} : Updates an existing slice.
-     *
-     * @param slice the slice to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated slice,
-     * or with status {@code 400 (Bad Request)} if the slice is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the slice couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PutMapping("/slice")
-    public ResponseEntity<Slice> updateSlice(@Valid @RequestBody Slice slice) throws URISyntaxException {
-        log.debug("REST request to update Slice : {}", slice);
-        if (slice.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        Slice result = sliceService.save(slice);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, slice.getId().toString()))
             .body(result);
     }
 
@@ -95,7 +82,7 @@ public class SliceResource {
     @GetMapping("/slice")
     public ResponseEntity<List<Slice>> getAllSlice(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
         log.debug("REST request to get a page of Slice");
-        Page<Slice> page = sliceService.findAll(pageable);
+        Page<Slice> page = sliceRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -109,7 +96,7 @@ public class SliceResource {
     @GetMapping("/slice/{id}")
     public ResponseEntity<Slice> getSlice(@PathVariable String id) {
         log.debug("REST request to get Slice : {}", id);
-        Optional<Slice> slice = sliceService.findOne(id);
+        Optional<Slice> slice = sliceRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(slice);
     }
 
@@ -122,7 +109,7 @@ public class SliceResource {
     @DeleteMapping("/slice/{id}")
     public ResponseEntity<Void> deleteSlice(@PathVariable String id) {
         log.debug("REST request to delete Slice : {}", id);
-        sliceService.delete(id);
+        sliceRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
     }
 }

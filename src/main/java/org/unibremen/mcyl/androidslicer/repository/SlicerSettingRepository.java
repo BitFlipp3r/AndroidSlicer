@@ -2,6 +2,9 @@ package org.unibremen.mcyl.androidslicer.repository;
 
 import org.unibremen.mcyl.androidslicer.domain.SlicerSetting;
 import org.springframework.data.mongodb.repository.Query;
+
+import java.util.Optional;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +15,7 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface SlicerSettingRepository extends MongoRepository<SlicerSetting, String> {
+
+    Optional<SlicerSetting> findOneByKey(String key);
 
 }

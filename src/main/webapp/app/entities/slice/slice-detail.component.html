@@ -21,52 +21,49 @@
                 <dd>
                     <span>{{slice.seedStatements}}</span>
                 </dd>
-                <dt><span>Slice</span></dt>
+                <div *ngIf="slice.slice">
+                    <dt><span>Slice</span></dt>
+                    <dd>
+                        <monaco-editor [theme]="theme" [file]="code"></monaco-editor>
+                    </dd>
+                </div>
+                <dt><span>Reflection Option</span></dt>
                 <dd>
-                    <span>{{slice.slice}}</span>
+                    <div *ngIf="slice.reflectionOption">
+                        <a [routerLink]="['/slicer-option', slice.reflectionOption?.id, 'view']">{{slice.reflectionOption?.key}}</a>
+                    </div>
                 </dd>
-                <dt><span>Log</span></dt>
+                <dt><span>Data Dependence Option</span></dt>
                 <dd>
-                    <span>{{slice.log}}</span>
+                    <div *ngIf="slice.dataDependenceOption">
+                        <a [routerLink]="['/slicer-option', slice.dataDependenceOption?.id, 'view']">{{slice.dataDependenceOptions?.key}}</a>
+                    </div>
                 </dd>
-                <dt><span>Thread Id</span></dt>
+                <dt><span>Control Dependence Option</span></dt>
                 <dd>
-                    <span>{{slice.threadId}}</span>
+                    <div *ngIf="slice.controlDependenceOption">
+                        <a [routerLink]="['/slicer-option', slice.controlDependenceOption?.id, 'view']">{{slice.controlDependenceOption?.key}}</a>
+                    </div>
                 </dd>
+                <div *ngIf="slice.log">
+                    <dt><span>Log</span></dt>
+                    <dd>
+                        <textarea readonly style="width:100%;" rows="10">{{slice.log}}</textarea>
+                    </dd>
+                </div>  
                 <dt><span>Running</span></dt>
                 <dd>
-                    <span>{{slice.running}}</span>
-                </dd>
-                <dt><span>Reflection Options</span></dt>
-                <dd>
-                    <div *ngIf="slice.reflectionOptions">
-                        <a [routerLink]="['/slicer-option', slice.reflectionOptions?.id, 'view']">{{slice.reflectionOptions?.key}}</a>
-                    </div>
-                </dd>
-                <dt><span>Data Dependence Options</span></dt>
-                <dd>
-                    <div *ngIf="slice.dataDependenceOptions">
-                        <a [routerLink]="['/slicer-option', slice.dataDependenceOptions?.id, 'view']">{{slice.dataDependenceOptions?.key}}</a>
-                    </div>
-                </dd>
-                <dt><span>Control Dependence Options</span></dt>
-                <dd>
-                    <div *ngIf="slice.controlDependenceOptions">
-                        <a [routerLink]="['/slicer-option', slice.controlDependenceOptions?.id, 'view']">{{slice.controlDependenceOptions?.key}}</a>
+                    <div [class.running]="slice.running">
+                        <fa-icon [icon]="'sync'"></fa-icon>
                     </div>
                 </dd>
             </dl>
+           
 
             <button type="submit"
                     (click)="previousState()"
                     class="btn btn-info">
                 <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
-            </button>
-
-            <button type="button"
-                    [routerLink]="['/slice', slice.id, 'edit']"
-                    class="btn btn-primary">
-                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
             </button>
         </div>
     </div>

@@ -28,6 +28,16 @@ Add the `help` flag on any command to see how you can use it. For example, `npm 
 
 The `npm run` command will list all of the scripts available to run for this project.
 
+2.  [MongoDB][]
+
+Create folder C:\data\db and install service with:
+
+    mongod --install
+
+Or run with:
+
+    mongod --dbpath=C:\data\db
+
 ### Service workers
 
 Service workers are commented by default, to enable them please uncomment the following code.
@@ -187,3 +197,5 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [protractor]: https://angular.github.io/protractor/
 [leaflet]: http://leafletjs.com/
 [definitelytyped]: http://definitelytyped.org/
+
+[mongodb]: [https://www.mongodb.com/download-center/community]

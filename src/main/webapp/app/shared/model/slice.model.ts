@@ -4,15 +4,15 @@ export interface ISlice {
   id?: string;
   androidVersion?: number;
   androidClassName?: string;
-  entryMethods?: any;
-  seedStatements?: any;
+  entryMethods?: string[];
+  seedStatements?: string[];
   slice?: any;
   log?: any;
   threadId?: string;
   running?: boolean;
-  reflectionOptions?: ISlicerOption;
-  dataDependenceOptions?: ISlicerOption;
-  controlDependenceOptions?: ISlicerOption;
+  reflectionOption?: ISlicerOption;
+  dataDependenceOption?: ISlicerOption;
+  controlDependenceOption?: ISlicerOption;
 }
 
 export class Slice implements ISlice {
@@ -20,15 +20,15 @@ export class Slice implements ISlice {
     public id?: string,
     public androidVersion?: number,
     public androidClassName?: string,
-    public entryMethods?: any,
-    public seedStatements?: any,
+    public entryMethods = [],
+    public seedStatements = [],
     public slice?: any,
     public log?: any,
     public threadId?: string,
     public running?: boolean,
-    public reflectionOptions?: ISlicerOption,
-    public dataDependenceOptions?: ISlicerOption,
-    public controlDependenceOptions?: ISlicerOption
+    public reflectionOption?: ISlicerOption,
+    public dataDependenceOption?: ISlicerOption,
+    public controlDependenceOption?: ISlicerOption
   ) {
     this.running = this.running || false;
   }

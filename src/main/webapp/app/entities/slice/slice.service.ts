@@ -19,10 +19,6 @@ export class SliceService {
     return this.http.post<ISlice>(this.resourceUrl, slice, { observe: 'response' });
   }
 
-  update(slice: ISlice): Observable<EntityResponseType> {
-    return this.http.put<ISlice>(this.resourceUrl, slice, { observe: 'response' });
-  }
-
   find(id: string): Observable<EntityResponseType> {
     return this.http.get<ISlice>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

@@ -47,26 +47,26 @@ public class SlicerOptionResource {
     }
 
     /**
-     * {@code POST  /slicer-options} : Create a new slicerOption.
+     * {@code POST  /slicer-option} : Create a new slicerOption.
      *
      * @param slicerOption the slicerOption to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new slicerOption, or with status {@code 400 (Bad Request)} if the slicerOption has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/slicer-options")
+    @PostMapping("/slicer-option")
     public ResponseEntity<SlicerOption> createSlicerOption(@Valid @RequestBody SlicerOption slicerOption) throws URISyntaxException {
         log.debug("REST request to save SlicerOption : {}", slicerOption);
         if (slicerOption.getId() != null) {
             throw new BadRequestAlertException("A new slicerOption cannot already have an ID", ENTITY_NAME, "idexists");
         }
         SlicerOption result = slicerOptionRepository.save(slicerOption);
-        return ResponseEntity.created(new URI("/api/slicer-options/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/slicer-option/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /slicer-options} : Updates an existing slicerOption.
+     * {@code PUT  /slicer-option} : Updates an existing slicerOption.
      *
      * @param slicerOption the slicerOption to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated slicerOption,
@@ -74,7 +74,7 @@ public class SlicerOptionResource {
      * or with status {@code 500 (Internal Server Error)} if the slicerOption couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/slicer-options")
+    @PutMapping("/slicer-option")
     public ResponseEntity<SlicerOption> updateSlicerOption(@Valid @RequestBody SlicerOption slicerOption) throws URISyntaxException {
         log.debug("REST request to update SlicerOption : {}", slicerOption);
         if (slicerOption.getId() == null) {
@@ -87,12 +87,12 @@ public class SlicerOptionResource {
     }
 
     /**
-     * {@code GET  /slicer-options} : get all the slicerOptions.
+     * {@code GET  /slicer-option} : get all the slicerOptions.
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of slicerOptions in body.
      */
-    @GetMapping("/slicer-options")
+    @GetMapping("/slicer-option")
     public ResponseEntity<List<SlicerOption>> getAllSlicerOptions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
         log.debug("REST request to get a page of SlicerOptions");
         Page<SlicerOption> page = slicerOptionRepository.findAll(pageable);
@@ -101,12 +101,12 @@ public class SlicerOptionResource {
     }
 
     /**
-     * {@code GET  /slicer-options/:id} : get the "id" slicerOption.
+     * {@code GET  /slicer-option/:id} : get the "id" slicerOption.
      *
      * @param id the id of the slicerOption to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the slicerOption, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/slicer-options/{id}")
+    @GetMapping("/slicer-option/{id}")
     public ResponseEntity<SlicerOption> getSlicerOption(@PathVariable String id) {
         log.debug("REST request to get SlicerOption : {}", id);
         Optional<SlicerOption> slicerOption = slicerOptionRepository.findById(id);
@@ -114,12 +114,12 @@ public class SlicerOptionResource {
     }
 
     /**
-     * {@code DELETE  /slicer-options/:id} : delete the "id" slicerOption.
+     * {@code DELETE  /slicer-option/:id} : delete the "id" slicerOption.
      *
      * @param id the id of the slicerOption to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/slicer-options/{id}")
+    @DeleteMapping("/slicer-option/{id}")
     public ResponseEntity<Void> deleteSlicerOption(@PathVariable String id) {
         log.debug("REST request to delete SlicerOption : {}", id);
         slicerOptionRepository.deleteById(id);

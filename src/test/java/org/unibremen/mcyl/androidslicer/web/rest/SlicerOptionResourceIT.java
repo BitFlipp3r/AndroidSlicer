@@ -34,8 +34,8 @@ import org.unibremen.mcyl.androidslicer.domain.enumeration.SlicerOptionType;
 @SpringBootTest(classes = AndroidSlicerApp.class)
 public class SlicerOptionResourceIT {
 
-    private static final SlicerOptionType DEFAULT_TYPE = SlicerOptionType.ReflectionOptions;
-    private static final SlicerOptionType UPDATED_TYPE = SlicerOptionType.DataDependenceOptions;
+    private static final SlicerOptionType DEFAULT_TYPE = SlicerOptionType.REFLECTION_OPTION;
+    private static final SlicerOptionType UPDATED_TYPE = SlicerOptionType.DATA_DEPENDENCE_OPTION;
 
     private static final String DEFAULT_KEY = "AAAAAAAAAA";
     private static final String UPDATED_KEY = "BBBBBBBBBB";

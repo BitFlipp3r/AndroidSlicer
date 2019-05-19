@@ -4,17 +4,12 @@
             <h2 id="jhi-slicer-option-heading">Create or edit a Slicer Option</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!slicerOption.id">
-                    <label for="id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
-                        readonly />
-                </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_type">Type</label>
                     <select class="form-control" name="type" formControlName="type" id="field_type">
-                        <option value="ReflectionOptions">ReflectionOptions</option>
-                        <option value="DataDependenceOptions">DataDependenceOptions</option>
-                        <option value="ControlDependenceOptions">ControlDependenceOptions</option>
+                        <option value="REFLECTION_OPTION">Reflection Option</option>
+                        <option value="DATA_DEPENDENCE_OPTION">Data Dependence Option</option>
+                        <option value="CONTROL_DEPENDENCE_OPTION">Control Dependence Option</option>
                     </select>
                     <div *ngIf="editForm.get('type').invalid && (editForm.get('type').dirty || editForm.get('type').touched)">
                         <small class="form-text text-danger"
@@ -40,9 +35,9 @@
                               formControlName="description"></textarea>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_isDefault" ngbTooltip="There can only be one default per SlicerOptionType. This handled during create/save process.">Is Default</label>
-                    <input type="checkbox" class="form-control" name="isDefault" id="field_isDefault"
-                           formControlName="isDefault"/>
+                    <label class="form-control-label" for="field_isDefault" ngbTooltip="There can only be one default per SlicerOptionType. This handled during create/save process.">Default</label>
+                    <p-inputSwitch class="form-control"ame="isDefault" id="field_isDefault"
+                    formControlName="isDefault"></p-inputSwitch>
                 </div>
 
             </div>

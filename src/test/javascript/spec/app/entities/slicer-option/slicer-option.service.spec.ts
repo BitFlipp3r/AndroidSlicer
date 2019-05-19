@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(SlicerOptionService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new SlicerOption('ID', SlicerOptionType.ReflectionOptions, 'AAAAAAA', 'AAAAAAA', false);
+      elemDefault = new SlicerOption('ID', SlicerOptionType.REFLECTION_OPTION, 'AAAAAAA', 'AAAAAAA', false);
     });
 
     describe('Service methods', () => {

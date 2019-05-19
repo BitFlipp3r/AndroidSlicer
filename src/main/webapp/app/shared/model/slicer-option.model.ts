@@ -1,7 +1,7 @@
 export const enum SlicerOptionType {
-  ReflectionOptions = 'ReflectionOptions',
-  DataDependenceOptions = 'DataDependenceOptions',
-  ControlDependenceOptions = 'ControlDependenceOptions'
+  REFLECTION_OPTION = 'REFLECTION_OPTION',
+  DATA_DEPENDENCE_OPTION = 'DATA_DEPENDENCE_OPTION',
+  CONTROL_DEPENDENCE_OPTION = 'CONTROL_DEPENDENCE_OPTION'
 }
 
 export interface ISlicerOption {

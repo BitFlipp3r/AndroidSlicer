@@ -24,7 +24,6 @@
             </thead>
             <tbody>
             <tr *ngFor="let slicerOption of slicerOptions ;trackBy: trackId">
-                <td><a [routerLink]="['/slicer-option', slicerOption.id, 'view' ]">{{slicerOption.id}}</a></td>
                 <td>{{slicerOption.type}}</td>
                 <td>{{slicerOption.key}}</td>
                 <td>{{slicerOption.description}}</td>

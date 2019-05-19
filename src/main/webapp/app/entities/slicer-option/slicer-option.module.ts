@@ -11,11 +11,12 @@ import {
   slicerOptionRoute,
   slicerOptionPopupRoute
 } from './';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 const ENTITY_STATES = [...slicerOptionRoute, ...slicerOptionPopupRoute];
 
 @NgModule({
-  imports: [AndroidSlicerSharedModule, RouterModule.forChild(ENTITY_STATES)],
+  imports: [AndroidSlicerSharedModule, RouterModule.forChild(ENTITY_STATES), InputSwitchModule],
   declarations: [
     SlicerOptionComponent,
     SlicerOptionDetailComponent,

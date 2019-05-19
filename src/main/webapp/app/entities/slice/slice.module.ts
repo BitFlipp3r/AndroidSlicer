@@ -5,7 +5,7 @@ import { AndroidSlicerSharedModule } from 'app/shared';
 import {
   SliceComponent,
   SliceDetailComponent,
-  SliceUpdateComponent,
+  SliceMakeComponent,
   SliceDeletePopupComponent,
   SliceDeleteDialogComponent,
   sliceRoute,
@@ -14,10 +14,22 @@ import {
 
 const ENTITY_STATES = [...sliceRoute, ...slicePopupRoute];
 
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { DropdownModule } from 'primeng/dropdown';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { MonacoEditorModule } from 'ngx-monaco';
+
 @NgModule({
-  imports: [AndroidSlicerSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [SliceComponent, SliceDetailComponent, SliceUpdateComponent, SliceDeleteDialogComponent, SliceDeletePopupComponent],
-  entryComponents: [SliceComponent, SliceUpdateComponent, SliceDeleteDialogComponent, SliceDeletePopupComponent],
+  imports: [
+    AndroidSlicerSharedModule,
+    RouterModule.forChild(ENTITY_STATES),
+    InputSwitchModule,
+    DropdownModule,
+    AutoCompleteModule,
+    MonacoEditorModule
+  ],
+  declarations: [SliceComponent, SliceDetailComponent, SliceMakeComponent, SliceDeleteDialogComponent, SliceDeletePopupComponent],
+  entryComponents: [SliceComponent, SliceMakeComponent, SliceDeleteDialogComponent, SliceDeletePopupComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AndroidSlicerSliceModule {}

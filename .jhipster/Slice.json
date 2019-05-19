@@ -58,8 +58,8 @@
             "otherEntityName": "slicerOption",
             "otherEntityRelationshipName": "slice",
             "relationshipValidateRules": "required",
-            "javadoc": "SlicerOption must have type ReflectionOptions",
-            "relationshipName": "reflectionOptions",
+            "javadoc": "SlicerOption must have type ReflectionOption",
+            "relationshipName": "reflectionOption",
             "otherEntityField": "key",
             "ownerSide": true
         },
@@ -68,8 +68,8 @@
             "otherEntityName": "slicerOption",
             "otherEntityRelationshipName": "slice",
             "relationshipValidateRules": "required",
-            "javadoc": "SlicerOption must have type ReflectionOptions",
-            "relationshipName": "dataDependenceOptions",
+            "javadoc": "SlicerOption must have type ReflectionOption",
+            "relationshipName": "dataDependenceOption",
             "otherEntityField": "key",
             "ownerSide": true
         },
@@ -78,8 +78,8 @@
             "otherEntityName": "slicerOption",
             "otherEntityRelationshipName": "slice",
             "relationshipValidateRules": "required",
-            "javadoc": "SlicerOption must have type ReflectionOptions",
-            "relationshipName": "controlDependenceOptions",
+            "javadoc": "SlicerOption must have type ReflectionOption",
+            "relationshipName": "controlDependenceOption",
             "otherEntityField": "key",
             "ownerSide": true
         }

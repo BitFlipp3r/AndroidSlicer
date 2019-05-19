@@ -9,7 +9,7 @@ import { Slice } from 'app/shared/model/slice.model';
 import { SliceService } from './slice.service';
 import { SliceComponent } from './slice.component';
 import { SliceDetailComponent } from './slice-detail.component';
-import { SliceUpdateComponent } from './slice-update.component';
+import { SliceMakeComponent } from './slice-make.component';
 import { SliceDeletePopupComponent } from './slice-delete-dialog.component';
 import { ISlice } from 'app/shared/model/slice.model';
 
@@ -39,7 +39,7 @@ export const sliceRoute: Routes = [
     data: {
       authorities: ['ROLE_USER'],
       defaultSort: 'id,asc',
-      pageTitle: 'Slice'
+      pageTitle: 'Slices'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -57,19 +57,7 @@ export const sliceRoute: Routes = [
   },
   {
     path: 'new',
-    component: SliceUpdateComponent,
-    resolve: {
-      slice: SliceResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'Slice'
-    },
-    canActivate: [UserRouteAccessService]
-  },
-  {
-    path: ':id/edit',
-    component: SliceUpdateComponent,
+    component: SliceMakeComponent,
     resolve: {
       slice: SliceResolve
     },

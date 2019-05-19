@@ -2,11 +2,11 @@
 Main page styles
 ========================================================================== */
 
-.hipster {
+.android {
   display: inline-block;
   width: 347px;
   height: 497px;
-  background: url('../../content/images/jhipster_family_member_1.svg') no-repeat center top;
+  background: url('../../content/images/android.png') no-repeat center top;
   background-size: contain;
 }
 
@@ -16,8 +16,8 @@ Main page styles
   only screen and (-o-min-device-pixel-ratio: 2/1),
   only screen and (min-resolution: 192dpi),
   only screen and (min-resolution: 2dppx) {
-  .hipster {
-    background: url('../../content/images/jhipster_family_member_1.svg') no-repeat center top;
+  .android {
+    background: url('../../content/images/android2x.png') no-repeat center top;
     background-size: contain;
   }
 }

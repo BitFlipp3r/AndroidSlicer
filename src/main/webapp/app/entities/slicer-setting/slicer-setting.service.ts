@@ -11,7 +11,7 @@ type EntityArrayResponseType = HttpResponse<ISlicerSetting[]>;
 
 @Injectable({ providedIn: 'root' })
 export class SlicerSettingService {
-  public resourceUrl = SERVER_API_URL + 'api/slicer-settings';
+  public resourceUrl = SERVER_API_URL + 'api/slicer-setting';
 
   constructor(protected http: HttpClient) {}
 
