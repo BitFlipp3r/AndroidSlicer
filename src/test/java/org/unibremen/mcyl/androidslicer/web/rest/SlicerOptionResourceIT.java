@@ -129,7 +129,7 @@ public class SlicerOptionResourceIT {
         assertThat(testSlicerOption.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testSlicerOption.getKey()).isEqualTo(DEFAULT_KEY);
         assertThat(testSlicerOption.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testSlicerOption.isIsDefault()).isEqualTo(DEFAULT_IS_DEFAULT);
+        assertThat(testSlicerOption.isDefault()).isEqualTo(DEFAULT_IS_DEFAULT);
     }
 
     @Test
@@ -251,7 +251,7 @@ public class SlicerOptionResourceIT {
         assertThat(testSlicerOption.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testSlicerOption.getKey()).isEqualTo(UPDATED_KEY);
         assertThat(testSlicerOption.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testSlicerOption.isIsDefault()).isEqualTo(UPDATED_IS_DEFAULT);
+        assertThat(testSlicerOption.isDefault()).isEqualTo(UPDATED_IS_DEFAULT);
     }
 
     @Test

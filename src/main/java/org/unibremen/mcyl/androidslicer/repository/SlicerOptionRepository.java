@@ -1,7 +1,11 @@
 package org.unibremen.mcyl.androidslicer.repository;
 
 import org.unibremen.mcyl.androidslicer.domain.SlicerOption;
+import org.unibremen.mcyl.androidslicer.domain.enumeration.SlicerOptionType;
 import org.springframework.data.mongodb.repository.Query;
+
+import java.util.List;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +17,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SlicerOptionRepository extends MongoRepository<SlicerOption, String> {
 
+    @Query("{ 'type': ?0 }")
+    public List<SlicerOption> findByType(SlicerOptionType type);
 }

@@ -1,6 +1,7 @@
 package org.unibremen.mcyl.androidslicer.web.rest;
 
 import org.unibremen.mcyl.androidslicer.domain.SlicerOption;
+import org.unibremen.mcyl.androidslicer.domain.enumeration.SlicerOptionType;
 import org.unibremen.mcyl.androidslicer.repository.SlicerOptionRepository;
 import org.unibremen.mcyl.androidslicer.web.rest.errors.BadRequestAlertException;
 
@@ -27,7 +28,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REST controller for managing {@link org.unibremen.mcyl.androidslicer.domain.SlicerOption}.
+ * REST controller for managing
+ * {@link org.unibremen.mcyl.androidslicer.domain.SlicerOption}.
  */
 @RestController
 @RequestMapping("/api")
@@ -50,50 +52,70 @@ public class SlicerOptionResource {
      * {@code POST  /slicer-option} : Create a new slicerOption.
      *
      * @param slicerOption the slicerOption to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new slicerOption, or with status {@code 400 (Bad Request)} if the slicerOption has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new slicerOption, or with status {@code 400 (Bad Request)}
+     *         if the slicerOption has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/slicer-option")
-    public ResponseEntity<SlicerOption> createSlicerOption(@Valid @RequestBody SlicerOption slicerOption) throws URISyntaxException {
+    public ResponseEntity<SlicerOption> createSlicerOption(@Valid @RequestBody SlicerOption slicerOption)
+            throws URISyntaxException {
         log.debug("REST request to save SlicerOption : {}", slicerOption);
         if (slicerOption.getId() != null) {
             throw new BadRequestAlertException("A new slicerOption cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        // remove other default settings if this is a new default
+        if (slicerOption.isDefault()) {
+            removeDefaults(slicerOption.getType());
+        }
+
         SlicerOption result = slicerOptionRepository.save(slicerOption);
-        return ResponseEntity.created(new URI("/api/slicer-option/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        return ResponseEntity
+                .created(new URI("/api/slicer-option/" + result.getId())).headers(HeaderUtil
+                        .createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 
     /**
      * {@code PUT  /slicer-option} : Updates an existing slicerOption.
      *
      * @param slicerOption the slicerOption to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated slicerOption,
-     * or with status {@code 400 (Bad Request)} if the slicerOption is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the slicerOption couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated slicerOption, or with status {@code 400 (Bad Request)} if
+     *         the slicerOption is not valid, or with status
+     *         {@code 500 (Internal Server Error)} if the slicerOption couldn't be
+     *         updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/slicer-option")
-    public ResponseEntity<SlicerOption> updateSlicerOption(@Valid @RequestBody SlicerOption slicerOption) throws URISyntaxException {
+    public ResponseEntity<SlicerOption> updateSlicerOption(@Valid @RequestBody SlicerOption slicerOption)
+            throws URISyntaxException {
         log.debug("REST request to update SlicerOption : {}", slicerOption);
         if (slicerOption.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+
+        // remove other default settings if this is a new default
+        if (slicerOption.isDefault()) {
+            removeDefaults(slicerOption.getType());
+        }
+
         SlicerOption result = slicerOptionRepository.save(slicerOption);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, slicerOption.getId().toString()))
-            .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME,
+                slicerOption.getId().toString())).body(result);
     }
 
     /**
      * {@code GET  /slicer-option} : get all the slicerOptions.
      *
      * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of slicerOptions in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of slicerOptions in body.
      */
     @GetMapping("/slicer-option")
-    public ResponseEntity<List<SlicerOption>> getAllSlicerOptions(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<List<SlicerOption>> getAllSlicerOptions(Pageable pageable,
+            @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
         log.debug("REST request to get a page of SlicerOptions");
         Page<SlicerOption> page = slicerOptionRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
@@ -104,7 +126,8 @@ public class SlicerOptionResource {
      * {@code GET  /slicer-option/:id} : get the "id" slicerOption.
      *
      * @param id the id of the slicerOption to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the slicerOption, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the slicerOption, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/slicer-option/{id}")
     public ResponseEntity<SlicerOption> getSlicerOption(@PathVariable String id) {
@@ -123,6 +146,16 @@ public class SlicerOptionResource {
     public ResponseEntity<Void> deleteSlicerOption(@PathVariable String id) {
         log.debug("REST request to delete SlicerOption : {}", id);
         slicerOptionRepository.deleteById(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
+        return ResponseEntity.noContent()
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
+    }
+
+    private void removeDefaults(SlicerOptionType slicerOptionType) {
+        slicerOptionRepository.findByType(slicerOptionType).forEach((SlicerOption slicerOption) -> {
+            if (slicerOption.isDefault()) {
+                slicerOption.setDefault(false);
+                slicerOptionRepository.save(slicerOption);
+            }
+        });
     }
 }
