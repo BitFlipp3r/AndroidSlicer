@@ -85,8 +85,8 @@ public class SliceService {
             sliceLineNumbers = WalaSlicer.doSlicing(appJar, exclusionFile,
                     "L" + FilenameUtils.removeExtension(slice.getAndroidClassName()), // add "L" to class name and remove .java extension
                     slice.getEntryMethods(), slice.getSeedStatements(), 
-                    slice.getReflectionOption(), slice.getDataDependenceOption(),
-                    slice.getControlDependenceOption(), logger);
+                    slice.getReflectionOptions(), slice.getDataDependenceOptions(),
+                    slice.getControlDependenceOptions(), logger);
         } catch (IllegalArgumentException | WalaException | IOException | CancelException e) {
             logger.log(e.getMessage());
         }

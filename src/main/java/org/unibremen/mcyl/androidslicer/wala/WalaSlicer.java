@@ -57,12 +57,16 @@ import com.ibm.wala.util.strings.Atom;
 import org.unibremen.mcyl.androidslicer.domain.SlicerOption;
 import org.unibremen.mcyl.androidslicer.service.SliceLogger;
 
+import com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions;
+import com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions;
+import com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions;
+
 public class WalaSlicer {
 
   public static Map<String, Set<Integer>> doSlicing(File appJar, File exclusionFile, String androidClassName,
       List<String> entryMethods, List<String> seedStatements, 
-      SlicerOption reflectionOption, SlicerOption dataDependenceOption,
-      SlicerOption controlDependenceOption, 
+      ReflectionOptions reflectionOptions, DataDependenceOptions dataDependenceOptions,
+      ControlDependenceOptions controlDependenceOptions, 
       SliceLogger logger) throws WalaException, IOException, ClassHierarchyException, IllegalArgumentException,
       CallGraphBuilderCancelException, CancelException {
     long start = System.currentTimeMillis();
@@ -83,7 +87,7 @@ public class WalaSlicer {
 
     AnalysisOptions options = new AnalysisOptions(scope, entrypoints);
     /* you can dial down reflection handling if you like */
-    options.setReflectionOptions(ReflectionOptions.valueOf(reflectionOption.getKey()));
+    options.setReflectionOptions(reflectionOptions);
 
     logger.log("\n== BUILDING CALL GRAPH ==");
     /* build the call graph */
@@ -110,7 +114,7 @@ public class WalaSlicer {
     for (Statement sm : statements) {
       logger.log("Computing backward slice for " + sm.getNode().getMethod().getName().toString());
       sliceList.addAll(
-          Slicer.computeBackwardSlice(sm, cg, pointerAnalysis, DataDependenceOptions.valueOf(dataDependenceOption.getKey()), ControlDependenceOptions.valueOf(controlDependenceOption.getKey())));
+          Slicer.computeBackwardSlice(sm, cg, pointerAnalysis, dataDependenceOptions, controlDependenceOptions));
     }
 
     logger.log(Integer.toString(sliceList.size()));

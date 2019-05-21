@@ -8,7 +8,7 @@
                     <label class="form-control-label" for="field_androidVersion">Android Version</label>
                     <p-dropdown name="androidVersion" id="field_androidVersion" [options]="versionOptions" optionLabel="version"
                         formControlName="androidVersion" placeholder="Select Android Version..." required="true" filter="true"
-                        lazy="true" [style]="{'display':'block','width':'100%'}" (onChange)="onVersionSelection(mainClassDropdown)"></p-dropdown>
+                        lazy="true" [style]="{'display':'block','width':'100%'}" (onChange)="onVersionSelection()"></p-dropdown>
                     <div *ngIf="createForm.get('androidVersion').invalid && (createForm.get('androidVersion').dirty || createForm.get('androidVersion').touched)">
                         <small class="form-text text-danger"
                             *ngIf="createForm.get('androidVersion').errors.required">
@@ -22,7 +22,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_androidClassName">Android Class Name</label>
-                    <p-dropdown #androidClassNameDropdown name="androidClassName" id="field_androidClassName" [options]="classOptions"
+                    <p-dropdown name="androidClassName" id="field_androidClassName" [options]="classOptions"
                         optionLabel="name" formControlName="androidClassName" placeholder="Select Main Class..." required="true"
                         filter="true" lazy="true" [style]="{'display':'block','width':'100%'}" (onChange)="onClassSelection()"></p-dropdown>
                     <div *ngIf="createForm.get('androidClassName').invalid && (createForm.get('androidClassName').dirty || createForm.get('androidClassName').touched)">
@@ -37,7 +37,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_entryMethods" ngbTooltip="JSON-List with entry method names">Entry Methods</label>
-                    <p-autoComplete name="entryMethods" id="field_entryMethods" formControlName="entryMethods" [suggestions]="filteredEntryMethodOptions" required="true" [dropdown]="true" [multiple]="true" [minLength]="1" placeholder="Select Entry Methods..." (completeMethod)="filterMultiSelectOptions($event, entryMethodOptions, filteredEntryMethodOptions)" (onKeyUp)="addMultiSelectOption($event, entryMethodOptions)"></p-autoComplete>
+                    <p-autoComplete name="entryMethods" id="field_entryMethods" formControlName="entryMethods" [suggestions]="filteredEntryMethodOptions" required="true" [dropdown]="true" [multiple]="true" [minLength]="1" placeholder="Select Entry Methods..." (completeMethod)="filterEntryMethodOptions($event)" (onKeyUp)="addEntryMethodOption($event)"></p-autoComplete>
                     <div *ngIf="createForm.get('entryMethods').invalid && (createForm.get('entryMethods').dirty || createForm.get('entryMethods').touched)">
                         <small class="form-text text-danger"
                             *ngIf="createForm.get('entryMethods').errors.required">
@@ -47,7 +47,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_seedStatements" ngbTooltip="JSON-List with seed statement names">Seed Statements</label>
-                    <p-autoComplete name="seedStatements" id="field_seedStatement" formControlName="seedStatements" [suggestions]="filteredSeedStatementOptions" required="true" [dropdown]="true" [multiple]="true" [minLength]="1" placeholder="Select Seed Statement..." (completeMethod)="filterMultiSelectOptions($event, seedStatementOptions,filteredSeedStatementOptions)" (onKeyUp)="addMultiSelectOption($event, seedStatementOptions)"></p-autoComplete>
+                    <p-autoComplete name="seedStatements" id="field_seedStatement" formControlName="seedStatements" [suggestions]="filteredSeedStatementOptions" required="true" [dropdown]="true" [multiple]="true" [minLength]="1" placeholder="Select Seed Statement..." (completeMethod)="filterSeedStatementOptions($event)" (onKeyUp)="addSeedStatementOption($event)"></p-autoComplete>
                     <div *ngIf="createForm.get('seedStatements').invalid && (createForm.get('seedStatements').dirty || createForm.get('seedStatements').touched)">
                         <small class="form-text text-danger"
                             *ngIf="createForm.get('seedStatements').errors.required">
@@ -58,32 +58,28 @@
 
                 <div class="form-group">
                     <label class="form-control-label" for="field_reflectionOptions">Reflection Options</label>
-                    <!-- <select class="form-control" id="field_reflectionOption" name="reflectionOption" formControlName="reflectionOption">
-                        <option *ngIf="!createForm.get('reflectionOptions').value" [ngValue]="null" selected></option>
-                        <option [ngValue]="slicerOptionOption.id === createForm.get('reflectionOption').value?.id ? createForm.get('reflectionOptions').value : slicerOptionOption" *ngFor="let slicerOptionOption of reflectionoptions; trackBy: trackSlicerOptionById">{{slicerOptionOption.key}}</option>
-                    </select> -->
-
-                    <p-dropdown [options]="reflectionOptionList" name="reflectionOption" formControlName="reflectionOption">
+                    <p-dropdown [options]="reflectionOptionsList" id="field_reflectionOptions" name="reflectionOptions" formControlName="reflectionOptions" lazy="true" [style]="{'display':'block','width':'100%'}" required="true">
                        <ng-template let-option pTemplate="item"> 
-                           <span>{{option.label}}</span><br>
-                           <span>{{option.value}}</span>
+                           <span>{{option.value.key}}</span><span *ngIf="option.value.isDefault"><b> (Recommended)</b></span><br>
+                           <span>{{option.value.description}}</span>
                        </ng-template>
                    </p-dropdown>
-
                 </div>
-                <div *ngIf="createForm.get('reflectionOption').invalid && (createForm.get('reflectionOption').dirty || createForm.get('reflectionOption').touched)">
+                <div *ngIf="createForm.get('reflectionOptions').invalid && (createForm.get('reflectionOptions').dirty || createForm.get('reflectionOptions').touched)">
                     <small class="form-text text-danger"
-                        *ngIf="createForm.get('reflectionOption').errors.required">
+                        *ngIf="createForm.get('reflectionOptions').errors.required">
                         This field is required.
                     </small>
                 </div>
-                <!-- <div class="form-group">
+                <div class="form-group">
                     <label class="form-control-label" for="field_dataDependenceOptions">Data Dependence Options</label>
-                    <select class="form-control" id="field_dataDependenceOptions" name="dataDependenceOptions" formControlName="dataDependenceOptions">
-                        <option *ngIf="!createForm.get('dataDependenceOptions').value" [ngValue]="null" selected></option>
-                        <option [ngValue]="slicerOptionOption.id === createForm.get('dataDependenceOptions').value?.id ? createForm.get('dataDependenceOptions').value : slicerOptionOption" *ngFor="let slicerOptionOption of datadependenceoptions; trackBy: trackSlicerOptionById">{{slicerOptionOption.key}}</option>
-                    </select>
-                </div>
+                    <p-dropdown [options]="dataDependenceOptionsList" id="field_dataDependenceOptions" name="dataDependenceOptions" formControlName="dataDependenceOptions" lazy="true" [style]="{'display':'block','width':'100%'}" required="true">
+                        <ng-template let-option pTemplate="item"> 
+                            <span>{{option.value.key}}</span><div *ngIf="option.value.isDefault"><b> (Recommended)</b></div><br>
+                            <span>{{option.value.description}}</span>
+                        </ng-template>
+                    </p-dropdown>
+                </div>                  
                 <div *ngIf="createForm.get('dataDependenceOptions').invalid && (createForm.get('dataDependenceOptions').dirty || createForm.get('dataDependenceOptions').touched)">
                     <small class="form-text text-danger"
                         *ngIf="createForm.get('dataDependenceOptions').errors.required">
@@ -92,17 +88,19 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_controlDependenceOptions">Control Dependence Options</label>
-                    <select class="form-control" id="field_controlDependenceOptions" name="controlDependenceOptions" formControlName="controlDependenceOptions">
-                        <option *ngIf="!createForm.get('controlDependenceOptions').value" [ngValue]="null" selected></option>
-                        <option [ngValue]="slicerOptionOption.id === createForm.get('controlDependenceOptions').value?.id ? createForm.get('controlDependenceOptions').value : slicerOptionOption" *ngFor="let slicerOptionOption of controldependenceoptions; trackBy: trackSlicerOptionById">{{slicerOptionOption.key}}</option>
-                    </select>
+                    <p-dropdown [options]="controlDependenceOptionsList"  id="field_controlDependenceOptions" name="controlDependenceOptions" formControlName="controlDependenceOptions" lazy="true" [style]="{'display':'block','width':'100%'}" required="true">
+                        <ng-template let-option pTemplate="item"> 
+                            <span>{{option.value.key}}</span><div *ngIf="option.value.isDefault"><b> (Recommended)</b></div><br>
+                            <span>{{option.value.description}}</span>
+                        </ng-template>
+                    </p-dropdown>
                 </div>
                 <div *ngIf="createForm.get('controlDependenceOptions').invalid && (createForm.get('controlDependenceOptions').dirty || createForm.get('controlDependenceOptions').touched)">
                     <small class="form-text text-danger"
                         *ngIf="createForm.get('controlDependenceOptions').errors.required">
                         This field is required.
                     </small>
-                </div> -->
+                </div>
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">

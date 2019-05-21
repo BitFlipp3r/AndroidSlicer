@@ -2,7 +2,6 @@ package org.unibremen.mcyl.androidslicer.web.rest;
 
 import org.unibremen.mcyl.androidslicer.AndroidSlicerApp;
 import org.unibremen.mcyl.androidslicer.domain.Slice;
-import org.unibremen.mcyl.androidslicer.domain.SlicerOption;
 import org.unibremen.mcyl.androidslicer.repository.SliceRepository;
 import org.unibremen.mcyl.androidslicer.service.SliceService;
 import org.unibremen.mcyl.androidslicer.web.rest.errors.ExceptionTranslator;
@@ -17,17 +16,21 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import java.util.Arrays;
 import java.util.List;
+
+import com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions;
+import com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions;
+import com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions;
 
 import static org.unibremen.mcyl.androidslicer.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 /**
  * Integration tests for the {@Link SliceResource} REST controller.
@@ -36,7 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SliceResourceIT {
 
     private static final Integer DEFAULT_ANDROID_VERSION = 1;
-    private static final Integer UPDATED_ANDROID_VERSION = 2;
 
     private static final String DEFAULT_ANDROID_CLASS_NAME = "AAAAAAAAAA";
 
@@ -51,7 +53,12 @@ public class SliceResourceIT {
     private static final String DEFAULT_THREAD_ID = "AAAAAAAAAA";
 
     private static final Boolean DEFAULT_RUNNING = false;
-    private static final Boolean UPDATED_RUNNING = true;
+
+    private static final ReflectionOptions DEFAULT_REFLECTION_OPTIONS = ReflectionOptions.FULL;
+
+    private static final DataDependenceOptions DEFAULT_DATA_DEPENDENCE_OPTIONS = DataDependenceOptions.FULL;
+
+    private static final ControlDependenceOptions DEFAULT_CONTROL_DEPENDENCE_OPTIONS = ControlDependenceOptions.FULL;
 
     @Autowired
     private SliceRepository sliceRepository;
@@ -102,23 +109,13 @@ public class SliceResourceIT {
             .slice(DEFAULT_SLICE)
             .log(DEFAULT_LOG)
             .threadId(DEFAULT_THREAD_ID)
-            .running(DEFAULT_RUNNING);
-        // Add required entity
-        SlicerOption slicerOption = SlicerOptionResourceIT.createEntity();
-        slicerOption.setId("fixed-id-for-tests");
-        slice.setReflectionOption(slicerOption);
-        // Add required entity
-        slice.setDataDependenceOption(slicerOption);
-        // Add required entity
-        slice.setControlDependenceOption(slicerOption);
+            .running(DEFAULT_RUNNING)
+            .reflectionOptions(DEFAULT_REFLECTION_OPTIONS)
+            .dataDependenceOptions(DEFAULT_DATA_DEPENDENCE_OPTIONS)
+            .controlDependenceOptions(DEFAULT_CONTROL_DEPENDENCE_OPTIONS);
         return slice;
     }
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
+
 
     @BeforeEach
     public void initTest() {
@@ -148,6 +145,9 @@ public class SliceResourceIT {
         assertThat(testSlice.getLog()).isEqualTo(DEFAULT_LOG);
         assertThat(testSlice.getThreadId()).isEqualTo(DEFAULT_THREAD_ID);
         assertThat(testSlice.isRunning()).isEqualTo(DEFAULT_RUNNING);
+        assertThat(testSlice.getReflectionOptions()).isEqualTo(DEFAULT_REFLECTION_OPTIONS);
+        assertThat(testSlice.getDataDependenceOptions()).isEqualTo(DEFAULT_DATA_DEPENDENCE_OPTIONS);
+        assertThat(testSlice.getControlDependenceOptions()).isEqualTo(DEFAULT_CONTROL_DEPENDENCE_OPTIONS);
     }
 
     @Test
@@ -204,6 +204,57 @@ public class SliceResourceIT {
     }
 
     @Test
+    public void checkReflectionOptionsIsRequired() throws Exception {
+        int databaseSizeBeforeTest = sliceRepository.findAll().size();
+        // set the field null
+        slice.setReflectionOptions(null);
+
+        // Create the Slice, which fails.
+
+        restSliceMockMvc.perform(post("/api/slice")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(slice)))
+            .andExpect(status().isBadRequest());
+
+        List<Slice> sliceList = sliceRepository.findAll();
+        assertThat(sliceList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    public void checkDataDependenceOptionsIsRequired() throws Exception {
+        int databaseSizeBeforeTest = sliceRepository.findAll().size();
+        // set the field null
+        slice.setDataDependenceOptions(null);
+
+        // Create the Slice, which fails.
+
+        restSliceMockMvc.perform(post("/api/slice")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(slice)))
+            .andExpect(status().isBadRequest());
+
+        List<Slice> sliceList = sliceRepository.findAll();
+        assertThat(sliceList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    public void checkControlDependenceOptionsIsRequired() throws Exception {
+        int databaseSizeBeforeTest = sliceRepository.findAll().size();
+        // set the field null
+        slice.setControlDependenceOptions(null);
+
+        // Create the Slice, which fails.
+
+        restSliceMockMvc.perform(post("/api/slice")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(slice)))
+            .andExpect(status().isBadRequest());
+
+        List<Slice> sliceList = sliceRepository.findAll();
+        assertThat(sliceList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
     public void getAllSlice() throws Exception {
         // Initialize the database
         sliceRepository.save(slice);
@@ -220,7 +271,10 @@ public class SliceResourceIT {
             .andExpect(jsonPath("$.[*].slice").value(hasItem(DEFAULT_SLICE.toString())))
             .andExpect(jsonPath("$.[*].log").value(hasItem(DEFAULT_LOG.toString())))
             .andExpect(jsonPath("$.[*].threadId").value(hasItem(DEFAULT_THREAD_ID.toString())))
-            .andExpect(jsonPath("$.[*].running").value(hasItem(DEFAULT_RUNNING.booleanValue())));
+            .andExpect(jsonPath("$.[*].running").value(hasItem(DEFAULT_RUNNING.booleanValue())))
+            .andExpect(jsonPath("$.[*].reflectionOptions").value(hasItem(DEFAULT_REFLECTION_OPTIONS.toString())))
+            .andExpect(jsonPath("$.[*].dataDependenceOptions").value(hasItem(DEFAULT_DATA_DEPENDENCE_OPTIONS.toString())))
+            .andExpect(jsonPath("$.[*].controlDependenceOptions").value(hasItem(DEFAULT_CONTROL_DEPENDENCE_OPTIONS.toString())));
     }
     
     @Test
@@ -240,7 +294,10 @@ public class SliceResourceIT {
             .andExpect(jsonPath("$.slice").value(DEFAULT_SLICE.toString()))
             .andExpect(jsonPath("$.log").value(DEFAULT_LOG.toString()))
             .andExpect(jsonPath("$.threadId").value(DEFAULT_THREAD_ID.toString()))
-            .andExpect(jsonPath("$.running").value(DEFAULT_RUNNING.booleanValue()));
+            .andExpect(jsonPath("$.running").value(DEFAULT_RUNNING.booleanValue()))
+            .andExpect(jsonPath("$.reflectionOptions").value(DEFAULT_REFLECTION_OPTIONS.toString()))
+            .andExpect(jsonPath("$.dataDependenceOptions").value(DEFAULT_DATA_DEPENDENCE_OPTIONS.toString()))
+            .andExpect(jsonPath("$.controlDependenceOptions").value(DEFAULT_CONTROL_DEPENDENCE_OPTIONS.toString()));
     }
 
     @Test
@@ -249,6 +306,7 @@ public class SliceResourceIT {
         restSliceMockMvc.perform(get("/api/slice/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
+
 
     @Test
     public void deleteSlice() throws Exception {

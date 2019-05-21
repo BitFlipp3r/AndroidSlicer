@@ -3,16 +3,14 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
-import { ISlice, Slice } from 'app/shared/model/slice.model';
+import { ISlice, Slice, ReflectionOptions, DataDependenceOptions, ControlDependenceOptions } from 'app/shared/model/slice.model';
 import { SliceService } from './slice.service';
 import { ISlicerOption, SlicerOptionType } from 'app/shared/model/slicer-option.model';
 import { SlicerOptionService } from 'app/entities/slicer-option';
 import { IAndroidVersion } from 'app/shared/model/android-version.model';
 import { IAndroidClass, AndroidClass } from 'app/shared/model/android-class.model';
 import { AndroidOptionsService } from 'app/shared/services/android-options.service';
-import { Dropdown } from 'primeng/dropdown';
 import { MonacoFile } from 'ngx-monaco';
 import { SelectItem } from 'primeng/components/common/selectitem';
 
@@ -24,25 +22,19 @@ export class SliceMakeComponent implements OnInit {
   slice: ISlice;
   isSaving: boolean;
 
-  reflectionoptions: ISlicerOption[];
-
-  datadependenceoptions: ISlicerOption[];
-
-  controldependenceoptions: ISlicerOption[];
-
   versionOptions: IAndroidVersion[];
 
   classOptions: IAndroidClass[];
 
-  entryMethodOptions: string[];
+  entryMethodOptions: string[] = [];
   filteredEntryMethodOptions: string[] = [];
 
   seedStatementOptions: string[];
   filteredSeedStatementOptions: string[] = [];
 
-  reflectionOptionList: SelectItem[] = [];
-  dataDependenceOptionList: SelectItem[] = [];
-  controlDependenceOptionList: SelectItem[] = [];
+  reflectionOptionsList: SelectItem[] = [];
+  dataDependenceOptionsList: SelectItem[] = [];
+  controlDependenceOptionsList: SelectItem[] = [];
 
   theme = 'vs';
   sourceFile: MonacoFile;
@@ -52,9 +44,9 @@ export class SliceMakeComponent implements OnInit {
     androidClassName: [null, [Validators.required]],
     entryMethods: [null, [Validators.required]],
     seedStatements: [null, [Validators.required]],
-    reflectionOption: [null, Validators.required],
-    dataDependenceOption: [null, Validators.required],
-    controlDependenceOption: [null, Validators.required]
+    reflectionOptions: [null, Validators.required],
+    dataDependenceOptions: [null, Validators.required],
+    controlDependenceOptions: [null, Validators.required]
   });
 
   constructor(
@@ -70,6 +62,7 @@ export class SliceMakeComponent implements OnInit {
   ngOnInit() {
     this.isSaving = false;
     this.slice = new Slice();
+    this.updateForm(this.slice);
 
     this.androidOptionsService.getAndroidVersions().subscribe(
       (res: HttpResponse<IAndroidVersion[]>) => {
@@ -83,24 +76,32 @@ export class SliceMakeComponent implements OnInit {
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );
+
     this.slicerOptionService.query().subscribe(
       (res: HttpResponse<ISlicerOption[]>) => {
         for (const slicerOption of res.body) {
-          //const slicerOptionItem: SelectItem = { label: slicerOption.key, value: slicerOption.description };
+          const slicerOptionItem: SelectItem = { label: slicerOption.key, value: slicerOption };
+
           switch (slicerOption.type) {
             case SlicerOptionType.REFLECTION_OPTION: {
-              this.reflectionOptionList.push(slicerOption);
-              this.setDefault(slicerOption, slicerOptionItem, this.createForm.get(['reflectionOption']).value);
+              this.reflectionOptionsList.push(slicerOptionItem);
+              if (slicerOption.isDefault) {
+                this.createForm.get(['reflectionOptions']).setValue(slicerOption);
+              }
               break;
             }
             case SlicerOptionType.DATA_DEPENDENCE_OPTION: {
-              this.dataDependenceOptionList.push({ label: slicerOption.key, value: slicerOption.description });
-              this.setDefault(slicerOption, slicerOptionItem, this.createForm.get(['dataDependenceOption']).value);
+              this.dataDependenceOptionsList.push(slicerOptionItem);
+              if (slicerOption.isDefault) {
+                this.slice.dataDependenceOptions = slicerOption.key as DataDependenceOptions;
+              }
               break;
             }
             case SlicerOptionType.CONTROL_DEPENDENCE_OPTION: {
-              this.controlDependenceOptionList.push({ label: slicerOption.key, value: slicerOption.description });
-              this.setDefault(slicerOption, slicerOptionItem, this.createForm.get(['controlDependenceOption']).value);
+              this.controlDependenceOptionsList.push(slicerOptionItem);
+              if (slicerOption.isDefault) {
+                this.slice.controlDependenceOptions = slicerOption.key as ControlDependenceOptions;
+              }
               break;
             }
           }
@@ -112,13 +113,13 @@ export class SliceMakeComponent implements OnInit {
 
   updateForm(slice: ISlice) {
     this.createForm.patchValue({
-      androidVersion: slice.androidVersion,
-      androidClassName: slice.androidClassName,
+      androidVersion: null,
+      androidClassName: null,
       entryMethods: slice.entryMethods,
       seedStatements: slice.seedStatements,
-      reflectionOption: slice.reflectionOption,
-      dataDependenceOption: slice.dataDependenceOption,
-      controlDependenceOption: slice.controlDependenceOption
+      reflectionOptions: slice.reflectionOptions,
+      dataDependenceOptions: slice.dataDependenceOptions,
+      controlDependenceOptions: slice.controlDependenceOptions
     });
   }
 
@@ -139,9 +140,9 @@ export class SliceMakeComponent implements OnInit {
       androidClassName: (this.createForm.get(['androidClassName']).value as IAndroidClass).name,
       entryMethods: this.createForm.get(['entryMethods']).value,
       seedStatements: this.createForm.get(['seedStatements']).value,
-      reflectionOption: (this.createForm.get(['reflectionOption']).value as SelectItem).label,
-      dataDependenceOption: (this.createForm.get(['dataDependenceOption']).value as SelectItem).label,
-      controlDependenceOption: (this.createForm.get(['controlDependenceOption']).value as SelectItem).label
+      reflectionOptions: (this.createForm.get(['reflectionOptions']).value as ISlicerOption).key as ReflectionOptions,
+      dataDependenceOptions: (this.createForm.get(['dataDependenceOptions']).value as ISlicerOption).key as DataDependenceOptions,
+      controlDependenceOptions: (this.createForm.get(['controlDependenceOptions']).value as ISlicerOption).key as ControlDependenceOptions
     };
     return entity;
   }
@@ -163,56 +164,74 @@ export class SliceMakeComponent implements OnInit {
     this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  onVersionSelection(androidClassNameDropdown: Dropdown) {
-    this.slice.androidVersion = this.selectedVersion.version;
-    androidClassNameDropdown.setDisabledState(true);
+  onVersionSelection() {
+    this.createForm.get(['androidClassName']).disable();
 
-    this.androidOptionsService.getAndroidClasses(this.selectedVersion.path).subscribe(
+    this.androidOptionsService.getAndroidClasses((this.createForm.get(['androidVersion']).value as IAndroidVersion).path).subscribe(
       (res: HttpResponse<IAndroidClass[]>) => {
         this.classOptions = res.body;
-        androidClassNameDropdown.setDisabledState(false);
+        this.createForm.get(['androidClassName']).enable();
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }
 
   onClassSelection() {
-    this.androidOptionsService.getServiceSource(this.selectedClass.path).subscribe(
+    this.androidOptionsService.getServiceSource((this.createForm.get(['androidClassName']).value as IAndroidClass).path).subscribe(
       (res: any) => {
-        this.sourceFile = { uri: this.selectedClass.name, language: 'java', content: res.body };
+        this.sourceFile = {
+          uri: (this.createForm.get(['androidClassName']).value as IAndroidClass).name,
+          language: 'java',
+          content: res.body
+        };
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }
 
-  filterSeedStatementOptions(event, options, filterdOptions) {
-    filterdOptions = [];
+  filterEntryMethodOptions(event) {
+    this.filteredEntryMethodOptions = [];
+    this.filterMultiSelectOptions(event, this.entryMethodOptions, this.filteredEntryMethodOptions);
+  }
+
+  filterSeedStatementOptions(event) {
+    this.filteredSeedStatementOptions = [];
+    this.filterMultiSelectOptions(event, this.seedStatementOptions, this.filteredSeedStatementOptions);
+  }
+
+  private filterMultiSelectOptions(event, options, filterdOptions) {
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
       if (option.toLowerCase().indexOf(event.query.toLowerCase()) > -1) {
         filterdOptions.push(option);
+        console.log(filterdOptions);
+        console.log(this.filteredSeedStatementOptions);
       }
     }
   }
 
-  addSeedStatementOption(event, options) {
+  addEntryMethodOption(event: KeyboardEvent) {
+    this.addMultiSelectOption(event, this.entryMethodOptions, this.createForm.get(['entryMethods']).value);
+  }
+
+  addSeedStatementOption(event: KeyboardEvent) {
+    this.addMultiSelectOption(event, this.seedStatementOptions, this.createForm.get(['seedStatements']).value);
+  }
+
+  private addMultiSelectOption(event, options, selectedoptions) {
     if (event.key === 'Enter') {
       const tokenInput = event.srcElement as any;
       if (tokenInput.value) {
+        // add value to available options
         if (!options.includes(tokenInput.value)) {
           options.push(tokenInput.value);
         }
-        if (!event.target.value.includes(tokenInput.value)) {
-          this.createForm.get(['seedStatements']).value.push(tokenInput.value);
+        // add value to selected options
+        if (!selectedoptions.includes(tokenInput.value)) {
+          selectedoptions.push(tokenInput.value);
         }
         tokenInput.value = '';
       }
-    }
-  }
-
-  private setDefault(slicerOption: ISlicerOption, slicerOptionItem: SelectItem, formControlValue: any) {
-    if (slicerOption.isDefault) {
-      formControlValue = slicerOptionItem;
     }
   }
 }

@@ -10,7 +10,7 @@ import { SliceService } from 'app/entities/slice/slice.service';
 import { Slice } from 'app/shared/model/slice.model';
 
 describe('Component Tests', () => {
-  describe('Slice Management Update Component', () => {
+  describe('Slice Management Make Component', () => {
     let comp: SliceMakeComponent;
     let fixture: ComponentFixture<SliceMakeComponent>;
     let service: SliceService;

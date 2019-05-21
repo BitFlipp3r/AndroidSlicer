@@ -31,24 +31,13 @@ entity Slice {
   slice TextBlob,
   log TextBlob,
   threadId String,
-  running Boolean
-}
-
-relationship OneToOne {
-  /** SlicerOption must have type ReflectionOptions */
-  Slice{reflectionOptions(key) required} 
-  to 
-  SlicerOption,
-  
-  /** SlicerOption must have type ReflectionOptions */
-  Slice{dataDependenceOptions(key) required} 
-  to 
-  SlicerOption, 
-  
-  /** SlicerOption must have type ReflectionOptions */ 
-  Slice{controlDependenceOptions(key) required} 
-  to 
-  SlicerOption 
+  running Boolean,
+  /** com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions */
+  reflectionOptions ReflectionOptions required,
+  /** com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions */
+  dataDependenceOptions DataDependenceOptions required,
+  /** com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions */
+  controlDependenceOptions ControlDependenceOptions required
 }
 
 entity SlicerSetting {
@@ -68,6 +57,38 @@ enum SlicerOptionType {
 	REFLECTION_OPTION,
   DATA_DEPENDENCE_OPTION,
   CONTROL_DEPENDENCE_OPTION
+}
+
+/** Placeholder for com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions. Delete on server side after code generation. */
+enum ReflectionOptions {
+  FULL,
+  NO_FLOW_TO_CASTS,
+  NO_FLOW_TO_CASTS_NO_METHOD_INVOKE,
+  NO_METHOD_INVOKE,
+  NO_STRING_CONSTANTS,
+  NONE,
+  ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE
+}
+
+/** Placeholder for  com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions. Delete on server side after code generation. */
+enum DataDependenceOptions {
+  FULL,
+  NO_BASE_NO_EXCEPTIONS,
+  NO_BASE_NO_HEAP,
+  NO_BASE_NO_HEAP_NO_EXCEPTIONS,
+  NO_BASE_PTRS,
+  NO_EXCEPTIONS,
+  NO_HEAP,
+  NO_HEAP_NO_EXCEPTIONS,
+  NONE,
+  REFLECTION
+}
+
+/** Placeholder for  com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions. Delete on server side after code generation. */
+enum ControlDependenceOptions {
+  FULL,
+  NO_EXCEPTIONAL_EDGES,
+  NONE
 }
 
 paginate Slice, SlicerSetting, SlicerOption with pagination

@@ -218,12 +218,17 @@ p-autoComplete > span > button {
   color: #212529 !important;
 }
 
+p-dropdown > div,
 p-dropdown > div > input[type='text'] {
   &:hover,
   &:focus,
   &:active {
     background-color: white !important;
   }
+}
+
+body .ui-dropdown.ui-state-focus .ui-dropdown-label {
+  background-color: white !important;
 }
 
 p-inputswitch {

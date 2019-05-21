@@ -34,9 +34,9 @@ export class SliceUpdatePage {
   logInput = element(by.id('field_log'));
   threadIdInput = element(by.id('field_threadId'));
   runningInput = element(by.id('field_running'));
-  reflectionSelect = element(by.id('field_reflection'));
-  dataDependenceSelect = element(by.id('field_dataDependence'));
-  controlDependenceSelect = element(by.id('field_controlDependence'));
+  reflectionOptionsSelect = element(by.id('field_reflectionOptions'));
+  dataDependenceOptionsSelect = element(by.id('field_dataDependenceOptions'));
+  controlDependenceOptionsSelect = element(by.id('field_controlDependenceOptions'));
 
   async getPageTitle() {
     return this.pageTitle.getText();
@@ -101,62 +101,49 @@ export class SliceUpdatePage {
   getRunningInput(timeout?: number) {
     return this.runningInput;
   }
+  async setReflectionOptionsSelect(reflectionOptions) {
+    await this.reflectionOptionsSelect.sendKeys(reflectionOptions);
+  }
 
-  async reflectionSelectLastOption(timeout?: number) {
-    await this.reflectionSelect
+  async getReflectionOptionsSelect() {
+    return await this.reflectionOptionsSelect.element(by.css('option:checked')).getText();
+  }
+
+  async reflectionOptionsSelectLastOption(timeout?: number) {
+    await this.reflectionOptionsSelect
       .all(by.tagName('option'))
       .last()
       .click();
   }
 
-  async reflectionSelectOption(option) {
-    await this.reflectionSelect.sendKeys(option);
+  async setDataDependenceOptionsSelect(dataDependenceOptions) {
+    await this.dataDependenceOptionsSelect.sendKeys(dataDependenceOptions);
   }
 
-  getReflectionSelect(): ElementFinder {
-    return this.reflectionSelect;
+  async getDataDependenceOptionsSelect() {
+    return await this.dataDependenceOptionsSelect.element(by.css('option:checked')).getText();
   }
 
-  async getReflectionSelectedOption() {
-    return await this.reflectionSelect.element(by.css('option:checked')).getText();
-  }
-
-  async dataDependenceSelectLastOption(timeout?: number) {
-    await this.dataDependenceSelect
+  async dataDependenceOptionsSelectLastOption(timeout?: number) {
+    await this.dataDependenceOptionsSelect
       .all(by.tagName('option'))
       .last()
       .click();
   }
 
-  async dataDependenceSelectOption(option) {
-    await this.dataDependenceSelect.sendKeys(option);
+  async setControlDependenceOptionsSelect(controlDependenceOptions) {
+    await this.controlDependenceOptionsSelect.sendKeys(controlDependenceOptions);
   }
 
-  getDataDependenceSelect(): ElementFinder {
-    return this.dataDependenceSelect;
+  async getControlDependenceOptionsSelect() {
+    return await this.controlDependenceOptionsSelect.element(by.css('option:checked')).getText();
   }
 
-  async getDataDependenceSelectedOption() {
-    return await this.dataDependenceSelect.element(by.css('option:checked')).getText();
-  }
-
-  async controlDependenceSelectLastOption(timeout?: number) {
-    await this.controlDependenceSelect
+  async controlDependenceOptionsSelectLastOption(timeout?: number) {
+    await this.controlDependenceOptionsSelect
       .all(by.tagName('option'))
       .last()
       .click();
-  }
-
-  async controlDependenceSelectOption(option) {
-    await this.controlDependenceSelect.sendKeys(option);
-  }
-
-  getControlDependenceSelect(): ElementFinder {
-    return this.controlDependenceSelect;
-  }
-
-  async getControlDependenceSelectedOption() {
-    return await this.controlDependenceSelect.element(by.css('option:checked')).getText();
   }
 
   async save(timeout?: number) {

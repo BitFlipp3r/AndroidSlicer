@@ -3,7 +3,7 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { take, map } from 'rxjs/operators';
 import { SliceService } from 'app/entities/slice/slice.service';
-import { ISlice, Slice } from 'app/shared/model/slice.model';
+import { ISlice, Slice, ReflectionOptions, DataDependenceOptions, ControlDependenceOptions } from 'app/shared/model/slice.model';
 
 describe('Service Tests', () => {
   describe('Slice Service', () => {
@@ -21,7 +21,20 @@ describe('Service Tests', () => {
       service = injector.get(SliceService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Slice('ID', 0, 'AAAAAAA', ['AAAAAAA', 'AAAAAAA'], ['AAAAAAA', 'AAAAAAA'], 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', false);
+      elemDefault = new Slice(
+        'ID',
+        0,
+        'AAAAAAA',
+        ['AAAAAAA', 'AAAAAAA'],
+        ['AAAAAAA', 'AAAAAAA'],
+        'AAAAAAA',
+        'AAAAAAA',
+        'AAAAAAA',
+        false,
+        ReflectionOptions.FULL,
+        DataDependenceOptions.FULL,
+        ControlDependenceOptions.FULL
+      );
     });
 
     describe('Service methods', () => {
@@ -64,7 +77,10 @@ describe('Service Tests', () => {
             slice: 'BBBBBB',
             log: 'BBBBBB',
             threadId: 'BBBBBB',
-            running: true
+            running: true,
+            reflectionOptions: 'BBBBBB',
+            dataDependenceOptions: 'BBBBBB',
+            controlDependenceOptions: 'BBBBBB'
           },
           elemDefault
         );

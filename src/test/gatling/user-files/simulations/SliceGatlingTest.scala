@@ -80,6 +80,9 @@ class SliceGatlingTest extends Simulation {
                 , "log":null
                 , "threadId":"SAMPLE_TEXT"
                 , "running":null
+                , "reflectionOptions":"FULL"
+                , "dataDependenceOptions":"FULL"
+                , "controlDependenceOptions":"FULL"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_slice_url"))).exitHereIfFailed
