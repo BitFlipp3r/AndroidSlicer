@@ -93,14 +93,14 @@ export class SliceMakeComponent implements OnInit {
             case SlicerOptionType.DATA_DEPENDENCE_OPTION: {
               this.dataDependenceOptionsList.push(slicerOptionItem);
               if (slicerOption.isDefault) {
-                this.slice.dataDependenceOptions = slicerOption.key as DataDependenceOptions;
+                this.createForm.get(['dataDependenceOptions']).setValue(slicerOption);
               }
               break;
             }
             case SlicerOptionType.CONTROL_DEPENDENCE_OPTION: {
               this.controlDependenceOptionsList.push(slicerOptionItem);
               if (slicerOption.isDefault) {
-                this.slice.controlDependenceOptions = slicerOption.key as ControlDependenceOptions;
+                this.createForm.get(['controlDependenceOptions']).setValue(slicerOption);
               }
               break;
             }
@@ -177,13 +177,23 @@ export class SliceMakeComponent implements OnInit {
   }
 
   onClassSelection() {
-    this.androidOptionsService.getServiceSource((this.createForm.get(['androidClassName']).value as IAndroidClass).path).subscribe(
+    const serviceClassName: string = (this.createForm.get(['androidClassName']).value as IAndroidClass).name;
+    const sourceFilePath: string = (this.createForm.get(['androidClassName']).value as IAndroidClass).path;
+
+    this.androidOptionsService.getServiceSource(sourceFilePath).subscribe(
       (res: any) => {
         this.sourceFile = {
           uri: (this.createForm.get(['androidClassName']).value as IAndroidClass).name,
           language: 'java',
           content: res.body
         };
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
+
+    this.androidOptionsService.getEntryMethods(serviceClassName, sourceFilePath).subscribe(
+      (res: HttpResponse<string[]>) => {
+        this.entryMethodOptions = res.body;
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );

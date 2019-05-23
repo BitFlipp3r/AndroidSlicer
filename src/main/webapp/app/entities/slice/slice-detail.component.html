@@ -27,23 +27,17 @@
                         <monaco-editor [theme]="theme" [file]="code"></monaco-editor>
                     </dd>
                 </div>
-                <dt><span>Reflection Option</span></dt>
+                <dt><span>Reflection Options</span></dt>
                 <dd>
-                    <div *ngIf="slice.reflectionOption">
-                        <a [routerLink]="['/slicer-option', slice.reflectionOption?.id, 'view']">{{slice.reflectionOption?.key}}</a>
-                    </div>
+                    <span>{{slice.reflectionOptions}}</span>
                 </dd>
-                <dt><span>Data Dependence Option</span></dt>
+                <dt><span>Data Dependence Options</span></dt>
                 <dd>
-                    <div *ngIf="slice.dataDependenceOption">
-                        <a [routerLink]="['/slicer-option', slice.dataDependenceOption?.id, 'view']">{{slice.dataDependenceOptions?.key}}</a>
-                    </div>
+                    <span>{{slice.dataDependenceOptions}}</span>
                 </dd>
-                <dt><span>Control Dependence Option</span></dt>
+                <dt><span>Control Dependence Options</span></dt>
                 <dd>
-                    <div *ngIf="slice.controlDependenceOption">
-                        <a [routerLink]="['/slicer-option', slice.controlDependenceOption?.id, 'view']">{{slice.controlDependenceOption?.key}}</a>
-                    </div>
+                    <span>{{slice.controlDependenceOptions}}</span>
                 </dd>
                 <div *ngIf="slice.log">
                     <dt><span>Log</span></dt>

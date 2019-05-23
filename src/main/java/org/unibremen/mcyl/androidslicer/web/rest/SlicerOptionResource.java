@@ -66,7 +66,7 @@ public class SlicerOptionResource {
         }
 
         // remove other default settings if this is a new default
-        if (slicerOption.isDefault()) {
+        if (slicerOption.getIsDefault()) {
             removeDefaults(slicerOption.getType());
         }
 
@@ -97,7 +97,7 @@ public class SlicerOptionResource {
         }
 
         // remove other default settings if this is a new default
-        if (slicerOption.isDefault()) {
+        if (slicerOption.getIsDefault()) {
             removeDefaults(slicerOption.getType());
         }
 
@@ -152,8 +152,8 @@ public class SlicerOptionResource {
 
     private void removeDefaults(SlicerOptionType slicerOptionType) {
         slicerOptionRepository.findByType(slicerOptionType).forEach((SlicerOption slicerOption) -> {
-            if (slicerOption.isDefault()) {
-                slicerOption.setDefault(false);
+            if (slicerOption.getIsDefault()) {
+                slicerOption.setIsDefault(false);
                 slicerOptionRepository.save(slicerOption);
             }
         });

@@ -89,7 +89,7 @@ public class SlicerOption implements Serializable {
         this.description = description;
     }
 
-    public Boolean isDefault() {
+    public Boolean getIsDefault() {
         return isDefault;
     }
 
@@ -98,7 +98,7 @@ public class SlicerOption implements Serializable {
         return this;
     }
 
-    public void setDefault(Boolean isDefault) {
+    public void setIsDefault(Boolean isDefault) {
         this.isDefault = isDefault;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
@@ -126,7 +126,7 @@ public class SlicerOption implements Serializable {
             ", type='" + getType() + "'" +
             ", key='" + getKey() + "'" +
             ", description='" + getDescription() + "'" +
-            ", isDefault='" + isDefault() + "'" +
+            ", isDefault='" + getIsDefault() + "'" +
             "}";
     }
 }

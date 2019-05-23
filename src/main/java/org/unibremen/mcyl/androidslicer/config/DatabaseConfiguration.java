@@ -26,7 +26,6 @@ import java.util.List;
 
 @Configuration
 @EnableMongoRepositories("org.unibremen.mcyl.androidslicer.repository")
-@Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 @Import(value = MongoAutoConfiguration.class)
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
 public class DatabaseConfiguration {

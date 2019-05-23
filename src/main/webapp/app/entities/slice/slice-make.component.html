@@ -1,6 +1,6 @@
 <div class="row justify-content-center">
     <div class="col-8">
-        <form name="createForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="createForm">
+        <form name="createForm" role="form" novalidate (keydown.enter)="$event.preventDefault()" (ngSubmit)="save()" [formGroup]="createForm">
             <h2 id="jhi-slice-heading">Create or edit a Slice</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
@@ -58,6 +58,7 @@
 
                 <div class="form-group">
                     <label class="form-control-label" for="field_reflectionOptions">Reflection Options</label>
+                    <div>Options for handling reflection during call graph construction.</div>
                     <p-dropdown [options]="reflectionOptionsList" id="field_reflectionOptions" name="reflectionOptions" formControlName="reflectionOptions" lazy="true" [style]="{'display':'block','width':'100%'}" required="true">
                        <ng-template let-option pTemplate="item"> 
                            <span>{{option.value.key}}</span><span *ngIf="option.value.isDefault"><b> (Recommended)</b></span><br>
@@ -73,9 +74,10 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_dataDependenceOptions">Data Dependence Options</label>
+                    <div>Options for handling data dependence during system dependence graph (SDG) construction.</div>
                     <p-dropdown [options]="dataDependenceOptionsList" id="field_dataDependenceOptions" name="dataDependenceOptions" formControlName="dataDependenceOptions" lazy="true" [style]="{'display':'block','width':'100%'}" required="true">
                         <ng-template let-option pTemplate="item"> 
-                            <span>{{option.value.key}}</span><div *ngIf="option.value.isDefault"><b> (Recommended)</b></div><br>
+                            <span>{{option.value.key}}</span><span *ngIf="option.value.isDefault"><b> (Recommended)</b></span><br>
                             <span>{{option.value.description}}</span>
                         </ng-template>
                     </p-dropdown>
@@ -88,9 +90,10 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_controlDependenceOptions">Control Dependence Options</label>
+                    <div>Options for handling control dependence during system dependence graph (SDG) construction.</div>
                     <p-dropdown [options]="controlDependenceOptionsList"  id="field_controlDependenceOptions" name="controlDependenceOptions" formControlName="controlDependenceOptions" lazy="true" [style]="{'display':'block','width':'100%'}" required="true">
                         <ng-template let-option pTemplate="item"> 
-                            <span>{{option.value.key}}</span><div *ngIf="option.value.isDefault"><b> (Recommended)</b></div><br>
+                            <span>{{option.value.key}}</span><span *ngIf="option.value.isDefault"><b> (Recommended)</b></span><br>
                             <span>{{option.value.description}}</span>
                         </ng-template>
                     </p-dropdown>

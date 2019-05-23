@@ -16,17 +16,24 @@ export class AndroidOptionsService {
     return this.http.get<IAndroidVersion[]>(`${this.resourceUrl}/android-versions`, { observe: 'response' });
   }
 
-  getAndroidClasses(path: string): Observable<HttpResponse<IAndroidClass[]>> {
+  getAndroidClasses(androidSourceFolderPath: string): Observable<HttpResponse<IAndroidClass[]>> {
     return this.http.get<IAndroidClass[]>(`${this.resourceUrl}/system-services`, {
-      params: new HttpParams().set('path', path),
+      params: new HttpParams().set('path', androidSourceFolderPath),
       observe: 'response'
     });
   }
 
-  getServiceSource(path: string): Observable<any> {
+  getServiceSource(sourceFilePath: string): Observable<any> {
     return this.http.get(`${this.resourceUrl}/source-file`, {
       responseType: 'text',
-      params: new HttpParams().set('path', path),
+      params: new HttpParams().set('path', sourceFilePath),
+      observe: 'response'
+    });
+  }
+
+  getEntryMethods(serviceClassName: string, sourceFilePath: string): Observable<HttpResponse<string[]>> {
+    return this.http.get<string[]>(`${this.resourceUrl}/entry-methods`, {
+      params: new HttpParams().set('name', serviceClassName).set('path', sourceFilePath),
       observe: 'response'
     });
   }

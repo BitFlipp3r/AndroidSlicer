@@ -22,6 +22,7 @@ import java.util.stream.IntStream;
 import java.util.HashSet;
 import java.util.List;
 
+//TODO source: Philip, fix breaking changes since 1.5
 public class MethodVisitor extends VoidVisitorAdapter<Object> {
 
 	private Set<Integer> slice = new HashSet<>();

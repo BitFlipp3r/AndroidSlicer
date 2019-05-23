@@ -31,21 +31,9 @@
                 <td>{{slice.androidClassName}}</td>
                 <td>{{slice.entryMethods}}</td>
                 <td>{{slice.seedStatements}}</td>
-                <td>
-                    <div *ngIf="slice.reflectionOption">
-                        <a [routerLink]="['../slicer-option', slice.reflectionOption?.id, 'view' ]" >{{slice.reflectionOption?.key}}</a>
-                    </div>
-                </td>
-                <td>
-                    <div *ngIf="slice.dataDependenceOption">
-                        <a [routerLink]="['../slicer-option', slice.dataDependenceOption?.id, 'view' ]" >{{slice.dataDependenceOption?.key}}</a>
-                    </div>
-                </td>
-                <td>
-                    <div *ngIf="slice.controlDependenceOption">
-                        <a [routerLink]="['../slicer-option', slice.controlDependenceOption?.id, 'view' ]" >{{slice.controlDependenceOption?.key}}</a>
-                    </div>
-                </td>
+                <td>{{slice.reflectionOptions}}</td>
+                <td>{{slice.dataDependenceOptions}}</td>
+                <td>{{slice.controlDependenceOptions}}</td>
                 <td>
                     <div [class.running]="slice.running">
                         <fa-icon [icon]="'sync'" ></fa-icon>

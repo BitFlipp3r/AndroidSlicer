@@ -98,6 +98,11 @@ Generic styles
   cursor: pointer;
 }
 
+div.running svg {
+  color: green;
+  animation: fa-spin 2s infinite linear;
+}
+
 /* ==========================================================================
 Custom alerts for notification
 ========================================================================== */
