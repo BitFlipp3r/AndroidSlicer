@@ -237,7 +237,7 @@ public class AndroidOptionsResource {
         log.debug("REST request to get seed statements");
         SlicerSetting seedStatements = slicerSettingRepository.findOneByKey(Constants.SEED_STATEMENTS_KEY).get();
         if (seedStatements != null) {
-            return ResponseEntity.ok().body(Arrays.asList(seedStatements.getValue().split(";")));
+            return ResponseEntity.ok().body(Arrays.asList(seedStatements.getValue().replace(" ", "").split(";")));
         }
         throw new BadRequestAlertException("Seed Statements not found", ENTITY_NAME, "idnull");
     }

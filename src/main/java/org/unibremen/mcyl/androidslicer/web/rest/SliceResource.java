@@ -109,7 +109,14 @@ public class SliceResource {
     @DeleteMapping("/slice/{id}")
     public ResponseEntity<Void> deleteSlice(@PathVariable String id) {
         log.debug("REST request to delete Slice : {}", id);
-        sliceRepository.deleteById(id);
+        if (id != null && !id.isEmpty()){
+            Slice slice = sliceRepository.findById(id).get();
+            Thread slicerThread = Thread.getAllStackTraces().keySet().stream().filter(thread -> thread.getName().equals(slice.getThreadId())).findFirst().orElse(null);
+            if(slicerThread != null){
+                slicerThread.interrupt();
+            }
+            sliceRepository.deleteById(id);
+        }
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
     }
 }

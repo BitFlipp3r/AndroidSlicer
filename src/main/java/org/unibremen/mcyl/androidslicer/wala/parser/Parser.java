@@ -10,6 +10,8 @@ import java.util.Set;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
+import org.unibremen.mcyl.androidslicer.service.SliceLogger;
+
 //TODO source philip, fix for breaking changes since 1.5
 public class Parser {
 
@@ -26,18 +28,16 @@ public class Parser {
 		return null;
 	}
 
-	public static Set<Integer> getModifiedSlice(final String javaPath, final Set<Integer> sliceLines) {
+	public static Set<Integer> getModifiedSlice(final String javaPath, final Set<Integer> sliceLines, SliceLogger logger) {
 		MethodVisitor visitor = new MethodVisitor(sliceLines);
 
 		try {
-			CompilationUnit compilation_unit = getCu(javaPath);
-			if (compilation_unit != null) {
-				// System.out.println("Compilation unit:");
-				// System.out.println(compilation_unit);
-				visitor.visit(compilation_unit, "");
+			CompilationUnit compilationUnit = getCu(javaPath);
+			if (compilationUnit != null) {
+				visitor.visit(compilationUnit, "");
 				return visitor.getSlice();
 			} else {
-				System.out.println(javaPath + " file not found! Skipping!\n");
+				logger.log(javaPath + " file not found! Skipping!\n");
 				return null;
 			}
 		} catch (IOException e) {

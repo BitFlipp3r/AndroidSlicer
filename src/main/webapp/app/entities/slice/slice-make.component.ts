@@ -13,6 +13,7 @@ import { IAndroidClass, AndroidClass } from 'app/shared/model/android-class.mode
 import { AndroidOptionsService } from 'app/shared/services/android-options.service';
 import { MonacoFile } from 'ngx-monaco';
 import { SelectItem } from 'primeng/components/common/selectitem';
+import { constants } from 'perf_hooks';
 
 @Component({
   selector: 'jhi-slice-make',
@@ -221,11 +222,15 @@ export class SliceMakeComponent implements OnInit {
   }
 
   addEntryMethodOption(event: KeyboardEvent) {
-    this.addMultiSelectOption(event, this.entryMethodOptions, this.createForm.get(['entryMethods']).value);
+    const selectedEntryMethodOptions = this.createForm.get(['entryMethods']).value;
+    this.addMultiSelectOption(event, this.entryMethodOptions, selectedEntryMethodOptions);
+    this.createForm.get(['entryMethods']).patchValue(selectedEntryMethodOptions);
   }
 
   addSeedStatementOption(event: KeyboardEvent) {
-    this.addMultiSelectOption(event, this.seedStatementOptions, this.createForm.get(['seedStatements']).value);
+    const selectedSeedStatementOptions = this.createForm.get(['seedStatements']).value;
+    this.addMultiSelectOption(event, this.seedStatementOptions, selectedSeedStatementOptions);
+    this.createForm.get(['seedStatements']).patchValue(selectedSeedStatementOptions);
   }
 
   private addMultiSelectOption(event, options, selectedoptions) {

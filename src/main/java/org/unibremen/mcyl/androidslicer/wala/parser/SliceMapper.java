@@ -10,61 +10,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.unibremen.mcyl.androidslicer.service.SliceLogger;
+
+//TODO source: Philip,
+// mcyl refractor for higher code quality
+// mcy fix breaking changes since 1.5
 public class SliceMapper {
 
-	private BufferedReader br;
-	private BufferedReader br2;
-
-	public SliceMapper() {
-	}
-
-	public String markLinesOfCode(final String javaFileName, final Set<Integer> lineNumbers) {
+	public String getLinesOfCode(final String javaFileName, final Set<Integer> lineNumbers, SliceLogger logger) {
 		try {
 			String line = null;
 			Map<Integer, String> javaFile = new HashMap<>();
-			br = new BufferedReader(new FileReader(javaFileName));
+			BufferedReader reader = new BufferedReader(new FileReader(javaFileName));
 			int i = 1;
-			while ((line = br.readLine()) != null) {
-				javaFile.put(i, line);
-				i++;
-			}
-			List<Integer> listOfLineNumbers = new ArrayList<>();
-			listOfLineNumbers.addAll(lineNumbers);
-			Collections.sort(listOfLineNumbers);
-			StringBuilder sb = new StringBuilder();
-
-			for (Integer row : javaFile.keySet()) {
-				if (listOfLineNumbers.contains(row)) {
-					String fileline = javaFile.get(row);
-					if (fileline != null) {
-						sb.append("@");
-						sb.append(fileline);
-						sb.append("\n");
-					}
-				} else {
-					String fileline = javaFile.get(row);
-					if (fileline != null) {
-						sb.append(fileline);
-						sb.append("\n");
-					}
-				}
-			}
-			return sb.toString();
-
-		} catch (IOException e) {
-			// System.err.println(e);
-		}
-
-		return null;
-	}
-
-	public String getLinesOfCode(final String javaFileName, final Set<Integer> lineNumbers) {
-		try {
-			String line = null;
-			Map<Integer, String> javaFile = new HashMap<>();
-			br2 = new BufferedReader(new FileReader(javaFileName));
-			int i = 1;
-			while ((line = br2.readLine()) != null) {
+			while ((line = reader.readLine()) != null) {
 				javaFile.put(i, line);
 				i++;
 			}
@@ -79,13 +38,12 @@ public class SliceMapper {
 					sb.append("\n");
 				}
 			}
-			// System.out.println("String sb: " + sb.toString());
+			reader.close();
 			return sb.toString();
 
 		} catch (IOException e) {
-			// System.err.println(e);
-		}
-
-		return "";
+            logger.log(e.getMessage());
+            return null;
+        }
 	}
 }

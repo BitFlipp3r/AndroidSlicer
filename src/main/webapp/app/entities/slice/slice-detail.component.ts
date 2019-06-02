@@ -23,7 +23,7 @@ export class SliceDetailComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ slice }) => {
       this.slice = slice;
-      this.code = { uri: slice.mainClass, language: 'java', content: slice.slice };
+      this.code = { uri: slice.androidClassName, language: 'java', content: slice.slice };
       if (slice.running) {
         // update until slicing has finished
         this.refresh();
@@ -43,6 +43,11 @@ export class SliceDetailComponent implements OnInit {
         switchMap(() => this.sliceService.find(this.slice.id))
       )
       .pipe(takeWhile(() => this.slice.running))
-      .subscribe(httpResponse => (this.slice = httpResponse.body));
+      .subscribe(httpResponse => {
+        this.slice = httpResponse.body;
+        if (!this.slice.running) {
+          this.code = { uri: this.slice.androidClassName, language: 'java', content: this.slice.slice };
+        }
+      });
   }
 }

@@ -83,8 +83,9 @@ public class SliceService {
         Map<String, Set<Integer>> sliceLineNumbers = null;
         try {
             sliceLineNumbers = WalaSlicer.doSlicing(appJar, exclusionFile,
-                    "L" + FilenameUtils.removeExtension(slice.getAndroidClassName()), // add "L" to class name and remove .java extension
-                    slice.getEntryMethods(), slice.getSeedStatements(), 
+                    // add "L" to class name and remove .java extension
+                    "L" + FilenameUtils.removeExtension(slice.getAndroidClassName()),
+                    slice.getEntryMethods(), slice.getSeedStatements(),
                     slice.getReflectionOptions(), slice.getDataDependenceOptions(),
                     slice.getControlDependenceOptions(), logger);
         } catch (IllegalArgumentException | WalaException | IOException | CancelException e) {
@@ -93,28 +94,33 @@ public class SliceService {
 
         if (sliceLineNumbers != null) {
 
-            SliceMapper sm = new SliceMapper();
+            SliceMapper sliceMapper = new SliceMapper();
             StringBuilder builder = new StringBuilder();
 
             logger.log("\n== RECONSTRUCTING CODE ==");
-            logger.log(Integer.toString(sliceLineNumbers.size()) + " slices");
 
-            for (Map.Entry<String, Set<Integer>> elem : sliceLineNumbers.entrySet()) {
+            for (Map.Entry<String, Set<Integer>> sliceLineNumbersEntry : sliceLineNumbers.entrySet()) {
 
-                String sourceLocation = slicerSettingRepository.findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get()
-                        .getValue() + "\\android-" + slice.getAndroidVersion() + "\\"
-                        + slice.getAndroidClassName().replace("/", File.separator);
-                Set<Integer> sliceLineNumbersSorted = new TreeSet<>(elem.getValue());
+                String sourceLocation = slicerSettingRepository
+                    .findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get()
+                    .getValue()
+                    + "\\android-"
+                    + slice.getAndroidVersion()
+                    + "\\"
+                    + sliceLineNumbersEntry.getKey().replace("/", File.separator);
 
-                logger.log("Slice line numbers (sorted) for file " + elem.getKey() + ": " + sliceLineNumbersSorted);
+                Set<Integer> sliceLineNumbersSorted = new TreeSet<>(sliceLineNumbersEntry.getValue());
+
+                logger.log("Slice line numbers (sorted) for file " + sliceLineNumbersEntry.getKey() + ": " + sliceLineNumbersSorted);
 
                 try {
-                    Set<Integer> modSlice = Parser.getModifiedSlice(sourceLocation, elem.getValue());
+                    Set<Integer> modSlice = Parser.getModifiedSlice(sourceLocation, sliceLineNumbersEntry.getValue(), logger);
+                    logger.log("Lines of code: " + modSlice.toString());
                     if (modSlice != null) {
-                        builder.append(sm.getLinesOfCode(sourceLocation, modSlice));
+                        builder.append(sliceMapper.getLinesOfCode(sourceLocation, modSlice, logger));
                     }
                 } catch (Exception ex) {
-                    logger.log("Could not reconstruct code with parser for file '" + elem.getKey() + "': " + ex);
+                    logger.log("Could not reconstruct code with parser for file '" + sliceLineNumbersEntry.getKey() + "': " + ex);
                 }
             }
 

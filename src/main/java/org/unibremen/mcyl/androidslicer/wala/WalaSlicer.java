@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 
+import com.ibm.wala.cast.tree.CAstType.Method;
 import com.ibm.wala.classLoader.IClass;
 import com.ibm.wala.classLoader.IMethod;
 import com.ibm.wala.classLoader.ShrikeBTMethod;
@@ -64,9 +65,9 @@ import com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions;
 public class WalaSlicer {
 
   public static Map<String, Set<Integer>> doSlicing(File appJar, File exclusionFile, String androidClassName,
-      List<String> entryMethods, List<String> seedStatements, 
+      List<String> entryMethods, List<String> seedStatements,
       ReflectionOptions reflectionOptions, DataDependenceOptions dataDependenceOptions,
-      ControlDependenceOptions controlDependenceOptions, 
+      ControlDependenceOptions controlDependenceOptions,
       SliceLogger logger) throws WalaException, IOException, ClassHierarchyException, IllegalArgumentException,
       CallGraphBuilderCancelException, CancelException {
     long start = System.currentTimeMillis();
@@ -101,8 +102,9 @@ public class WalaSlicer {
     logger.log("Took " + (end - start) + "ms.");
     logger.log(CallGraphStats.getStats(cg));
 
-    logger.log("\n== FIND ENTRY_METHOD(s)/SEED_STATEMENT(s) ==");
+    logger.log("\n== FIND ENTRY_METHOD(s)==");
     List<CGNode> entryMethodNodes = findMethods(cg, entryMethods, androidClassName, logger);
+    logger.log("\n== SEED_STATEMENT(s) ==");
     List<Statement> statements = findCallsTo(entryMethodNodes, seedStatements, logger);
 
     logger.log("\n== SLICING ==");
@@ -116,9 +118,10 @@ public class WalaSlicer {
       sliceList.addAll(
           Slicer.computeBackwardSlice(sm, cg, pointerAnalysis, dataDependenceOptions, controlDependenceOptions));
     }
+    logger.log("Slicing done.");
+    logger.log("Number of slices:  " + sliceList.size());
 
-    logger.log(Integer.toString(sliceList.size()));
-
+    logger.log("\n== GETTING SOURCE FILES ==");
     return dumpSlices(sliceList, logger);
   }
 
@@ -127,11 +130,9 @@ public class WalaSlicer {
     Map<String, Set<Integer>> sourceFileLineNumbers = new HashMap<>();
 
     for (Statement statement : slices)
-      if (statement.getKind() != null
-          && (statement.getKind() == Statement.Kind.NORMAL | statement.getKind() == Statement.Kind.NORMAL_RET_CALLEE
-              | statement.getKind() == Statement.Kind.NORMAL_RET_CALLER)) { // ignore special kinds of statements
+      if (statement.getKind() != null && (statement.getKind() == Statement.Kind.NORMAL)) { // ignore special kinds of statements
 
-        int bcIndex, instructionIndex = ((NormalStatement) statement).getInstructionIndex();
+        int bcIndex, instructionIndex = ((StatementWithInstructionIndex) statement).getInstructionIndex();
 
         IMethod method = statement.getNode().getMethod();
 
@@ -143,9 +144,6 @@ public class WalaSlicer {
           if (method instanceof ShrikeBTMethod) {
             bcIndex = ((ShrikeBTMethod) method).getBytecodeIndex(instructionIndex);
             srcLineNumber = ((ShrikeBTMethod) method).getLineNumber(bcIndex);
-          } else if (method instanceof ShrikeCTMethod) {
-            bcIndex = ((ShrikeCTMethod) method).getBytecodeIndex(instructionIndex);
-            srcLineNumber = ((ShrikeCTMethod) method).getLineNumber(bcIndex);
           } else {
             continue; // skip everything that is not a shrike mehtod wrapper, like FakeRootMethod
           }
@@ -155,32 +153,25 @@ public class WalaSlicer {
           }
 
           try {
-            logger.log(" " + statement.getNode().getMethod().getDeclaringClass().getName());
-            System.out.println(
-                "Source line number = " + srcLineNumber + " with method // " + statement.getNode().getMethod());
-            String[] originalPath = method.getDeclaringClass().getName().toString().split("/");
-            logger.log(
-                "originalPath = " + statement.getNode().getMethod().getDeclaringClass().getName().toString().split("/"));
-            String file = "";
-            logger.log("originalPath.length-1 =" + (originalPath.length - 1));
-            if (originalPath.length - 1 > 0) {
-              file = originalPath[originalPath.length - 1] + ".java";
+
+
+            String declaringClass = method.getDeclaringClass().getName().toString();
+            logger.log("Source line number " + srcLineNumber + " with method // " + method + " in class " + declaringClass);
+            // construct java file path
+            // (e.g. Lcom/android/.../AlarmMangerService$2 -> com/android/.../AlarmManagerService.java)
+            if(declaringClass.indexOf("$") > -1){
+              // remove inner class name (e.g. AlarmMangerService$2 -> AlarmManagerService)
+              declaringClass = declaringClass.substring(0, declaringClass.indexOf("$"));
             }
-            if (originalPath.length == 1) {
-              file = originalPath[originalPath.length - 1] + ".java";
-              file = file.substring(1);
-              logger.log("Java File: " + file);
+            String declaringClassFile = declaringClass.substring(1, declaringClass.length()) + ".java";
+            logger.log("Java source file: " + declaringClassFile);
+
+            Set<Integer> currentLineNumbers = sourceFileLineNumbers.get(declaringClassFile);
+            if (currentLineNumbers == null) {
+                currentLineNumbers = new HashSet<Integer>();
             }
-            if (sourceFileLineNumbers.get(file) == null) {
-              sourceFileLineNumbers.put(file, new HashSet<Integer>());
-              Set<Integer> currentLineNumbers = sourceFileLineNumbers.get(file);
-              currentLineNumbers.add(srcLineNumber);
-              sourceFileLineNumbers.put(file, currentLineNumbers);
-            } else {
-              Set<Integer> currentLineNumbers = sourceFileLineNumbers.get(file);
-              currentLineNumbers.add(srcLineNumber);
-              sourceFileLineNumbers.put(file, currentLineNumbers);
-            }
+            currentLineNumbers.add(srcLineNumber);
+            sourceFileLineNumbers.put(declaringClassFile, currentLineNumbers);
           } catch (Exception e) {
             logger.log("Error getting line sourceFileLineNumbers: " + e);
           }
@@ -193,7 +184,7 @@ public class WalaSlicer {
 
   /**
    * Quelle: Masterthesis Nguyen Datei: \Auditor\src\test\CustomSlicer.java
-   * 
+   *
    * @param scope
    * @param cha
    * @param androidClassName
@@ -214,10 +205,7 @@ public class WalaSlicer {
          * Remove "Service" and package from class name to look for Stub-Classes as well (e.g.
          * Lcom/android/server/AlarmManagerService -> IAlarmManager$Stub),
          */
-        String stubName = androidClassName.substring(androidClassName.lastIndexOf("/") + 1, androidClassName.length());
-        stubName = "I" + stubName.replace("Service", "") + "$Stub";
-        if (typeName.equals(androidClassName) | typeName.startsWith(androidClassName + "$") | // also find inner classes
-            typeName.contains(stubName)) { 
+        if (typeName.equals(androidClassName) | typeName.startsWith(androidClassName + "$")) {
 
           if (isApplicationClass(scope, clazz)) {
             for (Iterator<? extends IMethod> methodIt = clazz.getDeclaredMethods().iterator(); methodIt.hasNext();) {
@@ -254,11 +242,8 @@ public class WalaSlicer {
       Atom method = node.getMethod().getName();
       TypeName declaringClass = node.getMethod().getDeclaringClass().getName();
 
-      String stubName = androidClassName.substring(androidClassName.lastIndexOf("/") + 1, androidClassName.length());
-      stubName = "I" + stubName.replace("Service", "") + "$Stub";
       if (declaringClass.equals(TypeName.findOrCreate(androidClassName))
-          | declaringClass.toString().startsWith(androidClassName + "$") | // also find inner classes
-          declaringClass.toString().contains(stubName)) { 
+          | declaringClass.toString().startsWith(androidClassName + "$")) {
             for (String entryMethod : entryMethods)
             if(method.equals(Atom.findOrCreateUnicodeAtom(entryMethod))){ // compare method name
               cgnodes.add(node);
