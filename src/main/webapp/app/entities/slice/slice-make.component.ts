@@ -215,8 +215,6 @@ export class SliceMakeComponent implements OnInit {
       const option = options[i];
       if (option.toLowerCase().indexOf(event.query.toLowerCase()) > -1) {
         filterdOptions.push(option);
-        console.log(filterdOptions);
-        console.log(this.filteredSeedStatementOptions);
       }
     }
   }
@@ -248,5 +246,21 @@ export class SliceMakeComponent implements OnInit {
         tokenInput.value = '';
       }
     }
+  }
+
+  addAllEntryMethods() {
+    this.createForm.get(['entryMethods']).patchValue(this.entryMethodOptions);
+  }
+
+  clearEntryMethods() {
+    this.createForm.get(['entryMethods']).patchValue(null);
+  }
+
+  addAllSeedStatements() {
+    this.createForm.get(['seedStatements']).patchValue(this.seedStatementOptions);
+  }
+
+  clearSeedStatements() {
+    this.createForm.get(['seedStatements']).patchValue(null);
   }
 }

@@ -1,6 +1,5 @@
 package org.unibremen.mcyl.androidslicer.domain;
 
-
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -8,9 +7,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions;
 import com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions;
@@ -38,18 +37,18 @@ public class Slice implements Serializable {
     /**
      * JSON-List with entry method names
      */
-    
+
     @ApiModelProperty(value = "JSON-List with entry method names", required = true)
     @Field("entry_methods")
-    private List<String> entryMethods = new ArrayList<>();
+    private Set<String> entryMethods = new HashSet<String>();
 
     /**
      * JSON-List with seed statement names
      */
-    
+
     @ApiModelProperty(value = "JSON-List with seed statement names", required = true)
     @Field("seed_statements")
-    private List<String> seedStatements = new ArrayList<>();
+    private Set<String> seedStatements = new HashSet<String>();
 
     @Field("slice")
     private String slice;
@@ -122,29 +121,29 @@ public class Slice implements Serializable {
         this.androidClassName = androidClassName;
     }
 
-    public List<String> getEntryMethods() {
+    public Set<String> getEntryMethods() {
         return entryMethods;
     }
 
-    public Slice entryMethods(List<String> entryMethods) {
+    public Slice entryMethods(Set<String> entryMethods) {
         this.entryMethods = entryMethods;
         return this;
     }
 
-    public void setEntryMethods(List<String> entryMethods) {
+    public void setEntryMethods(Set<String> entryMethods) {
         this.entryMethods = entryMethods;
     }
 
-    public List<String> getSeedStatements() {
+    public Set<String> getSeedStatements() {
         return seedStatements;
     }
 
-    public Slice seedStatements(List<String> seedStatements) {
+    public Slice seedStatements(Set<String> seedStatements) {
         this.seedStatements = seedStatements;
         return this;
     }
 
-    public void setSeedStatements(List<String> seedStatements) {
+    public void setSeedStatements(Set<String> seedStatements) {
         this.seedStatements = seedStatements;
     }
 

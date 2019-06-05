@@ -86,7 +86,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                         }
                     }
 
-                    if (ifStatement.getElseStmt().get() != null) {
+                    if (ifStatement.getElseStmt() != null && ifStatement.getElseStmt().isPresent() && ifStatement.getElseStmt().get() != null) {
                         // if no bracets, no inner blocks and probably statement without bracets
                         if (ifStatement.getThenStmt().toString().contains("{")) {
                             sourceLineNumbers.add(ifStatement.getElseStmt().get().getBegin().get().line);

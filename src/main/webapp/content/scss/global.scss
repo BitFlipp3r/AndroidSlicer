@@ -30,6 +30,10 @@ a:hover {
   color: $dropdown-link-hover-color;
 }
 
+.form-control-label {
+  font-weight: bolder;
+}
+
 /* ==========================================================================
 Browser Upgrade Prompt
 ========================================================================== */
@@ -101,6 +105,15 @@ Generic styles
 div.running svg {
   color: green;
   animation: fa-spin 2s infinite linear;
+}
+
+button {
+  max-height: 100px !important;
+}
+
+.table th,
+.table td {
+  max-width: 1000px !important;
 }
 
 /* ==========================================================================
@@ -217,7 +230,9 @@ p-autoComplete > span > ul {
 
 p-autoComplete > span > button {
   width: 3% !important;
-  height: 46px !important;
+  height: 100% !important;
+  max-height: 100px !important;
+  position: absolute !important;
   background-color: white !important;
   border: 1px solid rgba(0, 0, 0, 0.15) !important;
   color: #212529 !important;

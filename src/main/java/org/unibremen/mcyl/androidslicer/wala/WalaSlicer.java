@@ -2,7 +2,6 @@ package org.unibremen.mcyl.androidslicer.wala;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -46,6 +45,7 @@ import com.ibm.wala.shrikeCT.InvalidClassFileException;
 import com.ibm.wala.ipa.slicer.Statement;
 import com.ibm.wala.ipa.slicer.StatementWithInstructionIndex;
 import com.ibm.wala.ssa.IR;
+import com.ibm.wala.ssa.SSAAbstractInvokeInstruction;
 import com.ibm.wala.ssa.SSAInstruction;
 import com.ibm.wala.ssa.SSAPhiInstruction;
 import com.ibm.wala.types.TypeName;
@@ -53,6 +53,7 @@ import com.ibm.wala.types.TypeReference;
 import com.ibm.wala.util.CancelException;
 import com.ibm.wala.util.WalaException;
 import com.ibm.wala.util.config.AnalysisScopeReader;
+import com.ibm.wala.util.intset.IntSet;
 import com.ibm.wala.util.strings.Atom;
 
 import org.unibremen.mcyl.androidslicer.domain.SlicerOption;
@@ -65,7 +66,7 @@ import com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions;
 public class WalaSlicer {
 
   public static Map<String, Set<Integer>> doSlicing(File appJar, File exclusionFile, String androidClassName,
-      List<String> entryMethods, List<String> seedStatements,
+      Set<String> entryMethods, Set<String> seedStatements,
       ReflectionOptions reflectionOptions, DataDependenceOptions dataDependenceOptions,
       ControlDependenceOptions controlDependenceOptions,
       SliceLogger logger) throws WalaException, IOException, ClassHierarchyException, IllegalArgumentException,
@@ -103,16 +104,19 @@ public class WalaSlicer {
     logger.log(CallGraphStats.getStats(cg));
 
     logger.log("\n== FIND ENTRY_METHOD(s)==");
-    List<CGNode> entryMethodNodes = findMethods(cg, entryMethods, androidClassName, logger);
+    Set<CGNode> entryMethodNodes = findMethods(cg, entryMethods, androidClassName, logger);
     logger.log("\n== SEED_STATEMENT(s) ==");
-    List<Statement> statements = findCallsTo(entryMethodNodes, seedStatements, logger);
+    Set<Statement> statements = findSeedStatements(cg, entryMethodNodes, androidClassName, seedStatements, logger);
+    if (statements.size() == 0) {
+        throw new WalaException("No Seed Statements found!");
+    }
 
     logger.log("\n== SLICING ==");
     logger.log("Pointer analysis...");
     PointerAnalysis<InstanceKey> pointerAnalysis = cgBuilder.getPointerAnalysis();
     logger.log("done.");
 
-    Collection<Statement> sliceList = new ArrayList<Statement>();
+    Collection<Statement> sliceList = new HashSet<Statement>();
     for (Statement sm : statements) {
       logger.log("Computing backward slice for " + sm.getNode().getMethod().getName().toString());
       sliceList.addAll(
@@ -130,7 +134,11 @@ public class WalaSlicer {
     Map<String, Set<Integer>> sourceFileLineNumbers = new HashMap<>();
 
     for (Statement statement : slices)
-      if (statement.getKind() != null && (statement.getKind() == Statement.Kind.NORMAL)) { // ignore special kinds of statements
+      // ignore special kinds of statements
+      if (statement.getKind() != null && (
+          statement.getKind() == Statement.Kind.NORMAL |
+          statement.getKind() == Statement.Kind.NORMAL_RET_CALLEE |
+          statement.getKind() == Statement.Kind.NORMAL_RET_CALLER)) {
 
         int bcIndex, instructionIndex = ((StatementWithInstructionIndex) statement).getInstructionIndex();
 
@@ -191,8 +199,10 @@ public class WalaSlicer {
    * @return
    */
   public static Set<Entrypoint> getEntrypoints(AnalysisScope scope, IClassHierarchy cha, String androidClassName,
-      List<String> entryMethods, SliceLogger logger) {
-    Set<Entrypoint> entrypoints = new HashSet<>();
+      Set<String> entryMethods, SliceLogger logger) {
+
+    Set<Entrypoint> entrypoints = new HashSet<Entrypoint>();
+
     if (cha == null) {
       throw new IllegalArgumentException("cha is null");
     }
@@ -231,19 +241,22 @@ public class WalaSlicer {
   }
 
   // source: PN, modified by MC
-  public static List<CGNode> findMethods(CallGraph cg, List<String> entryMethods, String androidClassName, SliceLogger logger)
+  public static Set<CGNode> findMethods(CallGraph cg, Set<String> entryMethods, String androidClassName, SliceLogger logger)
       throws WalaException {
-    List<CGNode> cgnodes = new ArrayList<>();
+
+    Set<CGNode> cgnodes = new HashSet<CGNode>();
+
     for (Iterator<? extends CGNode> it = cg.iterator(); it.hasNext();) {
       CGNode node = it.next();
       // modified to check if class name of current node equals main class name or
-      // inner clas
-
+      // inner class
       Atom method = node.getMethod().getName();
       TypeName declaringClass = node.getMethod().getDeclaringClass().getName();
 
       if (declaringClass.equals(TypeName.findOrCreate(androidClassName))
           | declaringClass.toString().startsWith(androidClassName + "$")) {
+
+            // check all entry methods
             for (String entryMethod : entryMethods)
             if(method.equals(Atom.findOrCreateUnicodeAtom(entryMethod))){ // compare method name
               cgnodes.add(node);
@@ -258,33 +271,50 @@ public class WalaSlicer {
   }
 
 
-  public static List<Statement> findCallsTo(List<CGNode> nodes, List<String> seedStatements, SliceLogger logger) throws WalaException {
+  public static Set<Statement> findSeedStatements(CallGraph cg, Set<CGNode> nodes, String androidClassName, Set<String> seedStatements, SliceLogger logger) throws WalaException {
 
-    List<Statement> statements = new ArrayList<>();
+    Set<Statement> statements = new HashSet<Statement>();
+
     for (CGNode node : nodes) {
       IR ir = node.getIR();
+      if(ir == null || ir.iterateAllInstructions() == null){
+          continue;
+      }
+
+      Set<String> innerNodeNames = new HashSet<String>();
+
       for (Iterator<SSAInstruction> it = ir.iterateAllInstructions(); it.hasNext();) {
-        SSAInstruction s = it.next();
-        if (s instanceof com.ibm.wala.ssa.SSAAbstractInvokeInstruction) {
-          com.ibm.wala.ssa.SSAAbstractInvokeInstruction call = (com.ibm.wala.ssa.SSAAbstractInvokeInstruction) s;
+        SSAInstruction instruction = it.next();
+        if (instruction instanceof SSAAbstractInvokeInstruction) {
+          SSAAbstractInvokeInstruction call = (SSAAbstractInvokeInstruction) instruction;
+
+          // check if method is call to service method and add it to list of inner nodes
+          if(call.getDeclaredTarget().getDeclaringClass().getName().toString().equals(androidClassName)){
+            innerNodeNames.add(call.getCallSite().getDeclaredTarget().getName().toString());
+          }
+
+          // check all seed statements
           for(String seedStatementName : seedStatements){
-          if (call.getCallSite().getDeclaredTarget().getName().toString().equals(seedStatementName)) {
-            com.ibm.wala.util.intset.IntSet indices = ir.getCallInstructionIndices(call.getCallSite());
-            statements.add(new com.ibm.wala.ipa.slicer.NormalStatement(node, indices.intIterator().next()));
-            logger.log("Found seed statement " + seedStatementName + " in " + node + ".");
+            if (call.getCallSite().getDeclaredTarget().getName().toString().equals(seedStatementName)) {
+                IntSet indices = ir.getCallInstructionIndices(call.getCallSite());
+                statements.add(new NormalStatement(node, indices.intIterator().next()));
+                logger.log("Found seed statement " + seedStatementName + " in " + node + ".");
+            }
           }
         }
-        }
+      }
+
+      // find seed statements in inner nodes
+      if(!innerNodeNames.isEmpty()){
+        statements.addAll(findSeedStatements(cg, findMethods(cg, innerNodeNames, androidClassName, logger), androidClassName, seedStatements, logger));
       }
     }
 
-
     if (statements.size() == 0) {
-      throw new WalaException("Failed to find any calls to " + seedStatements + " in " + nodes + "!");
-    } else {
-      return statements;
+      logger.log("Failed to find any calls to " + seedStatements + " in " + nodes + "!");
     }
 
+    return statements;
   }
 
   private static boolean isApplicationClass(AnalysisScope scope, IClass clazz) {

@@ -114,16 +114,16 @@ public class SliceService {
                 logger.log("Slice line numbers (sorted) for file " + sliceLineNumbersEntry.getKey() + ": " + sliceLineNumbersSorted);
 
                 try {
-                    Set<Integer> modSlice = Parser.getModifiedSlice(sourceLocation, sliceLineNumbersEntry.getValue(), logger);
-                    logger.log("Lines of code: " + modSlice.toString());
-                    if (modSlice != null) {
-                        builder.append(sliceMapper.getLinesOfCode(sourceLocation, modSlice, logger));
+                    Set<Integer> sourceCodeLines = Parser.getModifiedSlice(sourceLocation, sliceLineNumbersEntry.getValue(), logger);
+                    logger.log("Lines of source code: " + sourceCodeLines.toString());
+                    if (sourceCodeLines != null) {
+                        builder.append(sliceMapper.getLinesOfCode(sourceLocation, sourceCodeLines, logger));
                     }
                 } catch (Exception ex) {
+                    ex.printStackTrace();
                     logger.log("Could not reconstruct code with parser for file '" + sliceLineNumbersEntry.getKey() + "': " + ex);
                 }
             }
-
             slice.setSlice(builder.toString());
         }
         slice.setRunning(false);

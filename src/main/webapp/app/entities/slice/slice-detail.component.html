@@ -24,7 +24,7 @@
                 <div *ngIf="slice.slice">
                     <dt><span>Slice</span></dt>
                     <dd>
-                        <monaco-editor [theme]="theme" [file]="code"></monaco-editor>
+                        <monaco-editor [theme]="theme" [file]="code" class="border rounded"></monaco-editor>
                     </dd>
                 </div>
                 <dt><span>Reflection Options</span></dt>
@@ -42,9 +42,9 @@
                 <div *ngIf="slice.log">
                     <dt><span>Log</span></dt>
                     <dd>
-                        <textarea readonly style="width:100%;" rows="10">{{slice.log}}</textarea>
+                        <textarea readonly style="width:100%;" rows="10" class="border rounded">{{slice.log}}</textarea>
                     </dd>
-                </div>  
+                </div>
                 <dt><span>Running</span></dt>
                 <dd>
                     <div [class.running]="slice.running">
@@ -52,7 +52,7 @@
                     </div>
                 </dd>
             </dl>
-           
+
 
             <button type="submit"
                     (click)="previousState()"

@@ -15,7 +15,7 @@ import org.unibremen.mcyl.androidslicer.service.SliceLogger;
 //TODO source philip, fix for breaking changes since 1.5
 public class Parser {
 
-	public static CompilationUnit getCu(final String javaPath) throws IOException {
+	public static CompilationUnit getCu(final String javaPath, SliceLogger logger) throws IOException {
 		try {
 			FileInputStream in = new FileInputStream(new File(javaPath));
 			CompilationUnit cu = null;
@@ -23,7 +23,7 @@ public class Parser {
 			in.close();
 			return cu;
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.log(e.getMessage());
 		}
 		return null;
 	}
@@ -32,7 +32,7 @@ public class Parser {
 		MethodVisitor visitor = new MethodVisitor(sliceLines);
 
 		try {
-			CompilationUnit compilationUnit = getCu(javaPath);
+			CompilationUnit compilationUnit = getCu(javaPath, logger);
 			if (compilationUnit != null) {
 				visitor.visit(compilationUnit, "");
 				return visitor.getSlice();
@@ -41,7 +41,7 @@ public class Parser {
 				return null;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(e.getMessage());
 		}
 
 		Set<Integer> emptyResult = new HashSet<>();
