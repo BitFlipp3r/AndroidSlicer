@@ -231,7 +231,7 @@ export class SliceMakeComponent implements OnInit {
     this.createForm.get(['seedStatements']).patchValue(selectedSeedStatementOptions);
   }
 
-  private addMultiSelectOption(event, options, selectedoptions) {
+  private addMultiSelectOption(event, options, selectedOptions) {
     if (event.key === 'Enter') {
       const tokenInput = event.srcElement as any;
       if (tokenInput.value) {
@@ -240,8 +240,8 @@ export class SliceMakeComponent implements OnInit {
           options.push(tokenInput.value);
         }
         // add value to selected options
-        if (!selectedoptions.includes(tokenInput.value)) {
-          selectedoptions.push(tokenInput.value);
+        if (!selectedOptions.includes(tokenInput.value)) {
+          selectedOptions.push(tokenInput.value);
         }
         tokenInput.value = '';
       }
@@ -253,7 +253,7 @@ export class SliceMakeComponent implements OnInit {
   }
 
   clearEntryMethods() {
-    this.createForm.get(['entryMethods']).patchValue(null);
+    this.createForm.get(['entryMethods']).patchValue([]);
   }
 
   addAllSeedStatements() {
@@ -261,6 +261,6 @@ export class SliceMakeComponent implements OnInit {
   }
 
   clearSeedStatements() {
-    this.createForm.get(['seedStatements']).patchValue(null);
+    this.createForm.get(['seedStatements']).patchValue([]);
   }
 }

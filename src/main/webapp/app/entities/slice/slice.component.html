@@ -27,13 +27,13 @@
             </thead>
             <tbody>
             <tr *ngFor="let slice of slice ;trackBy: trackId">
-                <td>{{slice.androidVersion}}</td>
-                <td>{{slice.androidClassName}}</td>
-                <td>{{slice.entryMethods}}</td>
-                <td>{{slice.seedStatements}}</td>
-                <td>{{slice.reflectionOptions}}</td>
-                <td>{{slice.dataDependenceOptions}}</td>
-                <td>{{slice.controlDependenceOptions}}</td>
+                <td><div>{{slice.androidVersion}}</div></td>
+                <td><div>{{slice.androidClassName}}</div></td>
+                <td><div>{{slice.entryMethods}}</div></td>
+                <td><div>{{slice.seedStatements}}</div></td>
+                <td><div>{{slice.reflectionOptions}}</div></td>
+                <td><div>{{slice.dataDependenceOptions}}</div></td>
+                <td><div>{{slice.controlDependenceOptions}}</div></td>
                 <td>
                     <div [class.running]="slice.running">
                         <fa-icon [icon]="'sync'" ></fa-icon>

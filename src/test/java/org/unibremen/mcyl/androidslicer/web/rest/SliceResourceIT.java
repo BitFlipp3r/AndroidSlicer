@@ -19,7 +19,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions;
 import com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions;
@@ -42,9 +44,9 @@ public class SliceResourceIT {
 
     private static final String DEFAULT_ANDROID_CLASS_NAME = "AAAAAAAAAA";
 
-    private static final List<String> DEFAULT_ENTRY_METHODS = Arrays.asList("AAAAAAAAAA", "AAAAAAAAAA");
+    private static final Set<String> DEFAULT_ENTRY_METHODS = new HashSet<>(Arrays.asList("AAAAAAAAAA", "AAAAAAAAAA"));
 
-    private static final List<String> DEFAULT_SEED_STATEMENTS = Arrays.asList("AAAAAAAAAA", "AAAAAAAAAA");
+    private static final Set<String> DEFAULT_SEED_STATEMENTS = new HashSet<>(Arrays.asList("AAAAAAAAAA", "AAAAAAAAAA"));
 
     private static final String DEFAULT_SLICE = "AAAAAAAAAA";
 

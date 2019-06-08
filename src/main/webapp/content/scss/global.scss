@@ -111,9 +111,17 @@ button {
   max-height: 100px !important;
 }
 
-.table th,
+.table thead th {
+  vertical-align: top !important;
+}
+
 .table td {
-  max-width: 1000px !important;
+  max-width: 220px !important;
+}
+
+.table td > div {
+  max-height: 200px !important;
+  overflow-y: auto;
 }
 
 /* ==========================================================================

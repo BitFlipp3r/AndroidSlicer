@@ -52,6 +52,9 @@ public class AndroidOptionsResource {
 
     private final SlicerSettingRepository slicerSettingRepository;
 
+    private static final Pattern sourceFilePathPattern = Pattern.compile("android-\\d+");
+    private static final Pattern methodPattern = Pattern.compile("\\s([a-zA-Z]+)\\(");
+
     public AndroidOptionsResource(SlicerSettingRepository slicerSettingRepository) {
         this.slicerSettingRepository = slicerSettingRepository;
     }
@@ -173,7 +176,7 @@ public class AndroidOptionsResource {
         log.debug("REST request to get get service's public methods based on the AIDL specification");
 
         // trim system service file path down to source root (i.e. .../android-xx/)
-        Pattern sourceFilePathPattern = Pattern.compile("android-\\d+");
+
         Matcher sourceFilePathMatcher = sourceFilePathPattern.matcher(sourceFilePath);
         if (sourceFilePathMatcher.find()) {
             String androidRootPath = sourceFilePath.substring(0, sourceFilePathMatcher.end()) + "\\";
@@ -201,7 +204,6 @@ public class AndroidOptionsResource {
 
                 // get method names
                 if (aidlFile != null && aidlFile.exists()) {
-                    Pattern methodPattern = Pattern.compile("\\s([a-zA-Z]+)\\(");
                     List<String> methodNames = new ArrayList<String>();
                     try (Scanner scanner = new Scanner(aidlFile)) {
                         while (scanner.hasNextLine()) {

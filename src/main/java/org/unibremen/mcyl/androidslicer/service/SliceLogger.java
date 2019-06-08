@@ -7,20 +7,17 @@ public class SliceLogger {
 
     private final SliceRepository sliceRepository;
     private final Slice slice;
+    private final StringBuffer buffer;
 
     public SliceLogger(SliceRepository sliceRepository, Slice slice) {
         this.sliceRepository = sliceRepository;
         this.slice = slice;
+        this.buffer = new StringBuffer("");
     }
 
-    public void log(String message){
-        String log = slice.getLog();
-        if(log == null){
-            slice.setLog(message + "\n");
-        }
-        else{
-            slice.setLog(log.concat(message + "\n"));
-        }
+    public void log(String message) {
+        this.buffer.append(message + "\n");
+        slice.setLog(this.buffer.toString());
         sliceRepository.save(slice);
     }
 }

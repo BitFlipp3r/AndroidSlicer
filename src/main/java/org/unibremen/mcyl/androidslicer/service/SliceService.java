@@ -109,13 +109,12 @@ public class SliceService {
                     + "\\"
                     + sliceLineNumbersEntry.getKey().replace("/", File.separator);
 
-                Set<Integer> sliceLineNumbersSorted = new TreeSet<>(sliceLineNumbersEntry.getValue());
-
-                logger.log("Slice line numbers (sorted) for file " + sliceLineNumbersEntry.getKey() + ": " + sliceLineNumbersSorted);
+                // use TreeSet to sort line numbers
+                logger.log("Slice line numbers for file " + sliceLineNumbersEntry.getKey() + ": " + new TreeSet<>(sliceLineNumbersEntry.getValue()));
 
                 try {
                     Set<Integer> sourceCodeLines = Parser.getModifiedSlice(sourceLocation, sliceLineNumbersEntry.getValue(), logger);
-                    logger.log("Lines of source code: " + sourceCodeLines.toString());
+                    logger.log("Lines of source code: " + new TreeSet<>(sourceCodeLines));
                     if (sourceCodeLines != null) {
                         builder.append(sliceMapper.getLinesOfCode(sourceLocation, sourceCodeLines, logger));
                     }

@@ -191,7 +191,7 @@ public class InitialSetupMigration {
         SlicerOption dataDependenceOptions_REFLECTION = new SlicerOption();
         dataDependenceOptions_REFLECTION.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
         dataDependenceOptions_REFLECTION.setKey("REFLECTION");
-        dataDependenceOptions_REFLECTION.setDescription("Like NO_BASE_NO_HEAP, but also ignore data dependence edges originating from checkcast statements. This is the dependence algorithm used to unsoundly track from from newInstance to casts.");
+        dataDependenceOptions_REFLECTION.setDescription("Like NO_BASE_NO_HEAP, but also ignore data dependence edges originating from checkcast statements. This is the dependence algorithm used to unsoundly track from newInstance to casts.");
         dataDependenceOptions_REFLECTION.setIsDefault(false);
         mongoTemplate.save(dataDependenceOptions_REFLECTION);
 
