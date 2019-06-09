@@ -2,6 +2,7 @@ package org.unibremen.mcyl.androidslicer.service;
 
 import org.unibremen.mcyl.androidslicer.config.Constants;
 import org.unibremen.mcyl.androidslicer.domain.Slice;
+import org.unibremen.mcyl.androidslicer.domain.SlicerSetting;
 import org.unibremen.mcyl.androidslicer.repository.SliceRepository;
 import org.unibremen.mcyl.androidslicer.repository.SlicerSettingRepository;
 import org.unibremen.mcyl.androidslicer.wala.WalaSlicer;
@@ -72,18 +73,32 @@ public class SliceService {
             throw new CompletionException(e);
         }
 
-        File appJar = new File(
-                slicerSettingRepository.findOneByKey(Constants.ANDROID_PLATFORM_PATH_KEY).get().getValue()
-                        + "\\android-" + slice.getAndroidVersion() + "\\android.jar");
+
+        SlicerSetting androidBinaryPathSetting = 
+        slicerSettingRepository.findOneByKey(Constants.ANDROID_PLATFORM_PATH_KEY).get();
+    
+        String androidBinaryPath = "";
+        if(androidBinaryPathSetting != null){
+            androidBinaryPath = androidBinaryPathSetting.getValue();
+            // replace "~" with working dir
+            if(androidBinaryPath.startsWith("~")){
+                androidBinaryPath = androidBinaryPath.replace("~", System.getProperty("user.dir"));
+            }
+        }
+
+        File appJar = 
+            new File(androidBinaryPath + "\\android-" + slice.getAndroidVersion() + "\\android.jar");
 
         if (!appJar.exists()) {
-            logger.log("Android Platform Jar not found");
+            logger.log("Android Binary Jar not found");
         }
 
         Map<String, Set<Integer>> sliceLineNumbers = null;
         try {
             sliceLineNumbers = WalaSlicer.doSlicing(appJar, exclusionFile,
                     // add "L" to class name and remove .java extension
+                    // e.g. com/android/server/AlarmManagerService.java
+                    // -> Lcom/android/server/AlarmManagerService
                     "L" + FilenameUtils.removeExtension(slice.getAndroidClassName()),
                     slice.getEntryMethods(), slice.getSeedStatements(),
                     slice.getReflectionOptions(), slice.getDataDependenceOptions(),
@@ -103,7 +118,7 @@ public class SliceService {
 
                 String sourceLocation = slicerSettingRepository
                     .findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get()
-                    .getValue()
+                    .getValue().replace("~", System.getProperty("user.dir"))
                     + "\\android-"
                     + slice.getAndroidVersion()
                     + "\\"

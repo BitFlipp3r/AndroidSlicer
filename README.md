@@ -30,13 +30,25 @@ The `npm run` command will list all of the scripts available to run for this pro
 
 2.  [MongoDB][]
 
-Create folder C:\data\db and install service with:
+Download MongoDB server (community edition) from
+
+https://www.mongodb.com/download-center/community
+
+and follow the installation instructions under
+
+https://docs.mongodb.com/manual/administration/install-community/
+
+There is no need to install MongoDB-Compass (GUI for MongoDB). After the binaries are installed, create a folder under C:\data\db run with
+
+    mongod
+
+or install the service with
 
     mongod --install
 
-Or run with:
+If you want the databases in a different folder use the --dbpath parameter, e.g.
 
-    mongod --dbpath=C:\data\db
+    mongod --dbpath=C:\folder\to\databases\data\db
 
 ### Service workers
 

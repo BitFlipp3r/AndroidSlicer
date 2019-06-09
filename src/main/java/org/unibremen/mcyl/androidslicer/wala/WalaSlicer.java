@@ -111,7 +111,7 @@ public class WalaSlicer {
 
         Collection<Statement> sliceList = new HashSet<Statement>();
         for (Statement stmt : statements) {
-            logger.log("+ Computing backward slice for " + stmt.toString());
+            logger.log("+ Computing backward slice for " + stmt.getNode().toString());
             sliceList.addAll(Slicer.computeBackwardSlice(stmt, cg, pointerAnalysis, dataDependenceOptions,
                     controlDependenceOptions));
         }

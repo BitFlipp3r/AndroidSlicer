@@ -1,7 +1,6 @@
 package org.unibremen.mcyl.androidslicer.web.rest;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,12 +11,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -70,11 +63,22 @@ public class AndroidOptionsResource {
     @GetMapping("/android-options/android-versions")
     public ResponseEntity<List<AndroidVersionVM>> getAndroidVersions() {
         log.debug("REST request to get android versions");
-        SlicerSetting androidSourcesPath = slicerSettingRepository.findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY)
-                .get();
-        if (androidSourcesPath != null) {
+
+        SlicerSetting androidSourcesPathSetting = 
+            slicerSettingRepository.findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get();
+        
+        String androidSourcesPath = "";
+        if(androidSourcesPathSetting != null){
+            androidSourcesPath = androidSourcesPathSetting.getValue();
+            // replace "~" with working dir
+            if(androidSourcesPath.startsWith("~")){
+                androidSourcesPath = androidSourcesPath.replace("~", System.getProperty("user.dir"));
+            }
+        }
+        
+        if (!androidSourcesPath.isEmpty()) {
             // get android versions from folder names (e.g. android-28 -> 28)
-            File file = new File(androidSourcesPath.getValue());
+            File file = new File(androidSourcesPath);
             File[] directories = file.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File current, String name) {
@@ -82,17 +86,22 @@ public class AndroidOptionsResource {
                 }
             });
 
-            List<AndroidVersionVM> androidVersions = new ArrayList<AndroidVersionVM>();
-            for (File directory : directories) {
-                AndroidVersionVM androidVersion = new AndroidVersionVM();
-                androidVersion.setKey(Integer.parseInt(directory.getName().split("-")[1]));
-                androidVersion.setPath(directory.getAbsolutePath());
-                androidVersions.add(androidVersion);
-            }
+            System.out.println(androidSourcesPath);
 
-            return ResponseEntity.ok().body(androidVersions);
+            if(directories != null && directories.length > 0){
+                List<AndroidVersionVM> androidVersions = new ArrayList<AndroidVersionVM>();
+                for (File directory : directories) {
+                    if(directory.getName().contains("-")){
+                        AndroidVersionVM androidVersion = new AndroidVersionVM();
+                        androidVersion.setKey(Integer.parseInt(directory.getName().split("-")[1]));
+                        androidVersion.setPath(directory.getAbsolutePath());
+                        androidVersions.add(androidVersion);
+                    }
+                }
+                return ResponseEntity.ok().body(androidVersions);
+            }     
         }
-        throw new BadRequestAlertException("Anroid Sources not found", ENTITY_NAME, "idnull");
+        throw new BadRequestAlertException("Android Sources not found", ENTITY_NAME, "idnull");
     }
 
     /**
@@ -242,15 +251,5 @@ public class AndroidOptionsResource {
             return ResponseEntity.ok().body(Arrays.asList(seedStatements.getValue().replace(" ", "").split(";")));
         }
         throw new BadRequestAlertException("Seed Statements not found", ENTITY_NAME, "idnull");
-    }
-
-    // TODO source: javaparservisited.pdf page 14
-    private static class MethodNameCollector extends VoidVisitorAdapter<List<String>> {
-
-        @Override
-        public void visit(MethodDeclaration md, List<String> collector) {
-            super.visit(md, collector);
-            collector.add(md.getNameAsString());
-        }
     }
 }

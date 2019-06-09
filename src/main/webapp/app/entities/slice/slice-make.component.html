@@ -61,7 +61,7 @@
                     <label class="form-control-label" for="field_seedStatements" ngbTooltip="JSON-List with seed statement names">Seed Statements</label>
                     <div class="row no-gutters mx-lg-n1">
                     <div class="col-10 px-lg-1">
-                    <p-autoComplete name="seedStatements" id="field_seedStatement" formControlName="seedStatements" [suggestions]="filteredSeedStatementOptions" required="true" [dropdown]="true" [multiple]="true" [minLength]="1" placeholder="Select Seed Statement..." (completeMethod)="filterSeedStatementOptions($event)" (onKeyUp)="addSeedStatementOption($event)" [class]="pull-left"></p-autoComplete>
+                    <p-autoComplete name="seedStatements" id="field_seedStatement" formControlName="seedStatements" [suggestions]="filteredSeedStatementOptions" required="true" [dropdown]="true" [multiple]="true" [minLength]="1" placeholder="Select Seed Statement..." (completeMethod)="filterSeedStatementOptions($event)" (onKeyUp)="addSeedStatementOption($event)"></p-autoComplete>
                     </div>
                     <div class="btn-group col-2 px-lg-1" role="group">
                         <button type="button"
