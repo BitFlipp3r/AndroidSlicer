@@ -2,12 +2,14 @@ const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 const Visualizer = require('webpack-visualizer-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const path = require('path');
+const glob = require('glob-all');
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -128,6 +130,26 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             // both options are optional
             filename: 'content/[name].[contenthash].css',
             chunkFilename: 'content/[id].css'
+        }),
+        new PurgecssPlugin({
+            paths: glob.sync([
+                path.join(utils.root('src/main/webapp'), '*.*'),
+                path.join(utils.root('src/main/webapp/app'), '**/*.*')
+            ]),
+            whitelist: [
+                'close' // toast close button
+            ], 
+            // selectors beginning pattern and all children of the selectors are preserved
+            // see: https://www.purgecss.com/configuration
+            whitelistPatternsChildren: [
+                /^jhi/, // Jhipster
+                /^alert/, // Toasts
+                /^alerts/, // Toasts
+                /^fa/, // Font Awesome
+                /^ui/, // PrimeNG
+                /^ng/, // Angular
+                /^pi/// Angular
+            ]
         }),
         new MomentLocalesPlugin({
             localesToKeep: [

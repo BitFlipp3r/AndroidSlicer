@@ -10,7 +10,7 @@ eg $input-color: red;
 @import '~bootstrap/scss/bootstrap';
 // Import Prime NG (see: https://stackoverflow.com/a/52018091)
 @import '~primeicons/primeicons.css';
-@import '~primeng/resources/themes/bootstrap/theme.css';
+@import 'primeng-bootstrap-theme';
 @import '~primeng/resources/primeng.min.css';
 
 /* jhipster-needle-scss-add-vendor JHipster will add new css style */
