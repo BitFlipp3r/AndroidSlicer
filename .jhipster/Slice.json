@@ -1,0 +1,94 @@
+{
+    "name": "Slice",
+    "fields": [
+        {
+            "fieldName": "androidVersion",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "androidClassName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "entryMethods",
+            "javadoc": "JSON-List with entry method names",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "seedStatements",
+            "javadoc": "JSON-List with seed statement names",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "slice",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "log",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "threadId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "running",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "reflectionOptions",
+            "javadoc": "com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions",
+            "fieldType": "ReflectionOptions",
+            "fieldValues": "FULL,NO_FLOW_TO_CASTS,NO_FLOW_TO_CASTS_NO_METHOD_INVOKE,NO_METHOD_INVOKE,NO_STRING_CONSTANTS,NONE,ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dataDependenceOptions",
+            "javadoc": "com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions",
+            "fieldType": "DataDependenceOptions",
+            "fieldValues": "FULL,NO_BASE_NO_EXCEPTIONS,NO_BASE_NO_HEAP,NO_BASE_NO_HEAP_NO_EXCEPTIONS,NO_BASE_PTRS,NO_EXCEPTIONS,NO_HEAP,NO_HEAP_NO_EXCEPTIONS,NONE,REFLECTION",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "controlDependenceOptions",
+            "javadoc": "com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions",
+            "fieldType": "ControlDependenceOptions",
+            "fieldValues": "FULL,NO_EXCEPTIONAL_EDGES,NONE",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20190512080845",
+    "entityTableName": "slice",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": [
+        "AndroidSlicer"
+    ]
+}

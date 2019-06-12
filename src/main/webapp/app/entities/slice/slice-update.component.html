@@ -1,0 +1,145 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-slice-heading">Create or edit a Slice</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!slice.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_androidVersion">Android Version</label>
+                    <input type="number" class="form-control" name="androidVersion" id="field_androidVersion"
+                           formControlName="androidVersion"/>
+                    <div *ngIf="editForm.get('androidVersion').invalid && (editForm.get('androidVersion').dirty || editForm.get('androidVersion').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('androidVersion').errors.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('androidVersion')?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_androidClassName">Android Class Name</label>
+                    <input type="text" class="form-control" name="androidClassName" id="field_androidClassName"
+                           formControlName="androidClassName"/>
+                    <div *ngIf="editForm.get('androidClassName').invalid && (editForm.get('androidClassName').dirty || editForm.get('androidClassName').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('androidClassName').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_entryMethods" ngbTooltip="JSON-List with entry method names">Entry Methods</label>
+                    <textarea class="form-control" name="entryMethods" id="field_entryMethods"
+                              formControlName="entryMethods"></textarea>
+                    <div *ngIf="editForm.get('entryMethods').invalid && (editForm.get('entryMethods').dirty || editForm.get('entryMethods').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('entryMethods').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_seedStatements" ngbTooltip="JSON-List with seed statement names">Seed Statements</label>
+                    <textarea class="form-control" name="seedStatements" id="field_seedStatements"
+                              formControlName="seedStatements"></textarea>
+                    <div *ngIf="editForm.get('seedStatements').invalid && (editForm.get('seedStatements').dirty || editForm.get('seedStatements').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('seedStatements').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_slice">Slice</label>
+                    <textarea class="form-control" name="slice" id="field_slice"
+                              formControlName="slice"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_log">Log</label>
+                    <textarea class="form-control" name="log" id="field_log"
+                              formControlName="log"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_threadId">Thread Id</label>
+                    <input type="text" class="form-control" name="threadId" id="field_threadId"
+                           formControlName="threadId"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_running">Running</label>
+                    <input type="checkbox" class="form-control" name="running" id="field_running"
+                           formControlName="running"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_reflectionOptions" ngbTooltip="com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions">Reflection Options</label>
+                    <select class="form-control" name="reflectionOptions" formControlName="reflectionOptions" id="field_reflectionOptions">
+                        <option value="FULL">FULL</option>
+                        <option value="NO_FLOW_TO_CASTS">NO_FLOW_TO_CASTS</option>
+                        <option value="NO_FLOW_TO_CASTS_NO_METHOD_INVOKE">NO_FLOW_TO_CASTS_NO_METHOD_INVOKE</option>
+                        <option value="NO_METHOD_INVOKE">NO_METHOD_INVOKE</option>
+                        <option value="NO_STRING_CONSTANTS">NO_STRING_CONSTANTS</option>
+                        <option value="NONE">NONE</option>
+                        <option value="ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE">ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE</option>
+                    </select>
+                    <div *ngIf="editForm.get('reflectionOptions').invalid && (editForm.get('reflectionOptions').dirty || editForm.get('reflectionOptions').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('reflectionOptions').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_dataDependenceOptions" ngbTooltip="com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions">Data Dependence Options</label>
+                    <select class="form-control" name="dataDependenceOptions" formControlName="dataDependenceOptions" id="field_dataDependenceOptions">
+                        <option value="FULL">FULL</option>
+                        <option value="NO_BASE_NO_EXCEPTIONS">NO_BASE_NO_EXCEPTIONS</option>
+                        <option value="NO_BASE_NO_HEAP">NO_BASE_NO_HEAP</option>
+                        <option value="NO_BASE_NO_HEAP_NO_EXCEPTIONS">NO_BASE_NO_HEAP_NO_EXCEPTIONS</option>
+                        <option value="NO_BASE_PTRS">NO_BASE_PTRS</option>
+                        <option value="NO_EXCEPTIONS">NO_EXCEPTIONS</option>
+                        <option value="NO_HEAP">NO_HEAP</option>
+                        <option value="NO_HEAP_NO_EXCEPTIONS">NO_HEAP_NO_EXCEPTIONS</option>
+                        <option value="NONE">NONE</option>
+                        <option value="REFLECTION">REFLECTION</option>
+                    </select>
+                    <div *ngIf="editForm.get('dataDependenceOptions').invalid && (editForm.get('dataDependenceOptions').dirty || editForm.get('dataDependenceOptions').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('dataDependenceOptions').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_controlDependenceOptions" ngbTooltip="com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions">Control Dependence Options</label>
+                    <select class="form-control" name="controlDependenceOptions" formControlName="controlDependenceOptions" id="field_controlDependenceOptions">
+                        <option value="FULL">FULL</option>
+                        <option value="NO_EXCEPTIONAL_EDGES">NO_EXCEPTIONAL_EDGES</option>
+                        <option value="NONE">NONE</option>
+                    </select>
+                    <div *ngIf="editForm.get('controlDependenceOptions').invalid && (editForm.get('controlDependenceOptions').dirty || editForm.get('controlDependenceOptions').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('controlDependenceOptions').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
