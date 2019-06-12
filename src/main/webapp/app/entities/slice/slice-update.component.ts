@@ -12,7 +12,6 @@ import { SliceService } from './slice.service';
   templateUrl: './slice-update.component.html'
 })
 export class SliceUpdateComponent implements OnInit {
-  slice: ISlice;
   isSaving: boolean;
 
   editForm = this.fb.group({
@@ -42,7 +41,6 @@ export class SliceUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ slice }) => {
       this.updateForm(slice);
-      this.slice = slice;
     });
   }
 

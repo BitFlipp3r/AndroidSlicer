@@ -29,7 +29,7 @@
     "useSass": true,
     "clientPackageManager": "npm",
     "skipUserManagement": true,
-    "jhipsterVersion": "6.0.1",
+    "jhipsterVersion": "6.1.0",
     "authenticationType": "jwt",
     "serverPort": "8080",
     "jwtSecretKey": "NmU4YTY4ZjgyOWY4NWQxOTE4MGM1MzVlYzQyZWNlMjUzYmFjNTZjMzQ5ZWY2ZDE0NWMyY2VlODJmNDM5YTk2MTI1MTI5ZWQxZTAzNjNlOWU3YzVjZTRjY2EwZjE2OTU2ZjA1NzE0MDFhNWRmMGEzZmE0MDA4ZWJhMDYyMjNlMWY=",

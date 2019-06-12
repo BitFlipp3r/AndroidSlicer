@@ -4,7 +4,7 @@
             <h2 id="jhi-slicer-option-heading">Create or edit a Slicer Option</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!slicerOption.id">
+                <div class="form-group" [hidden]="!editForm.get('id').value">
                     <label for="id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"
                         readonly />

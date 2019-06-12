@@ -11,7 +11,6 @@ import { SlicerSettingService } from './slicer-setting.service';
   templateUrl: './slicer-setting-update.component.html'
 })
 export class SlicerSettingUpdateComponent implements OnInit {
-  slicerSetting: ISlicerSetting;
   isSaving: boolean;
 
   editForm = this.fb.group({
@@ -26,7 +25,6 @@ export class SlicerSettingUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ slicerSetting }) => {
       this.updateForm(slicerSetting);
-      this.slicerSetting = slicerSetting;
     });
   }
 
