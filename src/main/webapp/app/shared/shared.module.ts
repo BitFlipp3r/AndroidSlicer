@@ -1,8 +1,8 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { AndroidSlicerSharedLibsModule, AndroidSlicerSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective } from './';
+import { AndroidSlicerSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective } from './';
 
 @NgModule({
-  imports: [AndroidSlicerSharedLibsModule, AndroidSlicerSharedCommonModule],
+  imports: [AndroidSlicerSharedCommonModule],
   declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective],
   entryComponents: [JhiLoginModalComponent],
   exports: [AndroidSlicerSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective],
