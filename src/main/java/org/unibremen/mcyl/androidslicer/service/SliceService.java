@@ -1,27 +1,10 @@
 package org.unibremen.mcyl.androidslicer.service;
 
-import org.unibremen.mcyl.androidslicer.config.Constants;
-import org.unibremen.mcyl.androidslicer.domain.Slice;
-import org.unibremen.mcyl.androidslicer.domain.SlicerSetting;
-import org.unibremen.mcyl.androidslicer.repository.SliceRepository;
-import org.unibremen.mcyl.androidslicer.repository.SlicerSettingRepository;
-import org.unibremen.mcyl.androidslicer.wala.WalaSlicer;
-import org.unibremen.mcyl.androidslicer.wala.parser.Parser;
-import org.unibremen.mcyl.androidslicer.wala.parser.SliceMapper;
-import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -30,6 +13,20 @@ import java.util.concurrent.CompletionException;
 
 import com.ibm.wala.util.CancelException;
 import com.ibm.wala.util.WalaException;
+
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.unibremen.mcyl.androidslicer.config.Constants;
+import org.unibremen.mcyl.androidslicer.domain.Slice;
+import org.unibremen.mcyl.androidslicer.domain.SlicerSetting;
+import org.unibremen.mcyl.androidslicer.repository.SliceRepository;
+import org.unibremen.mcyl.androidslicer.repository.SlicerSettingRepository;
+import org.unibremen.mcyl.androidslicer.wala.WalaSlicer;
+import org.unibremen.mcyl.androidslicer.wala.parser.Parser;
+import org.unibremen.mcyl.androidslicer.wala.parser.SliceMapper;
 
 /**
  * Service Implementation for managing Slice.

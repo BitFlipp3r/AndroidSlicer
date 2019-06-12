@@ -20,7 +20,7 @@ import org.unibremen.mcyl.androidslicer.service.SliceLogger;
 public class SliceMapper {
 
 	private static final Pattern commentsPattern = Pattern.compile("^\\s*[\\/\\/.*|\\*.*].*");
-	private static final Pattern closingBracketPattern = Pattern.compile("\\s*}\\s*");
+	private static final Pattern closingBracketPattern = Pattern.compile("\\s*)*};?\\s*");
 
 	public String getLinesOfCode(final String sourceCodeFileName, final Set<Integer> sliceLineNumbers, SliceLogger logger) {
 		try {
