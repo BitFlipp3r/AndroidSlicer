@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
@@ -38,6 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@Link SliceResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
+@ActiveProfiles("dev,embedded-mongo")
 public class SliceResourceIT {
 
     private static final Integer DEFAULT_ANDROID_VERSION = 1;
@@ -54,7 +56,7 @@ public class SliceResourceIT {
 
     private static final String DEFAULT_THREAD_ID = "AAAAAAAAAA";
 
-    private static final Boolean DEFAULT_RUNNING = false;
+    private static final Boolean DEFAULT_RUNNING = true;
 
     private static final ReflectionOptions DEFAULT_REFLECTION_OPTIONS = ReflectionOptions.FULL;
 

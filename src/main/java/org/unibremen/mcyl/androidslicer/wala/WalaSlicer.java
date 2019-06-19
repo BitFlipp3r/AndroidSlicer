@@ -115,25 +115,29 @@ public class WalaSlicer {
             sliceList.addAll(Slicer.computeBackwardSlice(stmt, cg, pointerAnalysis, dataDependenceOptions,
                     controlDependenceOptions));
         }
-        logger.log("\n Slicing done.");
-        logger.log("Number of slices:  " + sliceList.size());
+        logger.log("\nNumber of slice statements:  " + sliceList.size());
+        for (Statement stmt : sliceList) {
+            logger.log("~ " + stmt.toString());
+        }
 
         logger.log("\n== GETTING SOURCE FILES ==");
-        return dumpSlices(sliceList, logger);
+        return getLineNumbersAndSourceFiles(sliceList, logger);
     }
 
-    // source: PN
-    public static Map<String, Set<Integer>> dumpSlices(final Collection<Statement> slices, SliceLogger logger) {
+    // source: pnygen, Modified by mcyl (more null checks, refactoring, morde statement kinds) 
+    // TODO javadoc
+    public static Map<String, Set<Integer>> getLineNumbersAndSourceFiles(final Collection<Statement> slices, SliceLogger logger) {
         Map<String, Set<Integer>> sourceFileLineNumbers = new HashMap<>();
 
-        for (Statement statement : slices)
+        for (Statement statement : slices) {
             // ignore special kinds of statements
-            if (statement.getKind() != null && (statement.getKind() == Statement.Kind.NORMAL
-                    | statement.getKind() == Statement.Kind.NORMAL_RET_CALLEE
-                    | statement.getKind() == Statement.Kind.NORMAL_RET_CALLER)) {
+            if (statement.getKind() != null && 
+                statement instanceof StatementWithInstructionIndex &&
+                    (statement.getKind() == Statement.Kind.NORMAL | 
+                    statement.getKind() == Statement.Kind.NORMAL_RET_CALLEE |
+                    statement.getKind() == Statement.Kind.NORMAL_RET_CALLER)) {
 
                 int bcIndex, instructionIndex = ((StatementWithInstructionIndex) statement).getInstructionIndex();
-
                 IMethod method = statement.getNode().getMethod();
 
                 // the source line number corresponding to a particular bytecode index, or -1 if
@@ -141,7 +145,7 @@ public class WalaSlicer {
                 int srcLineNumber = -1;
 
                 try {
-                    if (method instanceof ShrikeBTMethod) {
+                    if (method != null && method instanceof ShrikeBTMethod) {
                         bcIndex = ((ShrikeBTMethod) method).getBytecodeIndex(instructionIndex);
                         srcLineNumber = ((ShrikeBTMethod) method).getLineNumber(bcIndex);
                     } else {
@@ -153,18 +157,18 @@ public class WalaSlicer {
                     }
 
                     try {
-
-                        String declaringClass = method.getDeclaringClass().getName().toString();
-                        logger.log("+ Source line number " + srcLineNumber + " with method // " + method + " in class " + declaringClass);
+                        logger.log("+ Statement: " + statement.toString());                       
+                        logger.log("~ Source line number: " + srcLineNumber);
                         // construct java file path
                         // (e.g. Lcom/android/.../AlarmMangerService$2 ->
                         // com/android/.../AlarmManagerService.java)
+                        String declaringClass = method.getDeclaringClass().getName().toString();
                         if (declaringClass.indexOf("$") > -1) {
                             // remove inner class name (e.g. AlarmMangerService$2 -> AlarmManagerService)
                             declaringClass = declaringClass.substring(0, declaringClass.indexOf("$"));
                         }
                         String declaringClassFile = declaringClass.substring(1, declaringClass.length()) + ".java";
-                        logger.log("Java source file: " + declaringClassFile);
+                        logger.log("~ Java source file: " + declaringClassFile + "\n");
 
                         Set<Integer> currentLineNumbers = sourceFileLineNumbers.get(declaringClassFile);
                         if (currentLineNumbers == null) {
@@ -179,6 +183,7 @@ public class WalaSlicer {
                     logger.log("- getBytecodeIndex handling failed: " + e);
                 }
             }
+        }
         return sourceFileLineNumbers;
     }
 

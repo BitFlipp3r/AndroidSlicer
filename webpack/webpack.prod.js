@@ -137,7 +137,9 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                 path.join(utils.root('src/main/webapp/app'), '**/*.*')
             ]),
             whitelist: [
-                'close' // toast close button
+                'close', // Toast close button
+                'fade', 'show', // Popups
+                'pagination' // Pager
             ], 
             // selectors beginning pattern and all children of the selectors are preserved
             // see: https://www.purgecss.com/configuration
@@ -148,7 +150,15 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                 /^fa/, // Font Awesome
                 /^ui/, // PrimeNG
                 /^ng/, // Angular
-                /^pi/// Angular
+                /^pi/, // Angular
+                /^modal/, // Popups
+                /^ngb/, // NG-Bootstrap
+                /^form/, // Forms
+                /^row/, /^col/, /^justify/, // https://getbootstrap.com/docs/4.0/layout/overview/
+                /^d-/, // https://getbootstrap.com/docs/4.0/utilities/display/
+                /^page-/, // Pager
+                /^progress/, /^bg-/, // Progress bar 
+                /running/ // Spinner
             ]
         }),
         new MomentLocalesPlugin({

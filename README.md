@@ -19,7 +19,7 @@ We use npm scripts and [Webpack][] as our build system.
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
 
-    ./gradlew
+    gradlew
     npm start
 
 Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
@@ -49,6 +49,10 @@ or install the service with
 If you want the databases in a different folder use the --dbpath parameter, e.g.
 
     mongod --dbpath=C:\folder\to\databases\data\db
+
+Or run embedded mongo db with (use `gradle clean` before)
+
+    gradlew -Pembedded-mongo
 
 ### Service workers
 
@@ -115,7 +119,7 @@ will generate few files:
 
 To build the final jar and optimize the AndroidSlicer application for production, run:
 
-    ./gradlew -Pprod clean bootJar
+    gradlew -Pprod clean bootJar
 
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 To ensure everything worked, run:
@@ -130,13 +134,13 @@ Refer to [Using JHipster in production][] for more details.
 
 To package your application as a war in order to deploy it to an application server, run:
 
-    ./gradlew -Pprod -Pwar clean bootWar
+    gradlew -Pprod -Pwar clean bootWar
 
 ## Testing
 
 To launch your application's tests, run:
 
-    ./gradlew test integrationTest
+    gradlew test integrationTest
 
 ### Client tests
 
@@ -159,7 +163,7 @@ You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqu
 Then, run a Sonar analysis:
 
 ```
-./gradlew -Pprod clean check sonarqube
+gradlew -Pprod clean check sonarqube
 ```
 
 For more information, refer to the [Code quality page][].
@@ -179,7 +183,7 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    ./gradlew bootJar -Pprod jibDockerBuild
+    gradlew bootJar -Pprod jibDockerBuild
 
 Then run:
 

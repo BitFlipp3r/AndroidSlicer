@@ -86,8 +86,6 @@ public class AndroidOptionsResource {
                 }
             });
 
-            System.out.println(androidSourcesPath);
-
             if(directories != null && directories.length > 0){
                 List<AndroidVersionVM> androidVersions = new ArrayList<AndroidVersionVM>();
                 for (File directory : directories) {
@@ -189,7 +187,6 @@ public class AndroidOptionsResource {
         Matcher sourceFilePathMatcher = sourceFilePathPattern.matcher(sourceFilePath);
         if (sourceFilePathMatcher.find()) {
             String androidRootPath = sourceFilePath.substring(0, sourceFilePathMatcher.end()) + "\\";
-            System.out.println(androidRootPath);
 
             File androidSourceFolder = new File(androidRootPath);
             if (androidSourceFolder.exists()) {

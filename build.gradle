@@ -247,7 +247,7 @@ dependencies {
     testImplementation "org.assertj:assertj-core"
     testImplementation "junit:junit"
     testImplementation "org.mockito:mockito-core"
-    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
+    implementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
     testImplementation "org.hamcrest:hamcrest-library"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }

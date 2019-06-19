@@ -27,14 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@Profile("!embedded-mongo")
+@Profile("embedded-mongo")
 @EnableMongoRepositories("org.unibremen.mcyl.androidslicer.repository")
-@Import(value = MongoAutoConfiguration.class)
-@SpringBootApplication(exclude = EmbeddedMongoAutoConfiguration.class)
+@Import(value = EmbeddedMongoAutoConfiguration.class)
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
-public class DatabaseConfiguration {
+public class EmbeddedDatabaseConfiguration {
 
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(EmbeddedDatabaseConfiguration.class);
 
     @Bean
     public ValidatingMongoEventListener validatingMongoEventListener() {
