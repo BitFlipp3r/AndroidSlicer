@@ -83,8 +83,8 @@ spring:
     execution:
       thread-name-prefix: android-slicer-task-
       pool:
-        core-size: 2
-        max-size: 50
+        core-size: 4
+        max-size: 100
         queue-capacity: 10000
     scheduling:
       thread-name-prefix: android-slicer-scheduling-
