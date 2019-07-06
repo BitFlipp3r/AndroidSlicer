@@ -5,8 +5,6 @@ import { AndroidSlicerSharedModule } from 'app/shared';
 
 import {
   adminState,
-  AuditsComponent,
-  LogsComponent,
   JhiMetricsMonitoringComponent,
   JhiHealthModalComponent,
   JhiHealthCheckComponent,
@@ -21,8 +19,6 @@ import {
     RouterModule.forChild(adminState)
   ],
   declarations: [
-    AuditsComponent,
-    LogsComponent,
     JhiConfigurationComponent,
     JhiHealthCheckComponent,
     JhiHealthModalComponent,
