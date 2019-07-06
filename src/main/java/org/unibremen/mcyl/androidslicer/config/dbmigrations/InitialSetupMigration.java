@@ -241,7 +241,7 @@ public class InitialSetupMigration {
         controlDependenceOptions_NO_EXCEPTIONAL_EDGES.setType(SlicerOptionType.CONTROL_DEPENDENCE_OPTION);
         controlDependenceOptions_NO_EXCEPTIONAL_EDGES.setKey("NO_EXCEPTIONAL_EDGES");
         controlDependenceOptions_NO_EXCEPTIONAL_EDGES
-                .setDescription("Data dependencies transmitted via exception objects will be ignored.");
+                .setDescription("Control dependencies transmitted via exception objects will be ignored.");
         controlDependenceOptions_NO_EXCEPTIONAL_EDGES.setIsDefault(true);
         mongoTemplate.save(controlDependenceOptions_NO_EXCEPTIONAL_EDGES);
 

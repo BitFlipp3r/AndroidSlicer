@@ -99,7 +99,7 @@ public class AndroidOptionsResource {
                 return ResponseEntity.ok().body(androidVersions);
             }     
         }
-        throw new BadRequestAlertException("Android Sources not found in " + androidSourcesPath + "!", ENTITY_NAME, "idnull");
+        throw new BadRequestAlertException("Android Sources not found in " + androidSourcesPath + " !", ENTITY_NAME, "idnull");
     }
 
     /**
@@ -168,7 +168,7 @@ public class AndroidOptionsResource {
             httpHeaders.setContentType(org.springframework.http.MediaType.TEXT_PLAIN);
             return new ResponseEntity<String>(result.toString(), httpHeaders, HttpStatus.OK);
         }
-        throw new BadRequestAlertException("Source File not found in " + sourceFilePath + "!", ENTITY_NAME, "idnull");
+        throw new BadRequestAlertException("Source File not found in " + sourceFilePath + " !", ENTITY_NAME, "idnull");
     }
 
     /**
@@ -233,14 +233,14 @@ public class AndroidOptionsResource {
                     }
                 }
                 else{
-                    throw new BadRequestAlertException("AIDL File " + aidlFileName + " not found in " + androidRootPath + "!", ENTITY_NAME, "idnull");
+                    throw new BadRequestAlertException("AIDL File " + aidlFileName + " not found in " + androidRootPath + " !", ENTITY_NAME, "idnull");
                 }
             }
             else{
-                throw new BadRequestAlertException("Android source folder not found in " + androidRootPath + "!", ENTITY_NAME, "idnull");
+                throw new BadRequestAlertException("Android source folder not found in " + androidRootPath + " !", ENTITY_NAME, "idnull");
             }
         }
-        throw new BadRequestAlertException("AIDL File not found for " + sourceFilePath + "!", ENTITY_NAME, "idnull");
+        throw new BadRequestAlertException("AIDL File not found for " + sourceFilePath + " !", ENTITY_NAME, "idnull");
     }
 
     /**
