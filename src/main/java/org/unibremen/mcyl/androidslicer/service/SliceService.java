@@ -130,8 +130,8 @@ public class SliceService {
 
                 try {
                     Set<Integer> sourceCodeLines = Parser.getModifiedSlice(sourceLocation, sliceLineNumbersEntry.getValue(), logger);
-                    logger.log("Lines of source code: " + new TreeSet<>(sourceCodeLines));
                     if (sourceCodeLines != null) {
+                        logger.log("Lines of source code: " + new TreeSet<>(sourceCodeLines));
                         builder.append(sliceMapper.getLinesOfCode(sourceLocation, sourceCodeLines, logger));
                     }
                 } catch (Exception ex) {
