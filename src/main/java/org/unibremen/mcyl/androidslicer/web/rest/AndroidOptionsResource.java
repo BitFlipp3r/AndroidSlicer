@@ -99,7 +99,7 @@ public class AndroidOptionsResource {
                 return ResponseEntity.ok().body(androidVersions);
             }     
         }
-        throw new BadRequestAlertException("Android Sources not found", ENTITY_NAME, "idnull");
+        throw new BadRequestAlertException("Android Sources not found in " + androidSourcesPath + "!", ENTITY_NAME, "idnull");
     }
 
     /**
@@ -114,8 +114,10 @@ public class AndroidOptionsResource {
     public ResponseEntity<List<AndroidServiceClassesVM>> getAndroidServices(
             @RequestParam("path") String androidSourceFolderPath) {
         log.debug("REST request to get android services");
+
         SlicerSetting serviceRegex = slicerSettingRepository.findOneByKey(Constants.SERVICE_REGEX_KEY).get();
         File androidSourceFolder = new File(androidSourceFolderPath);
+
         if (serviceRegex != null && androidSourceFolder.exists()) {
             Collection<File> serviceClassFiles = FileUtils.listFiles(androidSourceFolder,
                     new RegexFileFilter(serviceRegex.getValue()), TrueFileFilter.INSTANCE);
@@ -133,7 +135,7 @@ public class AndroidOptionsResource {
 
             return ResponseEntity.ok().body(serviceClasses);
         }
-        throw new BadRequestAlertException("Anroid Sources not found", ENTITY_NAME, "idnull");
+        throw new BadRequestAlertException("Android services not found in " + androidSourceFolderPath +"!", ENTITY_NAME, "idnull");
     }
 
     /**
@@ -147,6 +149,7 @@ public class AndroidOptionsResource {
     @GetMapping("/android-options/source-file")
     public ResponseEntity<String> getAndroidSourceFile(@RequestParam("path") String sourceFilePath) {
         log.debug("REST request to get android source file");
+
         File file = new File(sourceFilePath);
         if (file.exists()) {
 
@@ -165,7 +168,7 @@ public class AndroidOptionsResource {
             httpHeaders.setContentType(org.springframework.http.MediaType.TEXT_PLAIN);
             return new ResponseEntity<String>(result.toString(), httpHeaders, HttpStatus.OK);
         }
-        throw new BadRequestAlertException("Source File not found", ENTITY_NAME, "idnull");
+        throw new BadRequestAlertException("Source File not found in " + sourceFilePath + "!", ENTITY_NAME, "idnull");
     }
 
     /**
@@ -186,7 +189,8 @@ public class AndroidOptionsResource {
 
         Matcher sourceFilePathMatcher = sourceFilePathPattern.matcher(sourceFilePath);
         if (sourceFilePathMatcher.find()) {
-            String androidRootPath = sourceFilePath.substring(0, sourceFilePathMatcher.end()) + "\\";
+
+            String androidRootPath = sourceFilePath.substring(0, sourceFilePathMatcher.end()) + File.separator;
 
             File androidSourceFolder = new File(androidRootPath);
             if (androidSourceFolder.exists()) {
@@ -229,9 +233,11 @@ public class AndroidOptionsResource {
                     }
                 }
             }
-
+            else{
+                throw new BadRequestAlertException("Android source folder not found in " + androidRootPath + "!", ENTITY_NAME, "idnull");
+            }
         }
-        throw new BadRequestAlertException("AIDL File not found", ENTITY_NAME, "idnull");
+        throw new BadRequestAlertException("AIDL File not found in " + sourceFilePath + "!", ENTITY_NAME, "idnull");
     }
 
     /**

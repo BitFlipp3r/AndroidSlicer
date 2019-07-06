@@ -90,7 +90,7 @@ if (OperatingSystem.current().isWindows()) {
 defaultTasks "bootRun"
 
 group = "org.unibremen.mcyl.androidslicer"
-version = "0.9.0-SNAPSHOT"
+version = "0.9.1"
 
 description = ""
 

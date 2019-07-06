@@ -84,7 +84,7 @@ public class SliceService {
         }
 
         File appJar = 
-            new File(androidBinaryPath + "\\android-" + slice.getAndroidVersion() + "\\android.jar");
+            new File(androidBinaryPath + File.separator + "android-" + slice.getAndroidVersion() + File.separator + "android.jar");
 
         if (!appJar.exists()) {
             logger.log("Android Binary Jar not found");
@@ -116,9 +116,10 @@ public class SliceService {
                 String sourceLocation = slicerSettingRepository
                     .findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get()
                     .getValue().replace("~", System.getProperty("user.dir"))
-                    + "\\android-"
+                    + File.separator
+                    + "android-"
                     + slice.getAndroidVersion()
-                    + "\\"
+                    + File.separator
                     + sliceLineNumbersEntry.getKey().replace("/", File.separator);
 
                 // use TreeSet to sort line numbers
