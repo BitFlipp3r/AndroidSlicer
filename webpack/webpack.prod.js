@@ -156,7 +156,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                 /^form/, // Forms
                 /^row/, /^col/, /^justify/, // https://getbootstrap.com/docs/4.0/layout/overview/
                 /^d-/, // https://getbootstrap.com/docs/4.0/utilities/display/
-                /^page-/, // Pager
+                /page/, // Pager
                 /^progress/, /^bg-/, // Progress bar 
                 /running/ // Spinner
             ]

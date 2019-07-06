@@ -188,7 +188,7 @@ public class InitialSetupMigration {
         dataDependenceOptions_NO_BASE_PTRS.setDescription(
                 "Like FULL, but ignore data dependence edges that define base pointers for indirect memory access.");
         dataDependenceOptions_NO_BASE_PTRS.setIsDefault(false);
-        mongoTemplate.save(dataDependenceOptions_FULL);
+        mongoTemplate.save(dataDependenceOptions_NO_BASE_PTRS);
 
         SlicerOption dataDependenceOptions_NO_EXCEPTIONS = new SlicerOption();
         dataDependenceOptions_NO_EXCEPTIONS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
@@ -204,7 +204,7 @@ public class InitialSetupMigration {
         dataDependenceOptions_NO_HEAP
                 .setDescription("Like FULL, and additionally ignore all data dependence edges to/from heap locations.");
         dataDependenceOptions_NO_HEAP.setIsDefault(false);
-        mongoTemplate.save(dataDependenceOptions_FULL);
+        mongoTemplate.save(dataDependenceOptions_NO_HEAP);
 
         SlicerOption dataDependenceOptions_NO_HEAP_NO_EXCEPTIONS = new SlicerOption();
         dataDependenceOptions_NO_HEAP_NO_EXCEPTIONS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
