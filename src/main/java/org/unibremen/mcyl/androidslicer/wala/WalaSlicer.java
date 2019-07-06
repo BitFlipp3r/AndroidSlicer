@@ -212,7 +212,7 @@ public class WalaSlicer {
                             for (String entryMethod : entryMethods) {
                                 if (!method.isAbstract() && method.getName().equals(Atom.findOrCreateUnicodeAtom(entryMethod))) {
                                     entrypoints.add(new ArgumentTypeEntrypoint(method, classHierarchy));
-                                    logger.log("~ Found entry method " + entryMethod + "() with object class: " + typeName + ".");
+                                    logger.log("~ Found entry method: " + entryMethod + "() with object class: " + typeName + ".");
                                 }
                             }
                         }
@@ -245,7 +245,7 @@ public class WalaSlicer {
                         // add node if not already in set
                         if(!methodNodes.contains(node)){
                             methodNodes.add(node);
-                            logger.log("~ Found call graph method " + methodName + "() with object class: " 
+                            logger.log("~ Found call graph method: " + methodName + "() with object class: " 
                             + declaringClass + " in " + node + ".");
                             // search inner method nodes
                             Set<String> innerMethodNames = getInnerMethodNames(node);
@@ -307,7 +307,7 @@ public class WalaSlicer {
                         if (call.getCallSite().getDeclaredTarget().getName().toString().equals(seedStatementName)) {
                             IntSet indices = ir.getCallInstructionIndices(call.getCallSite());
                             statements.add(new NormalStatement(node, indices.intIterator().next()));
-                            logger.log("~ Found seed statement " + seedStatementName + " in " + node + ".");
+                            logger.log("~ Found seed statement: " + seedStatementName + " in " + node + ".");
                         }
                     }
                 }
@@ -324,7 +324,7 @@ public class WalaSlicer {
                     for (String seedStatementName : seedStatements) {
                         if (exceptionName.equals(seedStatementName)){
                             statements.add(new NormalStatement(node, i));
-                            logger.log("~ Found 'new' seed statement " + seedStatementName + " in " + node + ".");
+                            logger.log("~ Found seed statement: new " + seedStatementName + " in " + node + ".");
                         }
                     }
                 }
