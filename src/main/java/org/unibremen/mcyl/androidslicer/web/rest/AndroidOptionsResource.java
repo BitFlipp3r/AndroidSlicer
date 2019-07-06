@@ -232,12 +232,15 @@ public class AndroidOptionsResource {
                         return ResponseEntity.ok().body(methodNames);
                     }
                 }
+                else{
+                    throw new BadRequestAlertException("AIDL File " + aidlFileName + " not found in " + androidRootPath + "!", ENTITY_NAME, "idnull");
+                }
             }
             else{
                 throw new BadRequestAlertException("Android source folder not found in " + androidRootPath + "!", ENTITY_NAME, "idnull");
             }
         }
-        throw new BadRequestAlertException("AIDL File not found in " + sourceFilePath + "!", ENTITY_NAME, "idnull");
+        throw new BadRequestAlertException("AIDL File not found for " + sourceFilePath + "!", ENTITY_NAME, "idnull");
     }
 
     /**
