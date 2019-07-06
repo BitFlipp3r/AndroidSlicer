@@ -83,9 +83,10 @@ spring:
     execution:
       thread-name-prefix: android-slicer-task-
       pool:
-        core-size: 2
-        max-size: 50
-        queue-capacity: 10000
+        core-size: 8 # initial number of threads that will be running tasks in the pool
+        max-size: 50 # is the maximum number of threads that will be allowed in your application
+        queue-capacity: 80 # app starts with CorePoolSize number of threads waiting for tasks. When tasks borrowed all CorePoolSize threads, the application will start queueing tasks. When queued tasks amount reaches QueueCapacity, it will start spawning additional threads until the number of threads reached MaxPoolSize number. And only then, it will start rejecting passed tasks by throwing TaskRejectedException.
+        keep-alive: 1h # keep idle threads alive
     scheduling:
       thread-name-prefix: android-slicer-scheduling-
       pool:

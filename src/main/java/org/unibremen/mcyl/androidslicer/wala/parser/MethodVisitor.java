@@ -8,6 +8,7 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.ast.stmt.SynchronizedStmt;
 import com.github.javaparser.ast.stmt.ThrowStmt;
@@ -17,6 +18,8 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.SwitchStmt;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -170,6 +173,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                 }
             }
 
+            //mcyl: added catch clauses
             if (node instanceof CatchClause) {
                 CatchClause catchClause = (CatchClause) node;
                 addAllLinesFromBeginToEnd(
@@ -196,6 +200,47 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                     throwStmt.getBegin().get().line,
                     throwStmt.getEnd().get().line,
                     sourceLineNumbers);
+            }
+
+            // mcyl: added return statements
+            if (node instanceof ReturnStmt) {
+                ReturnStmt returnStmt = (ReturnStmt) node;
+
+                addAllLinesFromBeginToEnd(
+                    returnStmt.getBegin().get().line,
+                    returnStmt.getEnd().get().line,
+                    sourceLineNumbers);
+            }
+
+            // mcyl: added switch statements
+            if (node instanceof SwitchStmt) {
+                SwitchStmt switchStmt = (SwitchStmt) node;
+                // mcyl: fix for multiline heads
+                int entrySize = switchStmt.getEntries().size();
+                if(entrySize > 0){
+                    addAllLinesFromBeginToEnd(
+                        switchStmt.getBegin().get().line,
+                        switchStmt.getEntry(0).getBegin().get().line,
+                        sourceLineNumbers);
+                    sourceLineNumbers.add(switchStmt.getEntry(entrySize -1).getEnd().get().line);
+
+                    for(SwitchEntry switchEntry : switchStmt.getEntries()) {
+                        addStatementBody(switchEntry, line);
+                    }
+                }
+            }
+            // mcyl: added switch entry statements
+            if (node instanceof SwitchEntry) {
+                SwitchEntry switchEntry = (SwitchEntry) node;
+                
+                addAllLinesFromBeginToEnd(
+                    switchEntry.getBegin().get().line,
+                    switchEntry.getEnd().get().line,
+                    sourceLineNumbers);
+
+                for(Statement switchEntryStmt : switchEntry.getStatements()) {
+                    addStatementBody(switchEntryStmt, line);
+                }
             }
         }
     }
