@@ -31,12 +31,12 @@ public class InitialSetupMigration {
     public void addDefaultSettings(MongoTemplate mongoTemplate) {
         SlicerSetting androidSourcePath = new SlicerSetting();
         androidSourcePath.setKey(Constants.ANDROID_SOURCE_PATH_KEY);
-        androidSourcePath.setValue("~\\android-resources");
+        androidSourcePath.setValue("~" + File.separator + "android-resources");
         mongoTemplate.save(androidSourcePath);
 
         SlicerSetting androidPlatformPath = new SlicerSetting();
         androidPlatformPath.setKey(Constants.ANDROID_PLATFORM_PATH_KEY);
-        androidPlatformPath.setValue("~\\android-resources");
+        androidPlatformPath.setValue("~" + File.separator + "android-resources");
         mongoTemplate.save(androidPlatformPath);
 
         SlicerSetting serviceRegex = new SlicerSetting();
