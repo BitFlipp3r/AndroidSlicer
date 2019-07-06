@@ -53,6 +53,9 @@ public class SliceService {
     @Async
     public CompletableFuture<Slice> process(Slice slice) {
 
+        // increase slicing priority
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+
         String newThreadName = UUID.randomUUID().toString();
         Thread.currentThread().setName(newThreadName);
         slice.setThreadId(newThreadName);
