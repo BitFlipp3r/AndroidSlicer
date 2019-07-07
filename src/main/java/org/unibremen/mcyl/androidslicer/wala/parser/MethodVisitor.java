@@ -202,16 +202,6 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                     sourceLineNumbers);
             }
 
-            // mcyl: added return statements
-            if (node instanceof ReturnStmt) {
-                ReturnStmt returnStmt = (ReturnStmt) node;
-
-                addAllLinesFromBeginToEnd(
-                    returnStmt.getBegin().get().line,
-                    returnStmt.getEnd().get().line,
-                    sourceLineNumbers);
-            }
-
             // mcyl: added switch statements
             if (node instanceof SwitchStmt) {
                 SwitchStmt switchStmt = (SwitchStmt) node;
@@ -242,6 +232,27 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                     addStatementBody(switchEntryStmt, line);
                 }
             }
+        }
+
+        // mcyl: add all return statements from control dependencies, regardless if sliced line is inside this return statement node
+        /* e.g. instead of 
+
+            if (isBluetoothDisallowed()) {
+            }
+
+        you get
+
+            if (isBluetoothDisallowed()) {
+                return false;
+            }
+        */
+        if (node instanceof ReturnStmt) {
+            ReturnStmt returnStmt = (ReturnStmt) node;
+
+            addAllLinesFromBeginToEnd(
+                returnStmt.getBegin().get().line,
+                returnStmt.getEnd().get().line,
+                sourceLineNumbers);
         }
     }
 
