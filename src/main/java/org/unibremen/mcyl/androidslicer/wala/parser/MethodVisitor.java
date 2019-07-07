@@ -52,6 +52,14 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
     // https://static.javadoc.io/com.github.javaparser/javaparser-core/3.5.0/com/github/javaparser/ast/stmt/Statement.html
     public void addStatementBody(Node node, int line) {
 
+        if (node instanceof BlockStmt) {
+            BlockStmt blockStmt = (BlockStmt) node;
+            for (Statement stmt : blockStmt.getStatements()) {
+                addStatementBody(stmt, line);
+            }
+            return;
+        }
+
         if (isLineInNode(node, line)) {
 
             sourceLineNumbers.add(node.getBegin().get().line);
@@ -129,9 +137,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                     if (thenStmt.toString().contains("{")) {
                         thenLastLine = thenStmt.getEnd().get().line;
                     }
-                    if (isLineInNode(thenStmt, line)) {
-                        addStatementBody(thenStmt, line);
-                    }
+                    addStatementBody(thenStmt, line);
                 }
 
                 if(ifStmt.getElseStmt() != null && ifStmt.getElseStmt().isPresent()){
@@ -164,13 +170,6 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                     addStatementBody(child, line);
                 }
 
-            }
-
-            if (node instanceof BlockStmt) {
-                BlockStmt blockStmt = (BlockStmt) node;
-                for (Statement stmt : blockStmt.getStatements()) {
-                    addStatementBody(stmt, line);
-                }
             }
 
             //mcyl: added catch clauses
