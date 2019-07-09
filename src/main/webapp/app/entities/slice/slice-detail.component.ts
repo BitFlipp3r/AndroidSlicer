@@ -19,7 +19,6 @@ export class SliceDetailComponent implements OnInit {
 
   editorOptions = { theme: 'vs', language: 'java', renderSideBySide: false, followsCaret: true, ignoreCharChanges: true };
 
-  sliceCode: string;
   sourceFile: string;
 
   sliceCodeModel: DiffEditorModel;
@@ -41,7 +40,7 @@ export class SliceDetailComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ slice }) => {
       this.slice = slice;
-      this.sliceCode = slice.slice;
+
       if (slice.running) {
         // update until slicing has finished
         this.refresh();
@@ -74,7 +73,6 @@ export class SliceDetailComponent implements OnInit {
       .subscribe(httpResponse => {
         this.slice = httpResponse.body;
         if (!this.slice.running) {
-          this.sliceCode = this.slice.slice;
           this.loadSourceFile();
           // scroll log to bottom
           const logTxt = document.getElementById('logTxt');

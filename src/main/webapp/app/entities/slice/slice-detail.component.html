@@ -34,12 +34,14 @@
                     </div>
                     <div *ngIf="!showDiff">                       
                         <dd>
-                            <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="sliceCode" class="code-editor border rounded"></ngx-monaco-editor>
+                            <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="slice.slice" class="code-editor border rounded"></ngx-monaco-editor>
                         </dd>
+                    <div *ngIf="sourceFile">        
                         <dt><span>Source File</span></dt>
                         <dd>
                             <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="sourceFile" class="code-editor border rounded"></ngx-monaco-editor>
                         </dd>
+                    </div>        
                     </div>
                     <div *ngIf="showDiff && sourceFileModel && sliceCodeModel">
                         <dd>
