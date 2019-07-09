@@ -1,4 +1,4 @@
-package org.unibremen.mcyl.androidslicer.config;
+package org.unibremen.mcyl.androidslicer.service;
 
 import java.util.Set;
 
@@ -9,17 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.unibremen.mcyl.androidslicer.domain.Slice;
 import org.unibremen.mcyl.androidslicer.repository.SliceRepository;
 
-@EnableScheduling
-@Component
-public class ScheduledTasks {
 
-private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledTasks.class);
+@Component
+public class SliceThreadCleaner {
+
+private static final Logger LOGGER = LoggerFactory.getLogger(SliceThreadCleaner.class);
 
 private static boolean startUpFinished = false;
 
@@ -27,9 +26,7 @@ private static boolean startUpFinished = false;
 private SliceRepository sliceRepository;
 
     @Scheduled(fixedRate = 360000)
-    public void keepAlive() {
-        //log "alive" every hour for sanity checks
-        LOGGER.debug("Alive Task started.");
+    public void keepCleaningUp() {
         if (startUpFinished) {
             cleanUpRunningSlices();
         }
@@ -56,5 +53,7 @@ private SliceRepository sliceRepository;
             }
         }
     }
+
+
 
 }

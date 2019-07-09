@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="form-group" *ngIf="sourceFile" class="border rounded">
-                    <monaco-editor [theme]="theme" [file]="sourceFile"></monaco-editor>
+                    <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="sourceFile" class="code-editor border rounded" [ngModelOptions]="{standalone: true}"></ngx-monaco-editor>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_entryMethods" ngbTooltip="JSON-List with entry method names">Entry Methods</label>

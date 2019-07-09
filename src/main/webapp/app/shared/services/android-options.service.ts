@@ -23,10 +23,10 @@ export class AndroidOptionsService {
     });
   }
 
-  getServiceSource(sourceFilePath: string): Observable<any> {
+  getServiceSource(androidVersion: number, sourceFileName: string): Observable<any> {
     return this.http.get(`${this.resourceUrl}/source-file`, {
       responseType: 'text',
-      params: new HttpParams().set('path', sourceFilePath),
+      params: new HttpParams().set('version', androidVersion.toString()).set('name', sourceFileName),
       observe: 'response'
     });
   }

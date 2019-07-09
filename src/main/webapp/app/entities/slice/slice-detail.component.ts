@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { JhiDataUtils } from 'ng-jhipster';
+import { JhiDataUtils, JhiAlertService } from 'ng-jhipster';
 
 import { ISlice } from 'app/shared/model/slice.model';
 import { interval } from 'rxjs';
 import { startWith, switchMap, takeWhile } from 'rxjs/operators';
-import { MonacoFile } from 'ngx-monaco';
 import { SliceService } from '.';
+import { AndroidOptionsService } from 'app/shared/services/android-options.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { DiffEditorModel } from 'ngx-monaco-editor';
 
 @Component({
   selector: 'jhi-slice-detail',
@@ -15,26 +17,37 @@ import { SliceService } from '.';
 export class SliceDetailComponent implements OnInit {
   slice: ISlice;
 
-  theme = 'vs-light';
-  code: MonacoFile;
+  editorOptions = { theme: 'vs', language: 'java', renderSideBySide: false, followsCaret: true, ignoreCharChanges: true };
+
+  sliceCode: string;
+  sourceFile: string;
+
+  sliceCodeModel: DiffEditorModel;
+  sourceFileModel: DiffEditorModel;
 
   poll: boolean;
 
+  showDiff = false;
+
   constructor(
     protected dataUtils: JhiDataUtils,
+    protected jhiAlertService: JhiAlertService,
     protected activatedRoute: ActivatedRoute,
     private sliceService: SliceService,
-    private router: Router
+    private router: Router,
+    protected androidOptionsService: AndroidOptionsService
   ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ slice }) => {
       this.slice = slice;
-      this.code = { uri: slice.androidClassName, language: 'java', content: slice.slice };
+      this.sliceCode = slice.slice;
       if (slice.running) {
         // update until slicing has finished
         this.refresh();
         this.poll = true;
+      } else {
+        this.loadSourceFile();
       }
     });
 
@@ -61,11 +74,43 @@ export class SliceDetailComponent implements OnInit {
       .subscribe(httpResponse => {
         this.slice = httpResponse.body;
         if (!this.slice.running) {
-          this.code = { uri: this.slice.androidClassName, language: 'java', content: this.slice.slice };
+          this.sliceCode = this.slice.slice;
+          this.loadSourceFile();
           // scroll log to bottom
           const logTxt = document.getElementById('logTxt');
           logTxt.scrollTop = logTxt.scrollHeight;
         }
       });
+  }
+
+  protected onError(errorMessage: string) {
+    this.jhiAlertService.error(errorMessage, null, null);
+  }
+
+  loadSourceFile() {
+    if (!this.sourceFileModel) {
+      // get source file for comparison
+      this.androidOptionsService.getServiceSource(this.slice.androidVersion, this.slice.androidClassName).subscribe(
+        (res: any) => {
+          this.sourceFile = res.body;
+
+          this.sliceCodeModel = { language: 'java', code: this.slice.slice };
+          this.sourceFileModel = { language: 'java', code: this.sourceFile };
+        },
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+    }
+  }
+
+  // force a re-rendering of the div container
+  reloadDiff() {
+    if (this.showDiff) {
+      this.sliceCodeModel = null;
+      this.sourceFileModel = null;
+      setTimeout(() => {
+        this.sliceCodeModel = { language: 'java', code: this.slice.slice };
+        this.sourceFileModel = { language: 'java', code: this.sourceFile };
+      }, 10);
+    }
   }
 }

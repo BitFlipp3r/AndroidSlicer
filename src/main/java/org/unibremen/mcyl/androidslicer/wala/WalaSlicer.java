@@ -116,9 +116,11 @@ public class WalaSlicer {
                     controlDependenceOptions));
         }
         logger.log("\nNumber of slice statements:  " + sliceList.size());
-        for (Statement stmt : sliceList) {
-            logger.log("~ " + stmt.toString());
-        }
+        
+        /* too much to log this for big slices */
+        //for (Statement stmt : sliceList) {
+        //    logger.log("~ " + stmt.toString());
+        //}
 
         logger.log("\n== GETTING SOURCE FILES ==");
         return getLineNumbersAndSourceFiles(sliceList, logger);

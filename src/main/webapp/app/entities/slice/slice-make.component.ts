@@ -11,9 +11,7 @@ import { SlicerOptionService } from 'app/entities/slicer-option';
 import { IAndroidVersion } from 'app/shared/model/android-version.model';
 import { IAndroidClass, AndroidClass } from 'app/shared/model/android-class.model';
 import { AndroidOptionsService } from 'app/shared/services/android-options.service';
-import { MonacoFile } from 'ngx-monaco';
 import { SelectItem } from 'primeng/components/common/selectitem';
-import { constants } from 'perf_hooks';
 
 @Component({
   selector: 'jhi-slice-make',
@@ -37,8 +35,8 @@ export class SliceMakeComponent implements OnInit {
   dataDependenceOptionsList: SelectItem[] = [];
   controlDependenceOptionsList: SelectItem[] = [];
 
-  theme = 'vs';
-  sourceFile: MonacoFile;
+  editorOptions = { theme: 'vs', language: 'java' };
+  sourceFile: String;
 
   createForm = this.fb.group({
     androidVersion: [null, [Validators.required]],
@@ -178,16 +176,13 @@ export class SliceMakeComponent implements OnInit {
   }
 
   onClassSelection() {
+    const androidVersion: number = (this.createForm.get(['androidVersion']).value as IAndroidVersion).version;
     const serviceClassName: string = (this.createForm.get(['androidClassName']).value as IAndroidClass).name;
     const sourceFilePath: string = (this.createForm.get(['androidClassName']).value as IAndroidClass).path;
 
-    this.androidOptionsService.getServiceSource(sourceFilePath).subscribe(
+    this.androidOptionsService.getServiceSource(androidVersion, serviceClassName).subscribe(
       (res: any) => {
-        this.sourceFile = {
-          uri: (this.createForm.get(['androidClassName']).value as IAndroidClass).name,
-          language: 'java',
-          content: res.body
-        };
+        this.sourceFile = res.body;
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );
@@ -213,7 +208,12 @@ export class SliceMakeComponent implements OnInit {
   private filterMultiSelectOptions(event, options, filterdOptions) {
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
-      if (option.toLowerCase().indexOf(event.query.toLowerCase()) > -1) {
+      if (
+        option
+          .toString()
+          .toLowerCase()
+          .indexOf(event.query.toString().toLowerCase()) > -1
+      ) {
         filterdOptions.push(option);
       }
     }

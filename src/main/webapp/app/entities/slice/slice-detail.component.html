@@ -23,9 +23,29 @@
                 </dd>
                 <div *ngIf="slice.slice">
                     <dt><span>Slice</span></dt>
-                    <dd>
-                        <monaco-editor [theme]="theme" [file]="code" class="border rounded"></monaco-editor>
-                    </dd>
+                    <div class="form-group row justify-content-md-left">
+                        <label class="col-md-auto align-middle" for="field_showDiff" >Show Diff</label>
+                        <div class="col-md-auto align-middle">
+                            <p-inputSwitch  name="showDiff" id="field_showDiff" [(ngModel)]="showDiff" (onChange)="loadSourceFile()"></p-inputSwitch>
+                        </div>
+                        <div class="col-md-auto align-middle">
+                            <p-checkbox  name="showSideBySide" label="View Side by Side" [(ngModel)]="editorOptions.renderSideBySide" binary="true"(onChange)="reloadDiff()" [disabled]="!showDiff"></p-checkbox>
+                        </div>
+                    </div>
+                    <div *ngIf="!showDiff">                       
+                        <dd>
+                            <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="sliceCode" class="code-editor border rounded"></ngx-monaco-editor>
+                        </dd>
+                        <dt><span>Source File</span></dt>
+                        <dd>
+                            <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="sourceFile" class="code-editor border rounded"></ngx-monaco-editor>
+                        </dd>
+                    </div>
+                    <div *ngIf="showDiff && sourceFileModel && sliceCodeModel">
+                        <dd>
+                            <ngx-monaco-diff-editor [options]="editorOptions" [originalModel]="sourceFileModel" [modifiedModel]="sliceCodeModel" class="code-editor border rounded"></ngx-monaco-diff-editor>
+                        </dd>
+                    </div>
                 </div>
                 <dt><span>Reflection Options</span></dt>
                 <dd>

@@ -140,15 +140,25 @@ public class AndroidOptionsResource {
 
     /**
      * GET /android-options/source-file : get android system service code from
-     * "sourceFilePath".
+     * "androidVersion" and "androidClassName".
      *
-     * @param sourceFilePath android source file path
+     * @param androidVersion android version
+     * @param androidClassName name of the class (fully qualified, i.e. com/android/server/AlarmManagerService.java)
      * @return the ResponseEntity with status 200 (OK) and with body the source
      *         file, or with status 404 (Not Found)
      */
     @GetMapping("/android-options/source-file")
-    public ResponseEntity<String> getAndroidSourceFile(@RequestParam("path") String sourceFilePath) {
+    public ResponseEntity<String> getAndroidSourceFile(@RequestParam("version") Integer androidVersion, @RequestParam("name") String androidClassName) {
         log.debug("REST request to get android source file");
+
+        String sourceFilePath = slicerSettingRepository
+        .findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get()
+        .getValue().replace("~", System.getProperty("user.dir"))
+        + File.separator
+        + "android-"
+        + androidVersion
+        + File.separator
+        + androidClassName.replace("/", File.separator);
 
         File file = new File(sourceFilePath);
         if (file.exists()) {

@@ -18,13 +18,12 @@ import { AndroidSlicerAppRoutingModule } from './app-routing.module';
 import { AndroidSlicerHomeModule } from './home/home.module';
 import { AndroidSlicerEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
-import { MonacoEditorModule, MonacoEditorOptions } from 'ngx-monaco';
+import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent } from './layouts';
 
-const monacoConfig: MonacoEditorOptions = {
-  quickSuggestions: true,
-  scrollBeyondLastLine: false
+const monacoConfig: NgxMonacoEditorConfig = {
+  defaultOptions: { quickSuggestions: true, scrollBeyondLastLine: false, readOnly: true } // pass default options to be used
 };
 
 @NgModule({
@@ -40,7 +39,7 @@ const monacoConfig: MonacoEditorOptions = {
     AndroidSlicerSharedModule.forRoot(),
     AndroidSlicerCoreModule,
     AndroidSlicerHomeModule,
-    MonacoEditorModule.forRoot({ options: monacoConfig }),
+    MonacoEditorModule.forRoot(monacoConfig),
     // jhipster-needle-angular-add-module JHipster will add new module here
     AndroidSlicerEntityModule,
     AndroidSlicerAppRoutingModule
