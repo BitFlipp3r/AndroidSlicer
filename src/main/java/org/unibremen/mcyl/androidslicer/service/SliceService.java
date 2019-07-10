@@ -144,8 +144,6 @@ public class SliceService {
 
         slice.setRunning(false);
         slice.setThreadId(null);
-        
-        logger.finishLogs();
 
         Slice result = sliceRepository.save(slice);
         return CompletableFuture.completedFuture(result);

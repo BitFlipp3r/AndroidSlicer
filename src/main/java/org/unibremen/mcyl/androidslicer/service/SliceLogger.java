@@ -28,9 +28,4 @@ public class SliceLogger {
         this.slice.setLog(this.buffer.toString());
         this.sliceRepository.save(slice);
     }
-
-    public void finishLogs() {
-        this.slice.setLog(this.buffer.toString());
-        this.sliceRepository.save(slice);
-    }
 }

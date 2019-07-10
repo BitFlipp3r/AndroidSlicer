@@ -72,9 +72,16 @@ export class SliceDetailComponent implements OnInit {
       .pipe(takeWhile(() => this.slice.running && this.poll))
       .subscribe(httpResponse => {
         this.slice = httpResponse.body;
+
         // scroll log to bottom
-        const logTxt = document.getElementById('logTxt');
-        logTxt.scrollTop = logTxt.scrollHeight;
+        setTimeout(() => {
+          // allow time for DOM update
+          const logTxt = document.getElementById('logTxt');
+          if (this.slice.log && logTxt && logTxt.scrollHeight) {
+            logTxt.scrollTop = logTxt.scrollHeight;
+          }
+        }, 100);
+
         if (!this.slice.running) {
           this.loadSourceFile();
         }
