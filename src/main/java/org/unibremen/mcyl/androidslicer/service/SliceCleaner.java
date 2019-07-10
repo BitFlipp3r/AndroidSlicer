@@ -16,9 +16,12 @@ import org.unibremen.mcyl.androidslicer.repository.SliceRepository;
 
 
 @Component
-public class SliceThreadCleaner {
+/**
+ * Check at startup and periodically if slice thread is still running and set slice state accordingly.
+ */
+public class SliceCleaner {
 
-private static final Logger LOGGER = LoggerFactory.getLogger(SliceThreadCleaner.class);
+private static final Logger LOGGER = LoggerFactory.getLogger(SliceCleaner.class);
 
 private static boolean startUpFinished = false;
 
