@@ -52,6 +52,7 @@ public class SliceService {
      */
     @Async
     public CompletableFuture<Slice> process(Slice slice) {
+        long start = System.currentTimeMillis();
 
         // increase slicing priority
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
@@ -146,6 +147,10 @@ public class SliceService {
         slice.setThreadId(null);
 
         Slice result = sliceRepository.save(slice);
+
+        long end = System.currentTimeMillis();
+        logger.log("Slicing took " + (end - start) + "ms.");
+
         return CompletableFuture.completedFuture(result);
     }
 }
