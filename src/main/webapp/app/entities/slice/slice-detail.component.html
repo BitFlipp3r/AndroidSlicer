@@ -23,10 +23,11 @@
                 </dd>
                 <div *ngIf="slice.slice">
                     <dt><span>Slice</span></dt>
-                    <div class="form-group row justify-content-md-left">
-                        <label class="col-md-auto align-middle" for="field_showDiff" >Show Diff</label>
+                    <div class="form-group row justify-content-md-left mb-2">
+                        
                         <div class="col-md-auto align-middle">
-                            <p-inputSwitch  name="showDiff" id="field_showDiff" [(ngModel)]="showDiff" (onChange)="loadSourceFile()"></p-inputSwitch>
+                            <label class="align-middle pr-2" for="field_showDiff" >Show Diff</label>
+                            <p-inputSwitch  class="align-middle pt-2" name="showDiff" id="field_showDiff" [(ngModel)]="showDiff" (onChange)="loadSourceFile()"></p-inputSwitch>
                         </div>
                         <div class="col-md-auto align-middle">
                             <p-checkbox  name="showSideBySide" label="View Side by Side" [(ngModel)]="editorOptions.renderSideBySide" binary="true"(onChange)="reloadDiff()" [disabled]="!showDiff"></p-checkbox>
@@ -62,7 +63,14 @@
                     <span>{{slice.controlDependenceOptions}}</span>
                 </dd>
                 <div *ngIf="slice.log">
-                    <dt><span>Log</span></dt>
+                    <div class="row justify-content-md-left pb-2">
+                        <div class="col-md-auto align-middle">
+                                <dt><span>Log</span></dt>
+                        </div>
+                        <div class="col-md-auto align-middle" *ngIf="slice.running">
+                            <p-checkbox  name="scrollLog" label="Auto Scroll to Bottom" [(ngModel)]="scrollLog" binary="true"></p-checkbox>
+                        </div>
+                    </div>
                     <dd>
                         <textarea id="logTxt" readonly style="width:100%;" rows="10" class="border rounded">{{slice.log}}</textarea>
                     </dd>

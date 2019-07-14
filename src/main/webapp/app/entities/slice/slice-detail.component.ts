@@ -27,6 +27,7 @@ export class SliceDetailComponent implements OnInit {
   poll: boolean;
 
   showDiff = false;
+  scrollLog = true;
 
   constructor(
     protected dataUtils: JhiDataUtils,
@@ -77,7 +78,7 @@ export class SliceDetailComponent implements OnInit {
         setTimeout(() => {
           // allow time for DOM update
           const logTxt = document.getElementById('logTxt');
-          if (this.slice.log && logTxt && logTxt.scrollHeight) {
+          if (this.slice.log && logTxt && logTxt.scrollHeight && this.scrollLog) {
             logTxt.scrollTop = logTxt.scrollHeight;
           }
         }, 100);
