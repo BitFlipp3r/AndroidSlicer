@@ -18,7 +18,7 @@ export class SliceResolve implements Resolve<ISlice> {
   constructor(private service: SliceService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ISlice> {
-    const id = route.params['id'] ? route.params['id'] : null;
+    const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
         filter((response: HttpResponse<Slice>) => response.ok),

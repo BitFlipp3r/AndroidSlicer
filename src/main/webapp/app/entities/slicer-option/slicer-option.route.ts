@@ -18,7 +18,7 @@ export class SlicerOptionResolve implements Resolve<ISlicerOption> {
   constructor(private service: SlicerOptionService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ISlicerOption> {
-    const id = route.params['id'] ? route.params['id'] : null;
+    const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
         filter((response: HttpResponse<SlicerOption>) => response.ok),

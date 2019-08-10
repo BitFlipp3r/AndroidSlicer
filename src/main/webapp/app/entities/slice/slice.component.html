@@ -4,7 +4,7 @@
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-slice" [routerLink]="['/slice/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span >
-            Create new Slice
+            Create a new Slice
             </span>
         </button>
     </h2>
@@ -61,7 +61,7 @@
                             <span class="d-none d-md-inline">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', 'slice', { outlets: { popup: slice.id + '/delete'} }]"
+                                [routerLink]="['/slice', { outlets: { popup: slice.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

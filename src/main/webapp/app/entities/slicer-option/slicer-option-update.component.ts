@@ -94,7 +94,7 @@ export class SlicerOptionUpdateComponent implements OnInit {
   }
 
   private createFromForm(): ISlicerOption {
-    const entity = {
+    return {
       ...new SlicerOption(),
       id: this.editForm.get(['id']).value,
       type: this.editForm.get(['type']).value,
@@ -102,11 +102,10 @@ export class SlicerOptionUpdateComponent implements OnInit {
       description: this.editForm.get(['description']).value,
       isDefault: this.editForm.get(['isDefault']).value
     };
-    return entity;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISlicerOption>>) {
-    result.subscribe((res: HttpResponse<ISlicerOption>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
   protected onSaveSuccess() {

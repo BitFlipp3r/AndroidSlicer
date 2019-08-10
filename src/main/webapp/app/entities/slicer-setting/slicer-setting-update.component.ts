@@ -51,17 +51,16 @@ export class SlicerSettingUpdateComponent implements OnInit {
   }
 
   private createFromForm(): ISlicerSetting {
-    const entity = {
+    return {
       ...new SlicerSetting(),
       id: this.editForm.get(['id']).value,
       key: this.editForm.get(['key']).value,
       value: this.editForm.get(['value']).value
     };
-    return entity;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISlicerSetting>>) {
-    result.subscribe((res: HttpResponse<ISlicerSetting>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
   protected onSaveSuccess() {

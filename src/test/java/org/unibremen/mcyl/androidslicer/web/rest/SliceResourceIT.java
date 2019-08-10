@@ -32,13 +32,14 @@ import org.unibremen.mcyl.androidslicer.domain.enumeration.ReflectionOptions;
 import org.unibremen.mcyl.androidslicer.domain.enumeration.DataDependenceOptions;
 import org.unibremen.mcyl.androidslicer.domain.enumeration.ControlDependenceOptions;
 /**
- * Integration tests for the {@Link SliceResource} REST controller.
+ * Integration tests for the {@link SliceResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
 public class SliceResourceIT {
 
     private static final Integer DEFAULT_ANDROID_VERSION = 1;
     private static final Integer UPDATED_ANDROID_VERSION = 2;
+    private static final Integer SMALLER_ANDROID_VERSION = 1 - 1;
 
     private static final String DEFAULT_ANDROID_CLASS_NAME = "AAAAAAAAAA";
     private static final String UPDATED_ANDROID_CLASS_NAME = "BBBBBBBBBB";
@@ -410,7 +411,7 @@ public class SliceResourceIT {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
-        // Validate the database is empty
+        // Validate the database contains one less item
         List<Slice> sliceList = sliceRepository.findAll();
         assertThat(sliceList).hasSize(databaseSizeBeforeDelete - 1);
     }

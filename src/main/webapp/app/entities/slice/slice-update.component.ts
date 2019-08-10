@@ -108,7 +108,7 @@ export class SliceUpdateComponent implements OnInit {
   }
 
   private createFromForm(): ISlice {
-    const entity = {
+    return {
       ...new Slice(),
       id: this.editForm.get(['id']).value,
       androidVersion: this.editForm.get(['androidVersion']).value,
@@ -123,11 +123,10 @@ export class SliceUpdateComponent implements OnInit {
       dataDependenceOptions: this.editForm.get(['dataDependenceOptions']).value,
       controlDependenceOptions: this.editForm.get(['controlDependenceOptions']).value
     };
-    return entity;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISlice>>) {
-    result.subscribe((res: HttpResponse<ISlice>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
   protected onSaveSuccess() {
