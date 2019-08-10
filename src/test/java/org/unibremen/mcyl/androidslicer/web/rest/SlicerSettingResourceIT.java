@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
 
-
 import java.util.List;
 
 import static org.unibremen.mcyl.androidslicer.web.rest.TestUtil.createFormattingConversionService;

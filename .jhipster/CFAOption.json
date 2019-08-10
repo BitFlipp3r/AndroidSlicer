@@ -1,0 +1,46 @@
+{
+    "name": "CFAOption",
+    "fields": [
+        {
+            "fieldName": "type",
+            "fieldType": "CFAOptionType",
+            "fieldValues": "ReflectionOption,DataDependenceOption,ControlDependenceOption",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "key",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "cfaLevel",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "isDefault",
+            "javadoc": "There can only be one default. This handled during create/save process.",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20190512080847",
+    "entityTableName": "cfa_option",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": [
+        "AndroidSlicer"
+    ]
+}
