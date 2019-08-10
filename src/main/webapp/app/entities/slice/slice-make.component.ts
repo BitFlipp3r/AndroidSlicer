@@ -12,6 +12,8 @@ import { IAndroidVersion } from 'app/shared/model/android-version.model';
 import { IAndroidClass, AndroidClass } from 'app/shared/model/android-class.model';
 import { AndroidOptionsService } from 'app/shared/services/android-options.service';
 import { SelectItem } from 'primeng/components/common/selectitem';
+import { ICFAOption } from 'app/shared/model/cfa-option.model';
+import { CFAOptionService } from 'app/entities/cfa-option';
 
 @Component({
   selector: 'jhi-slice-make',
@@ -31,6 +33,7 @@ export class SliceMakeComponent implements OnInit {
   seedStatementOptions: string[];
   filteredSeedStatementOptions: string[] = [];
 
+  cfaOptionsList: SelectItem[] = [];
   reflectionOptionsList: SelectItem[] = [];
   dataDependenceOptionsList: SelectItem[] = [];
   controlDependenceOptionsList: SelectItem[] = [];
@@ -43,6 +46,7 @@ export class SliceMakeComponent implements OnInit {
     androidClassName: [null, [Validators.required]],
     entryMethods: [null, [Validators.required]],
     seedStatements: [null, [Validators.required]],
+    cfaOptions: [null, [Validators.required]],
     reflectionOptions: [null, Validators.required],
     dataDependenceOptions: [null, Validators.required],
     controlDependenceOptions: [null, Validators.required]
@@ -55,13 +59,23 @@ export class SliceMakeComponent implements OnInit {
     protected slicerOptionService: SlicerOptionService,
     protected activatedRoute: ActivatedRoute,
     protected androidOptionsService: AndroidOptionsService,
+    protected cfaOptionService: CFAOptionService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit() {
     this.isSaving = false;
     this.slice = new Slice();
-    this.updateForm(this.slice);
+
+    this.createForm.patchValue({
+      androidVersion: null,
+      androidClassName: null,
+      entryMethods: null,
+      seedStatements: null,
+      reflectionOptions: null,
+      dataDependenceOptions: null,
+      controlDependenceOptions: null
+    });
 
     this.androidOptionsService.getAndroidVersions().subscribe(
       (res: HttpResponse<IAndroidVersion[]>) => {
@@ -72,6 +86,20 @@ export class SliceMakeComponent implements OnInit {
     this.androidOptionsService.getSeedStatements().subscribe(
       (res: HttpResponse<string[]>) => {
         this.seedStatementOptions = res.body;
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
+
+    this.cfaOptionService.query().subscribe(
+      (res: HttpResponse<ICFAOption[]>) => {
+        for (const cfaOption of res.body) {
+          const cfaOptionItem: SelectItem = { label: cfaOption.key, value: cfaOption };
+          this.cfaOptionsList.push(cfaOptionItem);
+
+          if (cfaOption.isDefault) {
+            this.createForm.get(['cfaOptions']).setValue(cfaOption);
+          }
+        }
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );
@@ -110,18 +138,6 @@ export class SliceMakeComponent implements OnInit {
     );
   }
 
-  updateForm(slice: ISlice) {
-    this.createForm.patchValue({
-      androidVersion: null,
-      androidClassName: null,
-      entryMethods: slice.entryMethods,
-      seedStatements: slice.seedStatements,
-      reflectionOptions: slice.reflectionOptions,
-      dataDependenceOptions: slice.dataDependenceOptions,
-      controlDependenceOptions: slice.controlDependenceOptions
-    });
-  }
-
   previousState() {
     window.history.back();
   }
@@ -139,6 +155,9 @@ export class SliceMakeComponent implements OnInit {
       androidClassName: (this.createForm.get(['androidClassName']).value as IAndroidClass).name,
       entryMethods: this.createForm.get(['entryMethods']).value,
       seedStatements: this.createForm.get(['seedStatements']).value,
+      cfaOptionName: (this.createForm.get(['cfaOptions']).value as ICFAOption).key,
+      cfaOptionType: (this.createForm.get(['cfaOptions']).value as ICFAOption).type,
+      cfaOptionLevel: (this.createForm.get(['cfaOptions']).value as ICFAOption).cfaLevel,
       reflectionOptions: (this.createForm.get(['reflectionOptions']).value as ISlicerOption).key as ReflectionOptions,
       dataDependenceOptions: (this.createForm.get(['dataDependenceOptions']).value as ISlicerOption).key as DataDependenceOptions,
       controlDependenceOptions: (this.createForm.get(['controlDependenceOptions']).value as ISlicerOption).key as ControlDependenceOptions

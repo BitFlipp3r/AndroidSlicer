@@ -2,14 +2,14 @@
 import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { SliceComponentsPage, SliceDeleteDialog, SliceUpdatePage } from './slice.page-object';
+import { SliceComponentsPage, SliceDeleteDialog, SliceMakePage } from './slice.page-object';
 
 const expect = chai.expect;
 
 describe('Slice e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let sliceUpdatePage: SliceUpdatePage;
+  let sliceMakePage: SliceMakePage;
   let sliceComponentsPage: SliceComponentsPage;
   let sliceDeleteDialog: SliceDeleteDialog;
 
@@ -30,9 +30,9 @@ describe('Slice e2e test', () => {
 
   it('should load create Slice page', async () => {
     await sliceComponentsPage.clickOnCreateButton();
-    sliceUpdatePage = new SliceUpdatePage();
-    expect(await sliceUpdatePage.getPageTitle()).to.eq('Create or edit a Slice');
-    await sliceUpdatePage.cancel();
+    sliceMakePage = new SliceMakePage();
+    expect(await sliceMakePage.getPageTitle()).to.eq('Create or edit a Slice');
+    await sliceMakePage.cancel();
   });
 
   it('should create and save Slice', async () => {
@@ -40,40 +40,48 @@ describe('Slice e2e test', () => {
 
     await sliceComponentsPage.clickOnCreateButton();
     await promise.all([
-      sliceUpdatePage.setAndroidVersionInput('5'),
-      sliceUpdatePage.setAndroidClassNameInput('androidClassName'),
-      sliceUpdatePage.setEntryMethodsInput('entryMethods'),
-      sliceUpdatePage.setSeedStatementsInput('seedStatements'),
-      sliceUpdatePage.setSliceInput('slice'),
-      sliceUpdatePage.setLogInput('log'),
-      sliceUpdatePage.setThreadIdInput('threadId'),
-      sliceUpdatePage.reflectionOptionsSelectLastOption(),
-      sliceUpdatePage.dataDependenceOptionsSelectLastOption(),
-      sliceUpdatePage.controlDependenceOptionsSelectLastOption()
+      sliceMakePage.setAndroidVersionInput('5'),
+      sliceMakePage.setAndroidClassNameInput('androidClassName'),
+      sliceMakePage.setEntryMethodsInput('entryMethods'),
+      sliceMakePage.setSeedStatementsInput('seedStatements'),
+      sliceMakePage.setSliceInput('slice'),
+      sliceMakePage.setLogInput('log'),
+      sliceMakePage.setThreadIdInput('threadId'),
+      sliceMakePage.setCfaOptionNameInput('cfaOptionName'),
+      sliceMakePage.cfaOptionTypeSelectLastOption(),
+      sliceMakePage.setCfaOptionLevelInput('5'),
+      sliceMakePage.reflectionOptionsSelectLastOption(),
+      sliceMakePage.dataDependenceOptionsSelectLastOption(),
+      sliceMakePage.controlDependenceOptionsSelectLastOption()
     ]);
-    expect(await sliceUpdatePage.getAndroidVersionInput()).to.eq('5', 'Expected androidVersion value to be equals to 5');
-    expect(await sliceUpdatePage.getAndroidClassNameInput()).to.eq(
+    expect(await sliceMakePage.getAndroidVersionInput()).to.eq('5', 'Expected androidVersion value to be equals to 5');
+    expect(await sliceMakePage.getAndroidClassNameInput()).to.eq(
       'androidClassName',
       'Expected AndroidClassName value to be equals to androidClassName'
     );
-    expect(await sliceUpdatePage.getEntryMethodsInput()).to.eq('entryMethods', 'Expected EntryMethods value to be equals to entryMethods');
-    expect(await sliceUpdatePage.getSeedStatementsInput()).to.eq(
+    expect(await sliceMakePage.getEntryMethodsInput()).to.eq('entryMethods', 'Expected EntryMethods value to be equals to entryMethods');
+    expect(await sliceMakePage.getSeedStatementsInput()).to.eq(
       'seedStatements',
       'Expected SeedStatements value to be equals to seedStatements'
     );
-    expect(await sliceUpdatePage.getSliceInput()).to.eq('slice', 'Expected Slice value to be equals to slice');
-    expect(await sliceUpdatePage.getLogInput()).to.eq('log', 'Expected Log value to be equals to log');
-    expect(await sliceUpdatePage.getThreadIdInput()).to.eq('threadId', 'Expected ThreadId value to be equals to threadId');
-    const selectedRunning = sliceUpdatePage.getRunningInput();
+    expect(await sliceMakePage.getSliceInput()).to.eq('slice', 'Expected Slice value to be equals to slice');
+    expect(await sliceMakePage.getLogInput()).to.eq('log', 'Expected Log value to be equals to log');
+    expect(await sliceMakePage.getThreadIdInput()).to.eq('threadId', 'Expected ThreadId value to be equals to threadId');
+    const selectedRunning = sliceMakePage.getRunningInput();
     if (await selectedRunning.isSelected()) {
-      await sliceUpdatePage.getRunningInput().click();
-      expect(await sliceUpdatePage.getRunningInput().isSelected(), 'Expected running not to be selected').to.be.false;
+      await sliceMakePage.getRunningInput().click();
+      expect(await sliceMakePage.getRunningInput().isSelected(), 'Expected running not to be selected').to.be.false;
     } else {
-      await sliceUpdatePage.getRunningInput().click();
-      expect(await sliceUpdatePage.getRunningInput().isSelected(), 'Expected running to be selected').to.be.true;
+      await sliceMakePage.getRunningInput().click();
+      expect(await sliceMakePage.getRunningInput().isSelected(), 'Expected running to be selected').to.be.true;
     }
-    await sliceUpdatePage.save();
-    expect(await sliceUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+    expect(await sliceMakePage.getCfaOptionNameInput()).to.eq(
+      'cfaOptionName',
+      'Expected CfaOptionName value to be equals to cfaOptionName'
+    );
+    expect(await sliceMakePage.getCfaOptionLevelInput()).to.eq('5', 'Expected cfaOptionLevel value to be equals to 5');
+    await sliceMakePage.save();
+    expect(await sliceMakePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
     expect(await sliceComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
   });

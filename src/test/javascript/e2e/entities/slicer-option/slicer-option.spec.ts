@@ -22,7 +22,7 @@ describe('SlicerOption e2e test', () => {
   });
 
   it('should load SlicerOptions', async () => {
-    await navBarPage.goToEntity('slicer-option');
+    await navBarPage.goToEntity('slicer-options');
     slicerOptionComponentsPage = new SlicerOptionComponentsPage();
     await browser.wait(ec.visibilityOf(slicerOptionComponentsPage.title), 5000);
     expect(await slicerOptionComponentsPage.getTitle()).to.eq('Slicer Options');

@@ -106,7 +106,7 @@ public class SlicerSettingResourceIT {
         int databaseSizeBeforeCreate = slicerSettingRepository.findAll().size();
 
         // Create the SlicerSetting
-        restSlicerSettingMockMvc.perform(post("/api/slicer-setting")
+        restSlicerSettingMockMvc.perform(post("/api/slicer-settings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slicerSetting)))
             .andExpect(status().isCreated());
@@ -127,7 +127,7 @@ public class SlicerSettingResourceIT {
         slicerSetting.setId("existing_id");
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restSlicerSettingMockMvc.perform(post("/api/slicer-setting")
+        restSlicerSettingMockMvc.perform(post("/api/slicer-settings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slicerSetting)))
             .andExpect(status().isBadRequest());
@@ -146,7 +146,7 @@ public class SlicerSettingResourceIT {
 
         // Create the SlicerSetting, which fails.
 
-        restSlicerSettingMockMvc.perform(post("/api/slicer-setting")
+        restSlicerSettingMockMvc.perform(post("/api/slicer-settings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slicerSetting)))
             .andExpect(status().isBadRequest());
@@ -163,7 +163,7 @@ public class SlicerSettingResourceIT {
 
         // Create the SlicerSetting, which fails.
 
-        restSlicerSettingMockMvc.perform(post("/api/slicer-setting")
+        restSlicerSettingMockMvc.perform(post("/api/slicer-settings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slicerSetting)))
             .andExpect(status().isBadRequest());
@@ -192,7 +192,7 @@ public class SlicerSettingResourceIT {
         slicerSettingRepository.save(slicerSetting);
 
         // Get the slicerSetting
-        restSlicerSettingMockMvc.perform(get("/api/slicer-setting/{id}", slicerSetting.getId()))
+        restSlicerSettingMockMvc.perform(get("/api/slicer-settings/{id}", slicerSetting.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(slicerSetting.getId()))
@@ -203,7 +203,7 @@ public class SlicerSettingResourceIT {
     @Test
     public void getNonExistingSlicerSetting() throws Exception {
         // Get the slicerSetting
-        restSlicerSettingMockMvc.perform(get("/api/slicer-setting/{id}", Long.MAX_VALUE))
+        restSlicerSettingMockMvc.perform(get("/api/slicer-settings/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
@@ -220,7 +220,7 @@ public class SlicerSettingResourceIT {
             .key(UPDATED_KEY)
             .value(UPDATED_VALUE);
 
-        restSlicerSettingMockMvc.perform(put("/api/slicer-setting")
+        restSlicerSettingMockMvc.perform(put("/api/slicer-settings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(updatedSlicerSetting)))
             .andExpect(status().isOk());
@@ -240,7 +240,7 @@ public class SlicerSettingResourceIT {
         // Create the SlicerSetting
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restSlicerSettingMockMvc.perform(put("/api/slicer-setting")
+        restSlicerSettingMockMvc.perform(put("/api/slicer-settings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slicerSetting)))
             .andExpect(status().isBadRequest());
@@ -258,7 +258,7 @@ public class SlicerSettingResourceIT {
         int databaseSizeBeforeDelete = slicerSettingRepository.findAll().size();
 
         // Delete the slicerSetting
-        restSlicerSettingMockMvc.perform(delete("/api/slicer-setting/{id}", slicerSetting.getId())
+        restSlicerSettingMockMvc.perform(delete("/api/slicer-settings/{id}", slicerSetting.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 

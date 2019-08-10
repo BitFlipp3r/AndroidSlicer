@@ -80,6 +80,9 @@ class SliceGatlingTest extends Simulation {
                 , "log":null
                 , "threadId":"SAMPLE_TEXT"
                 , "running":null
+                , "cfaOptionName":"SAMPLE_TEXT"
+                , "cfaOptionType":"ZeroCFA"
+                , "cfaOptionLevel":"0"
                 , "reflectionOptions":"FULL"
                 , "dataDependenceOptions":"FULL"
                 , "controlDependenceOptions":"FULL"

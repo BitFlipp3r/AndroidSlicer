@@ -79,7 +79,22 @@
                         </small>
                     </div>
                 </div>
-
+                <div class="form-group">
+                    <label class="form-control-label" for="field_cfaOptions">CFA Options</label>
+                    <div>Options for setting different context-sensitivities for pointer analysis.</div>
+                    <p-dropdown [options]="cfaOptionsList" id="field_cfaOptions" name="cfaOptions" formControlName="cfaOptions" lazy="true" [style]="{'display':'block','width':'100%'}" required="true">
+                       <ng-template let-option pTemplate="item">
+                           <span>{{option.value.key}}</span><span *ngIf="option.value.isDefault"><b> (Recommended)</b></span><br>
+                           <span>{{option.value.description}}</span>
+                       </ng-template>
+                   </p-dropdown>
+                </div>
+                <div *ngIf="createForm.get('reflectionOptions').invalid && (createForm.get('reflectionOptions').dirty || createForm.get('reflectionOptions').touched)">
+                    <small class="form-text text-danger"
+                        *ngIf="createForm.get('reflectionOptions').errors.required">
+                        This field is required.
+                    </small>
+                </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_reflectionOptions">Reflection Options</label>
                     <div>Options for handling reflection during call graph construction.</div>

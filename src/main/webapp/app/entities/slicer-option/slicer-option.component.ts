@@ -70,7 +70,7 @@ export class SlicerOptionComponent implements OnInit, OnDestroy {
   }
 
   transition() {
-    this.router.navigate(['/slicer-option'], {
+    this.router.navigate(['/slicer-options'], {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
@@ -83,7 +83,7 @@ export class SlicerOptionComponent implements OnInit, OnDestroy {
   clear() {
     this.page = 0;
     this.router.navigate([
-      '/slicer-option',
+      '/slicer-options',
       {
         page: this.page,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')

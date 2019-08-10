@@ -1,0 +1,43 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="cFAOption">
+            <h2><span>CFA Option</span> {{cFAOption.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Type</span></dt>
+                <dd>
+                    <span>{{cFAOption.type}}</span>
+                </dd>
+                <dt><span>Key</span></dt>
+                <dd>
+                    <span>{{cFAOption.key}}</span>
+                </dd>
+                <dt><span>Description</span></dt>
+                <dd>
+                    <span>{{cFAOption.description}}</span>
+                </dd>
+                <dt><span>Cfa Level</span></dt>
+                <dd>
+                    <span>{{cFAOption.cfaLevel}}</span>
+                </dd>
+                <dt><span ngbTooltip="There can only be one default. This handled during create/save process.">Is Default</span></dt>
+                <dd>
+                    <span>{{cFAOption.isDefault}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/cfa-options', cFAOption.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

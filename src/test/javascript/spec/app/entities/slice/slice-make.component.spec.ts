@@ -34,7 +34,6 @@ describe('Component Tests', () => {
         // GIVEN
         const entity = new Slice();
         spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
-        comp.updateForm(entity);
         // WHEN
         comp.save();
         tick(); // simulate async

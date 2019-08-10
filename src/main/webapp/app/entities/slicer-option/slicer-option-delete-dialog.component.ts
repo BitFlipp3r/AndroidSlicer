@@ -51,11 +51,11 @@ export class SlicerOptionDeletePopupComponent implements OnInit, OnDestroy {
         this.ngbModalRef.componentInstance.slicerOption = slicerOption;
         this.ngbModalRef.result.then(
           result => {
-            this.router.navigate(['/slicer-option', { outlets: { popup: null } }]);
+            this.router.navigate(['/slicer-options', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           },
           reason => {
-            this.router.navigate(['/slicer-option', { outlets: { popup: null } }]);
+            this.router.navigate(['/slicer-options', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           }
         );

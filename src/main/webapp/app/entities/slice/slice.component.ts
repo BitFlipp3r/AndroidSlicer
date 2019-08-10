@@ -70,7 +70,7 @@ export class SliceComponent implements OnInit, OnDestroy {
   }
 
   transition() {
-    this.router.navigate(['/slice'], {
+    this.router.navigate(['/slices'], {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
@@ -83,7 +83,7 @@ export class SliceComponent implements OnInit, OnDestroy {
   clear() {
     this.page = 0;
     this.router.navigate([
-      '/slice',
+      '/slices',
       {
         page: this.page,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')

@@ -18,7 +18,7 @@
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
             <li *ngSwitchCase="true" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link" routerLink="slice" (click)="collapseNavbar()">
+                <a class="nav-link" routerLink="slices" (click)="collapseNavbar()">
                     <span>
                         <fa-icon [icon]="'file-code'"></fa-icon>
                         <span>Slices</span>
@@ -26,7 +26,7 @@
                 </a>
             </li>
             <li *ngSwitchCase="true" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link" routerLink="slicer-setting" (click)="collapseNavbar()">
+                <a class="nav-link" routerLink="slicer-settings" (click)="collapseNavbar()">
                     <span>
                         <fa-icon [icon]="'cogs'"></fa-icon>
                         <span>Settings</span>
@@ -66,9 +66,15 @@
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" routerLink="slicer-option" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="slicer-options" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="cogs" fixedWidth="true"></fa-icon>
                             <span>Slicer Options</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="cfa-options" routerLinkActive="active" (click)="collapseNavbar()">
+                            <fa-icon icon="layer-group" fixedWidth="true"></fa-icon>
+                            <span>CFA Options</span>
                         </a>
                     </li>
                     <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->

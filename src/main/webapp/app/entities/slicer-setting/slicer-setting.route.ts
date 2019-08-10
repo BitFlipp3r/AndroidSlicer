@@ -51,7 +51,7 @@ export const slicerSettingRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'SlicerSettings'
+      pageTitle: 'Slicer Setting'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -63,7 +63,7 @@ export const slicerSettingRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'Slicer Settings'
+      pageTitle: 'Slicer Setting'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -75,7 +75,7 @@ export const slicerSettingRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'Slicer Settings'
+      pageTitle: 'Slicer Setting'
     },
     canActivate: [UserRouteAccessService]
   }

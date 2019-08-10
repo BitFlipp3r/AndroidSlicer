@@ -96,14 +96,22 @@ public class SliceService {
 
         Map<String, Set<Integer>> sliceLineNumbers = null;
         try {
-            sliceLineNumbers = WalaSlicer.doSlicing(appJar, exclusionFile,
+            sliceLineNumbers = WalaSlicer.doSlicing(
+                    appJar, 
+                    exclusionFile,
                     // add "L" to class name and remove .java extension
                     // e.g. com/android/server/AlarmManagerService.java
                     // -> Lcom/android/server/AlarmManagerService
                     "L" + FilenameUtils.removeExtension(slice.getAndroidClassName()),
-                    slice.getEntryMethods(), slice.getSeedStatements(),
-                    slice.getReflectionOptions(), slice.getDataDependenceOptions(),
-                    slice.getControlDependenceOptions(), logger);
+                    slice.getEntryMethods(), 
+                    slice.getSeedStatements(),
+                    slice.getCfaOptionName(),
+                    slice.getCfaOptionType(),
+                    slice.getCfaOptionLevel(),
+                    slice.getReflectionOptions(), 
+                    slice.getDataDependenceOptions(),
+                    slice.getControlDependenceOptions(), 
+                    logger);
         } catch (IllegalArgumentException | WalaException | IOException | CancelException e) {
             logger.log(e.getMessage());
         }

@@ -12,6 +12,7 @@ import java.util.stream.StreamSupport;
 
 import com.ibm.wala.classLoader.IClass;
 import com.ibm.wala.classLoader.IMethod;
+import com.ibm.wala.classLoader.Language;
 import com.ibm.wala.classLoader.ShrikeBTMethod;
 import com.ibm.wala.classLoader.ShrikeClass;
 import com.ibm.wala.ipa.callgraph.AnalysisCache;
@@ -49,23 +50,26 @@ import com.ibm.wala.util.config.AnalysisScopeReader;
 import com.ibm.wala.util.intset.IntSet;
 import com.ibm.wala.util.strings.Atom;
 
+import org.unibremen.mcyl.androidslicer.domain.CFAOption;
+import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAOptionType;
 import org.unibremen.mcyl.androidslicer.service.SliceLogger;
 
 public class WalaSlicer {
 
     public static Map<String, Set<Integer>> doSlicing(File appJar, File exclusionFile, String androidClassName,
-            Set<String> entryMethods, Set<String> seedStatements, ReflectionOptions reflectionOptions,
+            Set<String> entryMethods, Set<String> seedStatements, String cfaOptionName, CFAOptionType cfaOptionType, Integer cfaOptionLevel, ReflectionOptions reflectionOptions,
             DataDependenceOptions dataDependenceOptions, ControlDependenceOptions controlDependenceOptions,
             SliceLogger logger) throws WalaException, IOException, ClassHierarchyException, IllegalArgumentException,
             CallGraphBuilderCancelException, CancelException {
+
         long start = System.currentTimeMillis();
+
         /* create an analysis scope representing the appJar as a J2SE application */
         AnalysisScope scope = AnalysisScopeReader.makeJavaBinaryAnalysisScope(appJar.getAbsolutePath(), exclusionFile);
         IClassHierarchy cha = ClassHierarchyFactory.make(scope);
 
         /* make entry points */
         logger.log("\n== GET ENTRY POINTS ==");
-        // Getting Entrypoints via different methods
         Iterable<Entrypoint> entrypoints = getEntrypoints(scope, cha, androidClassName, entryMethods, logger);
 
         if (!entrypoints.iterator().hasNext()) {
@@ -79,11 +83,46 @@ public class WalaSlicer {
         options.setReflectionOptions(reflectionOptions);
 
         logger.log("\n== BUILDING CALL GRAPH ==");
-        /*  build the call graph 
-            see: https://wala.github.io/javadoc/com/ibm/wala/ipa/callgraph/impl/Util.html*/
+        /*  build the call graph  */
         AnalysisCache cache = new AnalysisCacheImpl();
-        /* other builders can be constructed with different Util methods */
-        CallGraphBuilder cgBuilder = Util.makeZeroOneContainerCFABuilder(options, cache, cha, scope);
+        /* builders can be constructed with different Util methods (see: https://wala.github.io/javadoc/com/ibm/wala/ipa/callgraph/impl/Util.html)*/
+        
+        CallGraphBuilder cgBuilder = null;
+        
+        switch(cfaOptionType){
+            case ZeroCFA:
+                cgBuilder = Util.makeZeroCFABuilder(Language.JAVA, options, cache, cha, scope);
+                break; 
+            case ZeroOneCFA:
+                cgBuilder = Util.makeZeroOneCFABuilder(Language.JAVA, options, cache, cha, scope);
+                break; 
+            case VanillaZeroOneCFA:
+                cgBuilder = Util.makeVanillaZeroOneCFABuilder(Language.JAVA, options, cache, cha, scope);
+                break; 
+            case NCFA:
+                if(cfaOptionLevel != null && cfaOptionLevel >= 0)
+                cgBuilder = Util.makeNCFABuilder(cfaOptionLevel, options, cache, cha, scope);
+                break; 
+            case VanillaNCFA:
+                if(cfaOptionLevel != null && cfaOptionLevel >= 0)
+                cgBuilder = Util.makeVanillaNCFABuilder(cfaOptionLevel, options, cache, cha, scope);
+                break; 
+            case ZeroContainerCFA:
+                cgBuilder = Util.makeZeroContainerCFABuilder(options, cache, cha, scope);
+                break; 
+            case ZeroOneContainerCFA:
+                cgBuilder = Util.makeZeroOneContainerCFABuilder(options, cache, cha, scope);
+                break; 
+            case VanillaZeroOneContainerCFA:
+                cgBuilder = Util.makeVanillaZeroOneContainerCFABuilder(options, cache, cha, scope);
+                break; 
+        }
+        
+        if(cgBuilder == null){
+            throw new WalaException("No Call Graph Builder for CFA Options found.");
+        }
+
+        cgBuilder = Util.makeZeroOneContainerCFABuilder(options, cache, cha, scope);
         // CallGraphBuilder builder = Util.makeNCFABuilder(2, options, cache, cha,
         // scope);
         // CallGraphBuilder builder = Util.makeVanillaNCFABuilder(2, options, cache,
@@ -106,9 +145,8 @@ public class WalaSlicer {
         }
 
         logger.log("\n== SLICING ==");
-        logger.log("Pointer analysis...");
+        logger.log("Computing Pointer Analysis with " + cfaOptionName + "-Level");
         PointerAnalysis<InstanceKey> pointerAnalysis = cgBuilder.getPointerAnalysis();
-        logger.log("done.");
 
         Collection<Statement> sliceList = new HashSet<Statement>();
         for (Statement stmt : statements) {

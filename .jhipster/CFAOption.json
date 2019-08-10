@@ -4,14 +4,14 @@
         {
             "fieldName": "type",
             "fieldType": "CFAOptionType",
-            "fieldValues": "ReflectionOption,DataDependenceOption,ControlDependenceOption",
+            "fieldValues": "ZeroCFA,ZeroOneCFA,VanillaZeroOneCFA,NCFA,VanillaNCFA,ZeroContainerCFA,ZeroOneContainerCFA,VanillaZeroOneContainerCFA",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
             "fieldName": "key",
-            "fieldType": "String",
+            "fieldType": "CFAOption",
             "fieldValidateRules": [
                 "required"
             ]

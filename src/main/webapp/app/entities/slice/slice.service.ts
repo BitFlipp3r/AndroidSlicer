@@ -11,7 +11,7 @@ type EntityArrayResponseType = HttpResponse<ISlice[]>;
 
 @Injectable({ providedIn: 'root' })
 export class SliceService {
-  public resourceUrl = SERVER_API_URL + 'api/slice';
+  public resourceUrl = SERVER_API_URL + 'api/slices';
 
   constructor(protected http: HttpClient) {}
 

@@ -58,14 +58,14 @@ public class SlicerSettingResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new slicerSetting, or with status {@code 400 (Bad Request)} if the slicerSetting has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/slicer-setting")
+    @PostMapping("/slicer-settings")
     public ResponseEntity<SlicerSetting> createSlicerSetting(@Valid @RequestBody SlicerSetting slicerSetting) throws URISyntaxException {
         log.debug("REST request to save SlicerSetting : {}", slicerSetting);
         if (slicerSetting.getId() != null) {
             throw new BadRequestAlertException("A new slicerSetting cannot already have an ID", ENTITY_NAME, "idexists");
         }
         SlicerSetting result = slicerSettingRepository.save(slicerSetting);
-        return ResponseEntity.created(new URI("/api/slicer-setting/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/slicer-settings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -79,7 +79,7 @@ public class SlicerSettingResource {
      * or with status {@code 500 (Internal Server Error)} if the slicerSetting couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/slicer-setting")
+    @PutMapping("/slicer-settings")
     public ResponseEntity<SlicerSetting> updateSlicerSetting(@Valid @RequestBody SlicerSetting slicerSetting) throws URISyntaxException {
         log.debug("REST request to update SlicerSetting : {}", slicerSetting);
         if (slicerSetting.getId() == null) {
@@ -108,12 +108,12 @@ public class SlicerSettingResource {
     }
 
     /**
-     * {@code GET  /slicer-setting/:id} : get the "id" slicerSetting.
+     * {@code GET  /slicer-settings/:id} : get the "id" slicerSetting.
      *
      * @param id the id of the slicerSetting to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the slicerSetting, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/slicer-setting/{id}")
+    @GetMapping("/slicer-settings/{id}")
     public ResponseEntity<SlicerSetting> getSlicerSetting(@PathVariable String id) {
         log.debug("REST request to get SlicerSetting : {}", id);
         Optional<SlicerSetting> slicerSetting = slicerSettingRepository.findById(id);
@@ -121,12 +121,12 @@ public class SlicerSettingResource {
     }
 
     /**
-     * {@code DELETE  /slicer-setting/:id} : delete the "id" slicerSetting.
+     * {@code DELETE  /slicer-settings/:id} : delete the "id" slicerSetting.
      *
      * @param id the id of the slicerSetting to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/slicer-setting/{id}")
+    @DeleteMapping("/slicer-settings/{id}")
     public ResponseEntity<Void> deleteSlicerSetting(@PathVariable String id) {
         log.debug("REST request to delete SlicerSetting : {}", id);
         slicerSettingRepository.deleteById(id);

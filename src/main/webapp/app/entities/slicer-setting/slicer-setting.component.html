@@ -1,7 +1,7 @@
 <div>
     <h2 id="page-heading">
         <span>Slicer Settings</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-slicer-setting" [routerLink]="['/slicer-setting/new']">
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-slicer-setting" [routerLink]="['/slicer-settings/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span >
             Create a new Slicer Setting
@@ -29,19 +29,19 @@
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
-                                [routerLink]="['/slicer-setting', slicerSetting.id, 'view' ]"
+                                [routerLink]="['/slicer-settings', slicerSetting.id, 'view' ]"
                                 class="btn btn-info btn-sm">
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/slicer-setting', slicerSetting.id, 'edit']"
+                                [routerLink]="['/slicer-settings', slicerSetting.id, 'edit']"
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/slicer-setting', { outlets: { popup: slicerSetting.id + '/delete'} }]"
+                                [routerLink]="['/slicer-settings', { outlets: { popup: slicerSetting.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

@@ -22,7 +22,7 @@ describe('SlicerSetting e2e test', () => {
   });
 
   it('should load SlicerSettings', async () => {
-    await navBarPage.goToEntity('slicer-setting');
+    await navBarPage.goToEntity('slicer-settings');
     slicerSettingComponentsPage = new SlicerSettingComponentsPage();
     await browser.wait(ec.visibilityOf(slicerSettingComponentsPage.title), 5000);
     expect(await slicerSettingComponentsPage.getTitle()).to.eq('Slicer Settings');

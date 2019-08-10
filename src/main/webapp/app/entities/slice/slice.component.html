@@ -1,7 +1,7 @@
 <div>
     <h2 id="page-heading">
         <span>Slices</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-slice" [routerLink]="['/slice/new']">
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-slice" [routerLink]="['/slices/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span >
             Create a new Slice
@@ -21,6 +21,7 @@
             <th jhiSortBy="androidClassName"><span>Android Class Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="entryMethods"><span>Entry Methods</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="seedStatements"><span>Seed Statements</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="cfaOptions"><span>CFA Option</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="reflectionOptions.key"><span>Reflection Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="dataDependenceOptions.key"><span>Data Dependence Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="controlDependenceOptions.key"><span>Control Dependence Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -34,6 +35,7 @@
                 <td><div>{{slice.androidClassName}}</div></td>
                 <td><div>{{slice.entryMethods}}</div></td>
                 <td><div>{{slice.seedStatements}}</div></td>
+                <td><div>{{slice.cfaOptionName}}</div></td>
                 <td><div>{{slice.reflectionOptions}}</div></td>
                 <td><div>{{slice.dataDependenceOptions}}</div></td>
                 <td><div>{{slice.controlDependenceOptions}}</div></td>
@@ -45,13 +47,13 @@
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
-                                [routerLink]="['/slice', slice.id, 'view' ]"
+                                [routerLink]="['/slices', slice.id, 'view' ]"
                                 class="btn btn-info btn-sm">
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', 'slice', { outlets: { popup: slice.id + '/delete'} }]"
+                                [routerLink]="['/', 'slices', { outlets: { popup: slice.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

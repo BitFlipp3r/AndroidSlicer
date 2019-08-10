@@ -52,6 +52,25 @@
             "fieldType": "Boolean"
         },
         {
+            "fieldName": "cfaOptionName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "cfaOptionType",
+            "fieldType": "CFAOptionType",
+            "fieldValues": "ZeroCFA,ZeroOneCFA,VanillaZeroOneCFA,NCFA,VanillaNCFA,ZeroContainerCFA,ZeroOneContainerCFA,VanillaZeroOneContainerCFA",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "cfaOptionLevel",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "reflectionOptions",
             "javadoc": "com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions",
             "fieldType": "ReflectionOptions",

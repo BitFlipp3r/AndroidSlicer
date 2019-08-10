@@ -22,7 +22,7 @@ export class SliceComponentsPage {
   }
 }
 
-export class SliceUpdatePage {
+export class SliceMakePage {
   pageTitle = element(by.id('jhi-slice-heading'));
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
@@ -34,6 +34,9 @@ export class SliceUpdatePage {
   logInput = element(by.id('field_log'));
   threadIdInput = element(by.id('field_threadId'));
   runningInput = element(by.id('field_running'));
+  cfaOptionNameInput = element(by.id('field_cfaOptionName'));
+  cfaOptionTypeSelect = element(by.id('field_cfaOptionType'));
+  cfaOptionLevelInput = element(by.id('field_cfaOptionLevel'));
   reflectionOptionsSelect = element(by.id('field_reflectionOptions'));
   dataDependenceOptionsSelect = element(by.id('field_dataDependenceOptions'));
   controlDependenceOptionsSelect = element(by.id('field_controlDependenceOptions'));
@@ -101,6 +104,37 @@ export class SliceUpdatePage {
   getRunningInput(timeout?: number) {
     return this.runningInput;
   }
+  async setCfaOptionNameInput(cfaOptionName) {
+    await this.cfaOptionNameInput.sendKeys(cfaOptionName);
+  }
+
+  async getCfaOptionNameInput() {
+    return await this.cfaOptionNameInput.getAttribute('value');
+  }
+
+  async setCfaOptionTypeSelect(cfaOptionType) {
+    await this.cfaOptionTypeSelect.sendKeys(cfaOptionType);
+  }
+
+  async getCfaOptionTypeSelect() {
+    return await this.cfaOptionTypeSelect.element(by.css('option:checked')).getText();
+  }
+
+  async cfaOptionTypeSelectLastOption(timeout?: number) {
+    await this.cfaOptionTypeSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async setCfaOptionLevelInput(cfaOptionLevel) {
+    await this.cfaOptionLevelInput.sendKeys(cfaOptionLevel);
+  }
+
+  async getCfaOptionLevelInput() {
+    return await this.cfaOptionLevelInput.getAttribute('value');
+  }
+
   async setReflectionOptionsSelect(reflectionOptions) {
     await this.reflectionOptionsSelect.sendKeys(reflectionOptions);
   }

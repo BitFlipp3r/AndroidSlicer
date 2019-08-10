@@ -47,11 +47,11 @@ export class SliceDeletePopupComponent implements OnInit, OnDestroy {
         this.ngbModalRef.componentInstance.slice = slice;
         this.ngbModalRef.result.then(
           result => {
-            this.router.navigate(['/slice', { outlets: { popup: null } }]);
+            this.router.navigate(['/slices', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           },
           reason => {
-            this.router.navigate(['/slice', { outlets: { popup: null } }]);
+            this.router.navigate(['/slices', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           }
         );

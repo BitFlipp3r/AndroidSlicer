@@ -13,6 +13,7 @@ import com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAOptionType;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -62,6 +63,17 @@ public class Slice implements Serializable {
 
     @Field("running")
     private Boolean running;
+
+    @NotNull
+    @Field("cfa_option_name")
+    private String cfaOptionName;
+
+    @NotNull
+    @Field("cfa_option_type")
+    private CFAOptionType cfaOptionType;
+
+    @Field("cfa_option_level")
+    private Integer cfaOptionLevel;
 
     /**
      * com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions
@@ -200,6 +212,40 @@ public class Slice implements Serializable {
         this.running = running;
     }
 
+    public String getCfaOptionName() {
+        return cfaOptionName;
+    }
+
+    public Slice cfaOptionName(String cfaOptionName) {
+        this.cfaOptionName = cfaOptionName;
+        return this;
+    }
+
+    public void setCfaOptionName(String cfaOptionName) {
+        this.cfaOptionName = cfaOptionName;
+    }
+
+    public CFAOptionType getCfaOptionType() {
+        return cfaOptionType;
+    }
+
+    public Slice cfaOptionType(CFAOptionType cfaOptionType) {
+        this.cfaOptionType = cfaOptionType;
+        return this;
+    }
+
+    public void setCfaOptionType(CFAOptionType cfaOptionType) {
+        this.cfaOptionType = cfaOptionType;
+    }
+
+    public Integer getCfaOptionLevel() {
+        return cfaOptionLevel;
+    }
+
+    public Slice cfaOptionLevel(Integer cfaOptionLevel) {
+        this.cfaOptionLevel = cfaOptionLevel;
+        return this;
+    }
     public ReflectionOptions getReflectionOptions() {
         return reflectionOptions;
     }
@@ -268,6 +314,9 @@ public class Slice implements Serializable {
             ", log='" + getLog() + "'" +
             ", threadId='" + getThreadId() + "'" +
             ", running='" + isRunning() + "'" +
+            ", cfaOptionName='" + getCfaOptionName() + "'" +
+            ", cfaOptionType='" + getCfaOptionType() + "'" +
+            ", cfaOptionLevel=" + getCfaOptionLevel() +
             ", reflectionOptions='" + getReflectionOptions() + "'" +
             ", dataDependenceOptions='" + getDataDependenceOptions() + "'" +
             ", controlDependenceOptions='" + getControlDependenceOptions() + "'" +

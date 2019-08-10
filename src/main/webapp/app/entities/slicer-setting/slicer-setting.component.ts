@@ -69,7 +69,7 @@ export class SlicerSettingComponent implements OnInit, OnDestroy {
   }
 
   transition() {
-    this.router.navigate(['/slicer-setting'], {
+    this.router.navigate(['/slicer-settings'], {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
@@ -82,7 +82,7 @@ export class SlicerSettingComponent implements OnInit, OnDestroy {
   clear() {
     this.page = 0;
     this.router.navigate([
-      '/slicer-setting',
+      '/slicer-settings',
       {
         page: this.page,
         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')

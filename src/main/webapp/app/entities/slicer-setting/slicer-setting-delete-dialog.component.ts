@@ -51,11 +51,11 @@ export class SlicerSettingDeletePopupComponent implements OnInit, OnDestroy {
         this.ngbModalRef.componentInstance.slicerSetting = slicerSetting;
         this.ngbModalRef.result.then(
           result => {
-            this.router.navigate(['/slicer-setting', { outlets: { popup: null } }]);
+            this.router.navigate(['/slicer-settings', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           },
           reason => {
-            this.router.navigate(['/slicer-setting', { outlets: { popup: null } }]);
+            this.router.navigate(['/slicer-settings', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           }
         );

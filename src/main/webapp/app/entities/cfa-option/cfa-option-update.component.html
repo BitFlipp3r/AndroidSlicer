@@ -1,0 +1,64 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-cfa-option-heading">Create or edit a CFA Option</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_type">Type</label>
+                    <select class="form-control" name="type" formControlName="type" id="field_type">
+                        <option value="ZeroCFA">ZeroCFA</option>
+                        <option value="ZeroOneCFA">ZeroOneCFA</option>
+                        <option value="VanillaZeroOneCFA">VanillaZeroOneCFA</option>
+                        <option value="NCFA">NCFA</option>
+                        <option value="VanillaNCFA">VanillaNCFA</option>
+                        <option value="ZeroContainerCFA">ZeroContainerCFA</option>
+                        <option value="ZeroOneContainerCFA">ZeroOneContainerCFA</option>
+                        <option value="VanillaZeroOneContainerCFA">VanillaZeroOneContainerCFA</option>
+                    </select>
+                    <div *ngIf="editForm.get('type').invalid && (editForm.get('type').dirty || editForm.get('type').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('type').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_key">Key</label>
+                    <input type="text" class="form-control" name="key" id="field_key"
+                           formControlName="key"/>
+                    <div *ngIf="editForm.get('key').invalid && (editForm.get('key').dirty || editForm.get('key').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('key').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_description">Description</label>
+                    <textarea class="form-control" name="description" id="field_description"
+                              formControlName="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_cfaLevel">Cfa Level</label>
+                    <input type="number" class="form-control" name="cfaLevel" id="field_cfaLevel"
+                           formControlName="cfaLevel"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_isDefault" ngbTooltip="There can only be one default. This handled during create/save process.">Default</label>
+                    <p-inputSwitch class="form-control" name="isDefault" id="field_isDefault"
+                    formControlName="isDefault"></p-inputSwitch>
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
