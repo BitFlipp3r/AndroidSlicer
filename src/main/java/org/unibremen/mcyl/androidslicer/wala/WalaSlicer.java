@@ -79,7 +79,8 @@ public class WalaSlicer {
         options.setReflectionOptions(reflectionOptions);
 
         logger.log("\n== BUILDING CALL GRAPH ==");
-        /* build the call graph */
+        /*  build the call graph 
+            see: https://wala.github.io/javadoc/com/ibm/wala/ipa/callgraph/impl/Util.html*/
         AnalysisCache cache = new AnalysisCacheImpl();
         /* other builders can be constructed with different Util methods */
         CallGraphBuilder cgBuilder = Util.makeZeroOneContainerCFABuilder(options, cache, cha, scope);

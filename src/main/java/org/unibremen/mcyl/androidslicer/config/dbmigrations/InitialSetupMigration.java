@@ -1,6 +1,9 @@
 package org.unibremen.mcyl.androidslicer.config.dbmigrations;
 
-import org.unibremen.mcyl.androidslicer.security.AuthoritiesConstants;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
 
 import com.github.mongobee.changeset.ChangeLog;
 import com.github.mongobee.changeset.ChangeSet;
@@ -9,17 +12,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
-
 import org.unibremen.mcyl.androidslicer.config.Constants;
 import org.unibremen.mcyl.androidslicer.domain.SlicerOption;
 import org.unibremen.mcyl.androidslicer.domain.SlicerSetting;
 import org.unibremen.mcyl.androidslicer.domain.enumeration.SlicerOptionType;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.Instant;
-import java.util.Scanner;
 
 /**
  * Creates the initial database setup

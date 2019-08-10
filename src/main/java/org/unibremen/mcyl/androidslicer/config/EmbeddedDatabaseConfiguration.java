@@ -1,14 +1,13 @@
 package org.unibremen.mcyl.androidslicer.config;
 
-import io.github.jhipster.config.JHipsterConstants;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.mongobee.Mongobee;
 import com.mongodb.MongoClient;
-import io.github.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
-import io.github.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -21,10 +20,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import java.util.ArrayList;
-import java.util.List;
+
+import io.github.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
+import io.github.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
 
 @Configuration
 @Profile("embedded-mongo")

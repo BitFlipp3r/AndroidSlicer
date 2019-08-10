@@ -1,9 +1,5 @@
 package org.unibremen.mcyl.androidslicer.config;
 
-import org.unibremen.mcyl.androidslicer.security.*;
-import org.unibremen.mcyl.androidslicer.security.jwt.*;
-
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,6 +11,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.web.filter.CorsFilter;
+import org.unibremen.mcyl.androidslicer.security.AuthoritiesConstants;
+import org.unibremen.mcyl.androidslicer.security.jwt.JWTConfigurer;
+import org.unibremen.mcyl.androidslicer.security.jwt.TokenProvider;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @EnableWebSecurity
