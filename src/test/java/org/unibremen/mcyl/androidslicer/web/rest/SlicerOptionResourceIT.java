@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.unibremen.mcyl.androidslicer.domain.enumeration.SlicerOptionType;
 /**
- * Integration tests for the {@Link SlicerOptionResource} REST controller.
+ * Integration tests for the {@link SlicerOptionResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
 @ActiveProfiles("dev,embedded-mongo")
@@ -284,7 +284,7 @@ public class SlicerOptionResourceIT {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
-        // Validate the database is empty
+        // Validate the database contains one less item
         List<SlicerOption> slicerOptionList = slicerOptionRepository.findAll();
         assertThat(slicerOptionList).hasSize(databaseSizeBeforeDelete - 1);
     }

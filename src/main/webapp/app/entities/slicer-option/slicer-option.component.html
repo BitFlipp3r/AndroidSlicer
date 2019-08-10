@@ -4,7 +4,7 @@
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-slicer-option" [routerLink]="['/slicer-option/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span >
-            Create new Slicer Option
+            Create a new Slicer Option
             </span>
         </button>
     </h2>
@@ -45,7 +45,7 @@
                             <span class="d-none d-md-inline">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', 'slicer-option', { outlets: { popup: slicerOption.id + '/delete'} }]"
+                                [routerLink]="['/slicer-option', { outlets: { popup: slicerOption.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

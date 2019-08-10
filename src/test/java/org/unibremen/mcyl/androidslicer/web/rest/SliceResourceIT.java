@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 /**
- * Integration tests for the {@Link SliceResource} REST controller.
+ * Integration tests for the {@link SliceResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
 @ActiveProfiles("dev,embedded-mongo")
@@ -324,7 +324,7 @@ public class SliceResourceIT {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
-        // Validate the database is empty
+        // Validate the database contains one less item
         List<Slice> sliceList = sliceRepository.findAll();
         assertThat(sliceList).hasSize(databaseSizeBeforeDelete - 1);
     }

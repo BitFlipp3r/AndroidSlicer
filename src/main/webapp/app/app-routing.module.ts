@@ -11,7 +11,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
       [
         {
           path: 'admin',
-          loadChildren: './admin/admin.module#AndroidSlicerAdminModule'
+          loadChildren: () => import('./admin/admin.module').then(m => m.AndroidSlicerAdminModule)
         },
         ...LAYOUT_ROUTES
       ],
