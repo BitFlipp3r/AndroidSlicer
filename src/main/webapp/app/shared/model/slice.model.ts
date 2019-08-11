@@ -1,4 +1,4 @@
-import { CFAOptionType } from './cfa-option.model';
+import { CFAType } from './cfa-option.model';
 
 export const enum ReflectionOptions {
   FULL = 'FULL',
@@ -39,9 +39,8 @@ export interface ISlice {
   log?: any;
   threadId?: string;
   running?: boolean;
-  cfaOptionName?: string;
-  cfaOptionType?: CFAOptionType;
-  cfaOptionLevel?: number;
+  cfaType?: CFAType;
+  cfaLevel?: number;
   reflectionOptions?: ReflectionOptions;
   dataDependenceOptions?: DataDependenceOptions;
   controlDependenceOptions?: ControlDependenceOptions;
@@ -58,9 +57,8 @@ export class Slice implements ISlice {
     public log?: any,
     public threadId?: string,
     public running?: boolean,
-    public cfaOptionName?: string,
-    public cfaOptionType?: CFAOptionType,
-    public cfaOptionLevel?: number,
+    public cfaType?: CFAType,
+    public cfaLevel?: number,
     public reflectionOptions?: ReflectionOptions,
     public dataDependenceOptions?: DataDependenceOptions,
     public controlDependenceOptions?: ControlDependenceOptions

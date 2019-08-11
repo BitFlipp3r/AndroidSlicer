@@ -33,7 +33,7 @@
     "ngx-infinite-scroll": "7.2.0",
     "ngx-webstorage": "4.0.1",
     "primeicons": "^1.0.0",
-    "primeng": "^8.0.1",
+    "primeng": "^8.0.2",
     "rxjs": "6.5.2",
     "swagger-ui": "2.2.10",
     "tslib": "1.10.0",

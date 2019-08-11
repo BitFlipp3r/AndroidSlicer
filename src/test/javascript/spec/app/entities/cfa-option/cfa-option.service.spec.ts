@@ -5,7 +5,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { CFAOptionService } from 'app/entities/cfa-option/cfa-option.service';
-import { ICFAOption, CFAOption, CFAOptionType } from 'app/shared/model/cfa-option.model';
+import { ICFAOption, CFAOption, CFAType } from 'app/shared/model/cfa-option.model';
 
 describe('Service Tests', () => {
   describe('CFAOption Service', () => {
@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(CFAOptionService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new CFAOption('ID', CFAOptionType.ZeroCFA, 'AAAAAAA', 'AAAAAAA', 0, false);
+      elemDefault = new CFAOption('ID', CFAType.ZERO_CFA, 'AAAAAAA', false);
     });
 
     describe('Service methods', () => {
@@ -59,10 +59,8 @@ describe('Service Tests', () => {
       it('should update a CFAOption', async () => {
         const returnedFromService = Object.assign(
           {
-            type: CFAOptionType.ZeroCFA,
-            key: 'BBBBBB',
+            type: 'BBBBBB',
             description: 'BBBBBB',
-            cfaLevel: 1,
             isDefault: true
           },
           elemDefault
@@ -81,10 +79,8 @@ describe('Service Tests', () => {
       it('should return a list of CFAOption', async () => {
         const returnedFromService = Object.assign(
           {
-            type: CFAOptionType.ZeroCFA,
-            key: 'BBBBBB',
+            type: 'BBBBBB',
             description: 'BBBBBB',
-            cfaLevel: 1,
             isDefault: true
           },
           elemDefault

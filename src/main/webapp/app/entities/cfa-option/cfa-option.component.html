@@ -11,16 +11,14 @@
     <jhi-alert></jhi-alert>
     <br/>
     <div class="alert alert-warning" *ngIf="cFAOptions?.length === 0">
-        <span>No cFAOptions found</span>
+        <span>No CFA Options found</span>
     </div>
     <div class="table-responsive" *ngIf="cFAOptions?.length > 0">
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="type"><span>Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="key"><span>Key</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="description"><span>Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="cfaLevel"><span>Cfa Level</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="isDefault"><span>Is Default</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
@@ -28,9 +26,7 @@
             <tbody>
             <tr *ngFor="let cFAOption of cFAOptions ;trackBy: trackId">
                 <td>{{cFAOption.type}}</td>
-                <td>{{cFAOption.key}}</td>
                 <td>{{cFAOption.description}}</td>
-                <td>{{cFAOption.cfaLevel}}</td>
                 <td>{{cFAOption.isDefault}}</td>
                 <td class="text-right">
                     <div class="btn-group">

@@ -47,9 +47,8 @@ describe('Slice e2e test', () => {
       sliceMakePage.setSliceInput('slice'),
       sliceMakePage.setLogInput('log'),
       sliceMakePage.setThreadIdInput('threadId'),
-      sliceMakePage.setCfaOptionNameInput('cfaOptionName'),
-      sliceMakePage.cfaOptionTypeSelectLastOption(),
-      sliceMakePage.setCfaOptionLevelInput('5'),
+      sliceMakePage.cfaTypeSelectLastOption(),
+      sliceMakePage.setcfaLevelInput('5'),
       sliceMakePage.reflectionOptionsSelectLastOption(),
       sliceMakePage.dataDependenceOptionsSelectLastOption(),
       sliceMakePage.controlDependenceOptionsSelectLastOption()
@@ -75,11 +74,7 @@ describe('Slice e2e test', () => {
       await sliceMakePage.getRunningInput().click();
       expect(await sliceMakePage.getRunningInput().isSelected(), 'Expected running to be selected').to.be.true;
     }
-    expect(await sliceMakePage.getCfaOptionNameInput()).to.eq(
-      'cfaOptionName',
-      'Expected CfaOptionName value to be equals to cfaOptionName'
-    );
-    expect(await sliceMakePage.getCfaOptionLevelInput()).to.eq('5', 'Expected cfaOptionLevel value to be equals to 5');
+    expect(await sliceMakePage.getcfaLevelInput()).to.eq('5', 'Expected cfaLevel value to be equals to 5');
     await sliceMakePage.save();
     expect(await sliceMakePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

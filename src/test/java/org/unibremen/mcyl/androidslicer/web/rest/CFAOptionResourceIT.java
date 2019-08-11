@@ -27,25 +27,18 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAOptionType;
+import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAType;
 /**
  * Integration tests for the {@link CFAOptionResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
 public class CFAOptionResourceIT {
 
-    private static final CFAOptionType DEFAULT_TYPE = CFAOptionType.NCFA;
-    private static final CFAOptionType UPDATED_TYPE = CFAOptionType.VanillaNCFA;
-
-    private static final String DEFAULT_KEY = "AAAAAAAAAA";
-    private static final String UPDATED_KEY = "BBBBBBBBBB";
+    private static final CFAType DEFAULT_TYPE = CFAType.ZERO_CFA;
+    private static final CFAType UPDATED_TYPE = CFAType.ZERO_ONE_CFA;
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
-
-    private static final Integer DEFAULT_CFA_LEVEL = 1;
-    private static final Integer UPDATED_CFA_LEVEL = 2;
-    private static final Integer SMALLER_CFA_LEVEL = 1 - 1;
 
     private static final Boolean DEFAULT_IS_DEFAULT = false;
     private static final Boolean UPDATED_IS_DEFAULT = true;
@@ -90,9 +83,7 @@ public class CFAOptionResourceIT {
     public static CFAOption createEntity() {
         CFAOption cFAOption = new CFAOption()
             .type(DEFAULT_TYPE)
-            .key(DEFAULT_KEY)
             .description(DEFAULT_DESCRIPTION)
-            .cfaLevel(DEFAULT_CFA_LEVEL)
             .isDefault(DEFAULT_IS_DEFAULT);
         return cFAOption;
     }
@@ -105,9 +96,7 @@ public class CFAOptionResourceIT {
     public static CFAOption createUpdatedEntity() {
         CFAOption cFAOption = new CFAOption()
             .type(UPDATED_TYPE)
-            .key(UPDATED_KEY)
             .description(UPDATED_DESCRIPTION)
-            .cfaLevel(UPDATED_CFA_LEVEL)
             .isDefault(UPDATED_IS_DEFAULT);
         return cFAOption;
     }
@@ -133,9 +122,7 @@ public class CFAOptionResourceIT {
         assertThat(cFAOptionList).hasSize(databaseSizeBeforeCreate + 1);
         CFAOption testCFAOption = cFAOptionList.get(cFAOptionList.size() - 1);
         assertThat(testCFAOption.getType()).isEqualTo(DEFAULT_TYPE);
-        assertThat(testCFAOption.getKey()).isEqualTo(DEFAULT_KEY);
         assertThat(testCFAOption.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testCFAOption.getCfaLevel()).isEqualTo(DEFAULT_CFA_LEVEL);
         assertThat(testCFAOption.getIsDefault()).isEqualTo(DEFAULT_IS_DEFAULT);
     }
 
@@ -176,23 +163,6 @@ public class CFAOptionResourceIT {
     }
 
     @Test
-    public void checkKeyIsRequired() throws Exception {
-        int databaseSizeBeforeTest = cFAOptionRepository.findAll().size();
-        // set the field null
-        cFAOption.setKey(null);
-
-        // Create the CFAOption, which fails.
-
-        restCFAOptionMockMvc.perform(post("/api/cfa-options")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(cFAOption)))
-            .andExpect(status().isBadRequest());
-
-        List<CFAOption> cFAOptionList = cFAOptionRepository.findAll();
-        assertThat(cFAOptionList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
     public void getAllCFAOptions() throws Exception {
         // Initialize the database
         cFAOptionRepository.save(cFAOption);
@@ -203,9 +173,7 @@ public class CFAOptionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cFAOption.getId())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].cfaLevel").value(hasItem(DEFAULT_CFA_LEVEL)))
             .andExpect(jsonPath("$.[*].isDefault").value(hasItem(DEFAULT_IS_DEFAULT.booleanValue())));
     }
     
@@ -220,9 +188,7 @@ public class CFAOptionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(cFAOption.getId()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
-            .andExpect(jsonPath("$.key").value(DEFAULT_KEY.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.cfaLevel").value(DEFAULT_CFA_LEVEL))
             .andExpect(jsonPath("$.isDefault").value(DEFAULT_IS_DEFAULT.booleanValue()));
     }
 
@@ -244,9 +210,7 @@ public class CFAOptionResourceIT {
         CFAOption updatedCFAOption = cFAOptionRepository.findById(cFAOption.getId()).get();
         updatedCFAOption
             .type(UPDATED_TYPE)
-            .key(UPDATED_KEY)
             .description(UPDATED_DESCRIPTION)
-            .cfaLevel(UPDATED_CFA_LEVEL)
             .isDefault(UPDATED_IS_DEFAULT);
 
         restCFAOptionMockMvc.perform(put("/api/cfa-options")
@@ -259,9 +223,7 @@ public class CFAOptionResourceIT {
         assertThat(cFAOptionList).hasSize(databaseSizeBeforeUpdate);
         CFAOption testCFAOption = cFAOptionList.get(cFAOptionList.size() - 1);
         assertThat(testCFAOption.getType()).isEqualTo(UPDATED_TYPE);
-        assertThat(testCFAOption.getKey()).isEqualTo(UPDATED_KEY);
         assertThat(testCFAOption.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testCFAOption.getCfaLevel()).isEqualTo(UPDATED_CFA_LEVEL);
         assertThat(testCFAOption.getIsDefault()).isEqualTo(UPDATED_IS_DEFAULT);
     }
 

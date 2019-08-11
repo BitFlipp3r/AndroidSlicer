@@ -12,7 +12,7 @@ import { IAndroidVersion } from 'app/shared/model/android-version.model';
 import { IAndroidClass, AndroidClass } from 'app/shared/model/android-class.model';
 import { AndroidOptionsService } from 'app/shared/services/android-options.service';
 import { SelectItem } from 'primeng/components/common/selectitem';
-import { ICFAOption } from 'app/shared/model/cfa-option.model';
+import { ICFAOption, CFAType } from 'app/shared/model/cfa-option.model';
 import { CFAOptionService } from 'app/entities/cfa-option';
 
 @Component({
@@ -34,6 +34,7 @@ export class SliceMakeComponent implements OnInit {
   filteredSeedStatementOptions: string[] = [];
 
   cfaOptionsList: SelectItem[] = [];
+  cfaLevelNeeded = false;
   reflectionOptionsList: SelectItem[] = [];
   dataDependenceOptionsList: SelectItem[] = [];
   controlDependenceOptionsList: SelectItem[] = [];
@@ -47,6 +48,7 @@ export class SliceMakeComponent implements OnInit {
     entryMethods: [null, [Validators.required]],
     seedStatements: [null, [Validators.required]],
     cfaOptions: [null, [Validators.required]],
+    cfaLevel: [null],
     reflectionOptions: [null, Validators.required],
     dataDependenceOptions: [null, Validators.required],
     controlDependenceOptions: [null, Validators.required]
@@ -67,16 +69,6 @@ export class SliceMakeComponent implements OnInit {
     this.isSaving = false;
     this.slice = new Slice();
 
-    this.createForm.patchValue({
-      androidVersion: null,
-      androidClassName: null,
-      entryMethods: null,
-      seedStatements: null,
-      reflectionOptions: null,
-      dataDependenceOptions: null,
-      controlDependenceOptions: null
-    });
-
     this.androidOptionsService.getAndroidVersions().subscribe(
       (res: HttpResponse<IAndroidVersion[]>) => {
         this.versionOptions = res.body;
@@ -93,7 +85,7 @@ export class SliceMakeComponent implements OnInit {
     this.cfaOptionService.query().subscribe(
       (res: HttpResponse<ICFAOption[]>) => {
         for (const cfaOption of res.body) {
-          const cfaOptionItem: SelectItem = { label: cfaOption.key, value: cfaOption };
+          const cfaOptionItem: SelectItem = { label: cfaOption.type, value: cfaOption };
           this.cfaOptionsList.push(cfaOptionItem);
 
           if (cfaOption.isDefault) {
@@ -155,9 +147,8 @@ export class SliceMakeComponent implements OnInit {
       androidClassName: (this.createForm.get(['androidClassName']).value as IAndroidClass).name,
       entryMethods: this.createForm.get(['entryMethods']).value,
       seedStatements: this.createForm.get(['seedStatements']).value,
-      cfaOptionName: (this.createForm.get(['cfaOptions']).value as ICFAOption).key,
-      cfaOptionType: (this.createForm.get(['cfaOptions']).value as ICFAOption).type,
-      cfaOptionLevel: (this.createForm.get(['cfaOptions']).value as ICFAOption).cfaLevel,
+      cfaType: (this.createForm.get(['cfaOptions']).value as ICFAOption).type,
+      cfaLevel: this.createForm.get(['cfaLevel']).value,
       reflectionOptions: (this.createForm.get(['reflectionOptions']).value as ISlicerOption).key as ReflectionOptions,
       dataDependenceOptions: (this.createForm.get(['dataDependenceOptions']).value as ISlicerOption).key as DataDependenceOptions,
       controlDependenceOptions: (this.createForm.get(['controlDependenceOptions']).value as ISlicerOption).key as ControlDependenceOptions
@@ -281,5 +272,18 @@ export class SliceMakeComponent implements OnInit {
 
   clearSeedStatements() {
     this.createForm.get(['seedStatements']).patchValue([]);
+  }
+
+  onCfaOptionSelection() {
+    const selectedCfaType = (this.createForm.get(['cfaOptions']).value as ICFAOption).type;
+    if (selectedCfaType === CFAType.N_CFA || selectedCfaType === CFAType.VANILLA_N_CFA) {
+      this.cfaLevelNeeded = true;
+      this.createForm.get(['cfaLevel']).setValidators([Validators.required]);
+    } else {
+      this.createForm.get(['cfaLevel']).patchValue(null);
+      this.createForm.get(['cfaLevel']).setValidators(null);
+      this.cfaLevelNeeded = false;
+    }
+    this.createForm.get(['cfaLevel']).updateValueAndValidity();
   }
 }

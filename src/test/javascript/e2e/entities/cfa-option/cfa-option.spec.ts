@@ -22,7 +22,7 @@ describe('CFAOption e2e test', () => {
   });
 
   it('should load CFAOptions', async () => {
-    await navBarPage.goToEntity('cfa-options');
+    await navBarPage.goToEntity('cfa-option');
     cFAOptionComponentsPage = new CFAOptionComponentsPage();
     await browser.wait(ec.visibilityOf(cFAOptionComponentsPage.title), 5000);
     expect(await cFAOptionComponentsPage.getTitle()).to.eq('CFA Options');
@@ -39,15 +39,8 @@ describe('CFAOption e2e test', () => {
     const nbButtonsBeforeCreate = await cFAOptionComponentsPage.countDeleteButtons();
 
     await cFAOptionComponentsPage.clickOnCreateButton();
-    await promise.all([
-      cFAOptionUpdatePage.typeSelectLastOption(),
-      cFAOptionUpdatePage.setKeyInput('key'),
-      cFAOptionUpdatePage.setDescriptionInput('description'),
-      cFAOptionUpdatePage.setCfaLevelInput('5')
-    ]);
-    expect(await cFAOptionUpdatePage.getKeyInput()).to.eq('key', 'Expected Key value to be equals to key');
+    await promise.all([cFAOptionUpdatePage.typeSelectLastOption(), cFAOptionUpdatePage.setDescriptionInput('description')]);
     expect(await cFAOptionUpdatePage.getDescriptionInput()).to.eq('description', 'Expected Description value to be equals to description');
-    expect(await cFAOptionUpdatePage.getCfaLevelInput()).to.eq('5', 'Expected cfaLevel value to be equals to 5');
     const selectedIsDefault = cFAOptionUpdatePage.getIsDefaultInput();
     if (await selectedIsDefault.isSelected()) {
       await cFAOptionUpdatePage.getIsDefaultInput().click();

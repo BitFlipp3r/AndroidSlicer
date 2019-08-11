@@ -27,9 +27,7 @@ export class CFAOptionUpdatePage {
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
   typeSelect = element(by.id('field_type'));
-  keyInput = element(by.id('field_key'));
   descriptionInput = element(by.id('field_description'));
-  cfaLevelInput = element(by.id('field_cfaLevel'));
   isDefaultInput = element(by.id('field_isDefault'));
 
   async getPageTitle() {
@@ -51,28 +49,12 @@ export class CFAOptionUpdatePage {
       .click();
   }
 
-  async setKeyInput(key) {
-    await this.keyInput.sendKeys(key);
-  }
-
-  async getKeyInput() {
-    return await this.keyInput.getAttribute('value');
-  }
-
   async setDescriptionInput(description) {
     await this.descriptionInput.sendKeys(description);
   }
 
   async getDescriptionInput() {
     return await this.descriptionInput.getAttribute('value');
-  }
-
-  async setCfaLevelInput(cfaLevel) {
-    await this.cfaLevelInput.sendKeys(cfaLevel);
-  }
-
-  async getCfaLevelInput() {
-    return await this.cfaLevelInput.getAttribute('value');
   }
 
   getIsDefaultInput(timeout?: number) {

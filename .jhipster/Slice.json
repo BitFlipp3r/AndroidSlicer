@@ -52,22 +52,15 @@
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "cfaOptionName",
-            "fieldType": "String",
+            "fieldName": "cfaType",
+            "fieldType": "CFAType",
+            "fieldValues": "ZERO_CFA,ZERO_ONE_CFA,VANILLA_ZERO_ONE_CFA,N_CFA,VANILLA_N_CFA,ZERO_CONTAINER_CFA,ZERO_ONE_CONTAINER_CFA,VANILLA_ZERO_ONE_CONTAINER_CFA",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "cfaOptionType",
-            "fieldType": "CFAOptionType",
-            "fieldValues": "ZeroCFA,ZeroOneCFA,VanillaZeroOneCFA,NCFA,VanillaNCFA,ZeroContainerCFA,ZeroOneContainerCFA,VanillaZeroOneContainerCFA",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "cfaOptionLevel",
+            "fieldName": "cfaLevel",
             "fieldType": "Integer"
         },
         {

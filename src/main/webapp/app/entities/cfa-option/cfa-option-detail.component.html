@@ -9,17 +9,9 @@
                 <dd>
                     <span>{{cFAOption.type}}</span>
                 </dd>
-                <dt><span>Key</span></dt>
-                <dd>
-                    <span>{{cFAOption.key}}</span>
-                </dd>
                 <dt><span>Description</span></dt>
                 <dd>
                     <span>{{cFAOption.description}}</span>
-                </dd>
-                <dt><span>Cfa Level</span></dt>
-                <dd>
-                    <span>{{cFAOption.cfaLevel}}</span>
                 </dd>
                 <dt><span ngbTooltip="There can only be one default. This handled during create/save process.">Is Default</span></dt>
                 <dd>
@@ -34,7 +26,7 @@
             </button>
 
             <button type="button"
-                    [routerLink]="['/cfa-options', cFAOption.id, 'edit']"
+                    [routerLink]="['/cfa-option', cFAOption.id, 'edit']"
                     class="btn btn-primary">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
             </button>

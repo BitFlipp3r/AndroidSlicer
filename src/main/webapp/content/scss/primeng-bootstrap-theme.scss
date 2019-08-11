@@ -591,9 +591,19 @@ body {
     }
   }
   .ui-spinner {
+    span {
+      display: block;
+    }
+    input {
+      width: 100%;
+    }
     .ui-spinner-button {
       z-index: auto;
       box-sizing: border-box;
+      background-color: white;
+      border: 1px solid #e6e6e6;
+      color: black !important;
+      padding: 0px !important;
     }
     &:not(.ui-state-disabled) .ui-spinner-button {
       &:hover {
@@ -604,6 +614,17 @@ body {
         background-color: #025aa5;
         color: #ffffff;
       }
+    }
+    .ui-spinner-button.ui-spinner-down {
+      -moz-border-radius-bottomright: 3px;
+      -webkit-border-bottom-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+    }
+
+    .ui-spinner-button.ui-spinner-up {
+      -moz-border-radius-topright: 3px;
+      -webkit-border-top-right-radius: 3px;
+      border-top-right-radius: 3px;
     }
   }
   .ui-slider {

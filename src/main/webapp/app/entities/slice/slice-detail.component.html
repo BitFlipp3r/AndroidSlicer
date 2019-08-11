@@ -52,7 +52,7 @@
                 </div>
                 <dt><span>CFA Option</span></dt>
                 <dd>
-                    <span>{{slice.cfaOptionName}}</span>
+                    <span>{{slice.cfaType}} <span *ngIf="slice.cfaLevel">, n={{slice.cfaLevel}}</span></span>
                 </dd>
                 <dt><span>Reflection Options</span></dt>
                 <dd>

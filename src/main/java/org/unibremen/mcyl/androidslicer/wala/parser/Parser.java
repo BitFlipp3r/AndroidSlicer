@@ -12,7 +12,12 @@ import com.github.javaparser.ast.CompilationUnit;
 
 import org.unibremen.mcyl.androidslicer.service.SliceLogger;
 
-//TODO source philip, fix for breaking changes since 1.5
+/**
+ * This is an implementation of the of the MethodVisitor-pattern for the JavaParser described in their ebook.
+ * The code based on the work by Markus Gulman (Masterthesis 2014) and Philip Phu Dang Hoan Nguyen (Masterthesis 2018) but has been 
+ * heavily altered by Michael Cyl with bug fixed, improvements and refactorings. Most notable changes are the update from Version 1.5
+ * to 3.14.9 along with the fix of all breaking changes.
+ */
 public class Parser {
 
 	public static CompilationUnit getCu(final String javaPath, SliceLogger logger) throws IOException {

@@ -16,7 +16,7 @@ import org.unibremen.mcyl.androidslicer.config.Constants;
 import org.unibremen.mcyl.androidslicer.domain.CFAOption;
 import org.unibremen.mcyl.androidslicer.domain.SlicerOption;
 import org.unibremen.mcyl.androidslicer.domain.SlicerSetting;
-import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAOptionType;
+import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAType;
 import org.unibremen.mcyl.androidslicer.domain.enumeration.SlicerOptionType;
 
 /**
@@ -258,78 +258,52 @@ public class InitialSetupMigration {
      */
     @ChangeSet(order = "03", author = "initiator", id = "03-addCFAOptions")
     public void addCFAOptions(MongoTemplate mongoTemplate) {
-        CFAOption ZeroCFA = new CFAOption();
-        ZeroCFA.setType(CFAOptionType.ZeroCFA);
-        ZeroCFA.setKey("ZeroCFA");
-        ZeroCFA.setDescription("Creates a 0-CFA call graph builder. Fastest and context-insensitive analyses. There is only one single method reference- and instance-context. Therefore it does not distinguish between different instances of the same object type and therefore might lack precision.");
-        ZeroCFA.setIsDefault(false);
-        mongoTemplate.save(ZeroCFA);
+        CFAOption zeroCFA = new CFAOption();
+        zeroCFA.setType(CFAType.ZERO_CFA);
+        zeroCFA.setDescription("Creates a 0-CFA call graph builder. Fastest and context-insensitive analyses. There is only one single method reference- and instance-context. Therefore it does not distinguish between different instances of the same object type and therefore might lack precision.");
+        zeroCFA.setIsDefault(false);
+        mongoTemplate.save(zeroCFA);
 
-        CFAOption ZeroOneCFA = new CFAOption();
-        ZeroOneCFA.setType(CFAOptionType.ZeroOneCFA);
-        ZeroOneCFA.setKey("ZeroOneCFA");
-        ZeroOneCFA.setDescription("Creates a 0-1-CFA call graph builder. More expensive than 0-CFA since a call stack based instance-context is created for every object, with one level of call stack tracing. There is still only a single level of method reference-context, meaning 0 level of call stack tracing. Appropriate for most slicing szenarios.");
-        ZeroOneCFA.setIsDefault(true);
-        mongoTemplate.save(ZeroOneCFA);
+        CFAOption zeroOneCFA = new CFAOption();
+        zeroOneCFA.setType(CFAType.ZERO_ONE_CFA);
+        zeroOneCFA.setDescription("Creates a 0-1-CFA call graph builder. More expensive than 0-CFA since a call stack based instance-context is created for every object, with one level of call stack tracing. There is still only a single level of method reference-context, meaning 0 level of call stack tracing. Appropriate for most slicing szenarios.");
+        zeroOneCFA.setIsDefault(true);
+        mongoTemplate.save(zeroOneCFA);
 
-        CFAOption VanillaZeroOneCFA = new CFAOption();
-        VanillaZeroOneCFA.setType(CFAOptionType.VanillaZeroOneCFA);
-        VanillaZeroOneCFA.setKey("VanillaZeroOneCFA");
-        VanillaZeroOneCFA.setDescription("Creates 0-1-CFA Call graph builder. With 1 level call stack tracing for object instances and no call stack tracing for method references. Standard optimizations in the heap abstraction like smushing of strings, meaning allocation sites for Strings and StringBuffers are not disambiguated, are disabled.");
-        VanillaZeroOneCFA.setIsDefault(false);
-        mongoTemplate.save(VanillaZeroOneCFA);
+        CFAOption vanillaZeroOneCFA = new CFAOption();
+        vanillaZeroOneCFA.setType(CFAType.VANILLA_ZERO_ONE_CFA);
+        vanillaZeroOneCFA.setDescription("Creates 0-1-CFA Call graph builder. With 1 level call stack tracing for object instances and no call stack tracing for method references. Standard optimizations in the heap abstraction like smushing of strings, meaning allocation sites for Strings and StringBuffers are not disambiguated, are disabled.");
+        vanillaZeroOneCFA.setIsDefault(false);
+        mongoTemplate.save(vanillaZeroOneCFA);
 
-        CFAOption OneCFA = new CFAOption();
-        OneCFA.setType(CFAOptionType.NCFA);
-        OneCFA.setKey("OneCFA");
-        OneCFA.setCfaLevel(1);
-        OneCFA.setDescription("Creates a call graph builder that uses call stack context-sensitivity for method references and a call stack context-sensitive allocation-site-based heap abstraction for different instance contexts. The with call stack tracing is limited to 1 method.");
-        OneCFA.setIsDefault(false);
-        mongoTemplate.save(OneCFA);
+        CFAOption nCFA = new CFAOption();
+        nCFA.setType(CFAType.N_CFA);
+        nCFA.setDescription("Creates a call graph builder that uses call stack context-sensitivity for method references and a call stack context-sensitive allocation-site-based heap abstraction for different instance contexts. The with call stack tracing is limited to n methods.");
+        nCFA.setIsDefault(false);
+        mongoTemplate.save(nCFA);
 
-        CFAOption TwoCFA = new CFAOption();
-        TwoCFA.setType(CFAOptionType.NCFA);
-        TwoCFA.setKey("TwoCFA");
-        TwoCFA.setCfaLevel(2);
-        TwoCFA.setDescription("Creates a call graph builder that uses call stack context-sensitivity for method references and a call stack context-sensitive allocation-site-based heap abstraction for different instance contexts. The with call stack tracing is limited to 2 methods.");
-        TwoCFA.setIsDefault(false);
-        mongoTemplate.save(TwoCFA);
+        CFAOption vanillaNcFA = new CFAOption();
+        vanillaNcFA.setType(CFAType.VANILLA_N_CFA);
+        vanillaNcFA.setDescription("Creates a call graph builder that uses call stack context-sensitivity for method references and a call stack context-sensitive allocation-site-based heap abstraction for different instance contexts. The with call stack tracing is limited to n methods. Standard optimizations in the heap abstraction like smushing of strings, meaning allocation sites for Strings and StringBuffers are not disambiguated, are disabled.");
+        vanillaNcFA.setIsDefault(false);
+        mongoTemplate.save(vanillaNcFA);
 
-        CFAOption VanillaOneCFA = new CFAOption();
-        VanillaOneCFA.setType(CFAOptionType.VanillaNCFA);
-        VanillaOneCFA.setKey("VanillaOneCFA");
-        VanillaOneCFA.setCfaLevel(1);
-        VanillaOneCFA.setDescription("Creates a call graph builder that uses call stack context-sensitivity for method references and a call stack context-sensitive allocation-site-based heap abstraction for different instance contexts. The with call stack tracing is limited to 1 method. Standard optimizations in the heap abstraction like smushing of strings, meaning allocation sites for Strings and StringBuffers are not disambiguated, are disabled.");
-        VanillaOneCFA.setIsDefault(false);
-        mongoTemplate.save(VanillaOneCFA);
+        CFAOption zeroContainerCFA = new CFAOption();
+        zeroContainerCFA.setType(CFAType.ZERO_CONTAINER_CFA);
+        zeroContainerCFA.setDescription("Creates a 0-CFA call graph builder augmented with extra logic for containers. There is only one single method reference- and instance-context. Therefore it does not distinguish between different instances of the same object type and therefore might lack precision. Method calls on container objects, like List, are distinguished by the allocation site of the receiver object, meaning the container the method was called upon.");
+        zeroContainerCFA.setIsDefault(false);
+        mongoTemplate.save(zeroContainerCFA);
 
-        CFAOption VanillaTwoCFA = new CFAOption();
-        VanillaTwoCFA.setType(CFAOptionType.VanillaNCFA);
-        VanillaTwoCFA.setKey("VanillaOneCFA");
-        VanillaTwoCFA.setCfaLevel(2);
-        VanillaTwoCFA.setDescription("Creates a call graph builder that uses call stack context-sensitivity for method references and a call stack context-sensitive allocation-site-based heap abstraction for different instance contexts. The with call stack tracing is limited to 2 method. Standard optimizations in the heap abstraction like smushing of strings, meaning allocation sites for Strings and StringBuffers are not disambiguated, are disabled.");
-        VanillaTwoCFA.setIsDefault(false);
-        mongoTemplate.save(VanillaOneCFA);
+        CFAOption zeroOneContainerCFA = new CFAOption();
+        zeroOneContainerCFA.setType(CFAType.ZERO_ONE_CONTAINER_CFA);
+        zeroOneContainerCFA.setDescription("Creates a 0-1-CFA call graph builder augmented with extra logic for containers. Uses a call stack based instance-context created for every object, with one level of call stack tracing. There is still only a single level of method reference-context, meaning 0 level of call stack tracing. Method calls on container objects, like List, are distinguished by the allocation site of the receiver object, meaning the container the method was called upon.");
+        zeroOneContainerCFA.setIsDefault(false);
+        mongoTemplate.save(zeroOneContainerCFA);
 
-        CFAOption ZeroContainerCFA = new CFAOption();
-        ZeroContainerCFA.setType(CFAOptionType.ZeroContainerCFA);
-        ZeroContainerCFA.setKey("ZeroContainerCFA");
-        ZeroContainerCFA.setDescription("Creates a 0-CFA call graph builder augmented with extra logic for containers. There is only one single method reference- and instance-context. Therefore it does not distinguish between different instances of the same object type and therefore might lack precision. Method calls on container objects, like List, are distinguished by the allocation site of the receiver object, meaning the container the method was called upon.");
-        ZeroContainerCFA.setIsDefault(false);
-        mongoTemplate.save(ZeroContainerCFA);
-
-        CFAOption ZeroOneContainerCFA = new CFAOption();
-        ZeroOneContainerCFA.setType(CFAOptionType.ZeroOneContainerCFA);
-        ZeroOneContainerCFA.setKey("ZeroOneContainerCFA");
-        ZeroOneContainerCFA.setDescription("Creates a 0-1-CFA call graph builder augmented with extra logic for containers. Uses a call stack based instance-context created for every object, with one level of call stack tracing. There is still only a single level of method reference-context, meaning 0 level of call stack tracing. Method calls on container objects, like List, are distinguished by the allocation site of the receiver object, meaning the container the method was called upon.");
-        ZeroOneContainerCFA.setIsDefault(false);
-        mongoTemplate.save(ZeroOneContainerCFA);
-
-        CFAOption VanillaZeroOneContainerCFA = new CFAOption();
-        VanillaZeroOneContainerCFA.setType(CFAOptionType.VanillaZeroOneContainerCFA);
-        VanillaZeroOneContainerCFA.setKey("VanillaZeroOneContainerCFA");
-        VanillaZeroOneContainerCFA.setDescription("Creates a 0-1-CFA call graph builder augmented with extra logic for containers. Uses a call stack based instance-context created for every object, with one level of call stack tracing. There is still only a single level of method reference-context, meaning 0 level of call stack tracing. Method calls on container objects, like List, are distinguished by the allocation site of the receiver object, meaning the container the method was called upon. Standard optimizations in the heap abstraction like smushing of strings, meaning allocation sites for Strings and StringBuffers are not disambiguated, are disabled");
-        VanillaZeroOneContainerCFA.setIsDefault(false);
-        mongoTemplate.save(VanillaZeroOneContainerCFA);
+        CFAOption vanillaZeroOneContainerCFA = new CFAOption();
+        vanillaZeroOneContainerCFA.setType(CFAType.VANILLA_ZERO_ONE_CONTAINER_CFA);
+        vanillaZeroOneContainerCFA.setDescription("Creates a 0-1-CFA call graph builder augmented with extra logic for containers. Uses a call stack based instance-context created for every object, with one level of call stack tracing. There is still only a single level of method reference-context, meaning 0 level of call stack tracing. Method calls on container objects, like List, are distinguished by the allocation site of the receiver object, meaning the container the method was called upon. Standard optimizations in the heap abstraction like smushing of strings, meaning allocation sites for Strings and StringBuffers are not disambiguated, are disabled");
+        vanillaZeroOneContainerCFA.setIsDefault(false);
+        mongoTemplate.save(vanillaZeroOneContainerCFA);
     }
 }

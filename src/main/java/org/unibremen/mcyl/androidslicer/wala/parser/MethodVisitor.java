@@ -26,11 +26,14 @@ import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-//TODO source: Philip,
-// mcyl: refactor for higher code quality
-// mcyl: fix breaking changes since 1.5
-// mcyl: fix for multi line ExpressionStmt
 
+/**
+ * This is an implementation of the of the MethodVisitor-pattern for the JavaParser described in their ebook.
+ * The code based on the work by Markus Gulman (Masterthesis 2014) and Philip Phu Dang Hoan Nguyen (Masterthesis 2018) but has been 
+ * heavily altered by Michael Cyl with bug fixed, improvements and refactorings. Most notable changes are the update from Version 1.5
+ * to 3.14.9 along with the fix of all breaking changes and the addition of missing statement types like SynchronizedStmt, ExpressionStmt
+ * and changes to handling of special statements like return statements.
+ */
 public class MethodVisitor extends VoidVisitorAdapter<Object> {
 
     // out
@@ -232,17 +235,6 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
         }
 
         // mcyl: add all return statements from control dependencies, regardless if sliced line is inside this return statement node
-        /* e.g. instead of 
-
-            if (isBluetoothDisallowed()) {
-            }
-
-        you get
-
-            if (isBluetoothDisallowed()) {
-                return false;
-            }
-        */
         if (node instanceof ReturnStmt) {
             ReturnStmt returnStmt = (ReturnStmt) node;
 

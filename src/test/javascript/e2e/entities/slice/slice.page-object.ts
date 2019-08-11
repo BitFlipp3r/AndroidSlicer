@@ -34,9 +34,8 @@ export class SliceMakePage {
   logInput = element(by.id('field_log'));
   threadIdInput = element(by.id('field_threadId'));
   runningInput = element(by.id('field_running'));
-  cfaOptionNameInput = element(by.id('field_cfaOptionName'));
-  cfaOptionTypeSelect = element(by.id('field_cfaOptionType'));
-  cfaOptionLevelInput = element(by.id('field_cfaOptionLevel'));
+  cfaTypeSelect = element(by.id('field_cfaType'));
+  cfaLevelInput = element(by.id('field_cfaLevel'));
   reflectionOptionsSelect = element(by.id('field_reflectionOptions'));
   dataDependenceOptionsSelect = element(by.id('field_dataDependenceOptions'));
   controlDependenceOptionsSelect = element(by.id('field_controlDependenceOptions'));
@@ -104,35 +103,28 @@ export class SliceMakePage {
   getRunningInput(timeout?: number) {
     return this.runningInput;
   }
-  async setCfaOptionNameInput(cfaOptionName) {
-    await this.cfaOptionNameInput.sendKeys(cfaOptionName);
+
+  async setCfaTypeSelect(cfaType) {
+    await this.cfaTypeSelect.sendKeys(cfaType);
   }
 
-  async getCfaOptionNameInput() {
-    return await this.cfaOptionNameInput.getAttribute('value');
+  async getCfaTypeSelect() {
+    return await this.cfaTypeSelect.element(by.css('option:checked')).getText();
   }
 
-  async setCfaOptionTypeSelect(cfaOptionType) {
-    await this.cfaOptionTypeSelect.sendKeys(cfaOptionType);
-  }
-
-  async getCfaOptionTypeSelect() {
-    return await this.cfaOptionTypeSelect.element(by.css('option:checked')).getText();
-  }
-
-  async cfaOptionTypeSelectLastOption(timeout?: number) {
-    await this.cfaOptionTypeSelect
+  async cfaTypeSelectLastOption(timeout?: number) {
+    await this.cfaTypeSelect
       .all(by.tagName('option'))
       .last()
       .click();
   }
 
-  async setCfaOptionLevelInput(cfaOptionLevel) {
-    await this.cfaOptionLevelInput.sendKeys(cfaOptionLevel);
+  async setcfaLevelInput(cfaLevel) {
+    await this.cfaLevelInput.sendKeys(cfaLevel);
   }
 
-  async getCfaOptionLevelInput() {
-    return await this.cfaOptionLevelInput.getAttribute('value');
+  async getcfaLevelInput() {
+    return await this.cfaLevelInput.getAttribute('value');
   }
 
   async setReflectionOptionsSelect(reflectionOptions) {

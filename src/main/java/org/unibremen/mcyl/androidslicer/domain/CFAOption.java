@@ -7,7 +7,7 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 
-import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAOptionType;
+import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAType;
 
 /**
  * A CFAOption.
@@ -22,17 +22,10 @@ public class CFAOption implements Serializable {
 
     @NotNull
     @Field("type")
-    private CFAOptionType type;
-
-    @NotNull
-    @Field("key")
-    private String key;
+    private CFAType type;
 
     @Field("description")
     private String description;
-
-    @Field("cfa_level")
-    private Integer cfaLevel;
 
     /**
      * There can only be one default. This handled during create/save process.
@@ -50,30 +43,17 @@ public class CFAOption implements Serializable {
         this.id = id;
     }
 
-    public CFAOptionType getType() {
+    public CFAType getType() {
         return type;
     }
 
-    public CFAOption type(CFAOptionType type) {
+    public CFAOption type(CFAType type) {
         this.type = type;
         return this;
     }
 
-    public void setType(CFAOptionType type) {
+    public void setType(CFAType type) {
         this.type = type;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public CFAOption key(String key) {
-        this.key = key;
-        return this;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public String getDescription() {
@@ -87,19 +67,6 @@ public class CFAOption implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Integer getCfaLevel() {
-        return cfaLevel;
-    }
-
-    public CFAOption cfaLevel(Integer cfaLevel) {
-        this.cfaLevel = cfaLevel;
-        return this;
-    }
-
-    public void setCfaLevel(Integer cfaLevel) {
-        this.cfaLevel = cfaLevel;
     }
 
     public Boolean getIsDefault() {
@@ -137,9 +104,7 @@ public class CFAOption implements Serializable {
         return "CFAOption{" +
             "id=" + getId() +
             ", type='" + getType() + "'" +
-            ", key='" + getKey() + "'" +
             ", description='" + getDescription() + "'" +
-            ", cfaLevel=" + getCfaLevel() +
             ", isDefault='" + getIsDefault() + "'" +
             "}";
     }

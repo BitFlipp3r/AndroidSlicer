@@ -22,9 +22,9 @@
             <th jhiSortBy="entryMethods"><span>Entry Methods</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="seedStatements"><span>Seed Statements</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="cfaOptions"><span>CFA Option</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="reflectionOptions.key"><span>Reflection Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="dataDependenceOptions.key"><span>Data Dependence Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="controlDependenceOptions.key"><span>Control Dependence Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="reflectionOptions"><span>Reflection Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dataDependenceOptions"><span>Data Dependence Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="controlDependenceOptions"><span>Control Dependence Options</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="running"><span>Running</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
@@ -35,7 +35,7 @@
                 <td><div>{{slice.androidClassName}}</div></td>
                 <td><div>{{slice.entryMethods}}</div></td>
                 <td><div>{{slice.seedStatements}}</div></td>
-                <td><div>{{slice.cfaOptionName}}</div></td>
+                <td><div>{{slice.cfaType}} <span *ngIf="slice.cfaLevel">, n={{slice.cfaLevel}}</span></div></td> 
                 <td><div>{{slice.reflectionOptions}}</div></td>
                 <td><div>{{slice.dataDependenceOptions}}</div></td>
                 <td><div>{{slice.controlDependenceOptions}}</div></td>

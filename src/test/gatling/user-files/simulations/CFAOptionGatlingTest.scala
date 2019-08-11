@@ -72,10 +72,8 @@ class CFAOptionGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "type":"ZeroCFA"
-                , "key":"SAMPLE_TEXT"
+                , "type":"ZERO_CFA"
                 , "description":null
-                , "cfaLevel":"0"
                 , "isDefault":null
                 }""")).asJson
             .check(status.is(201))

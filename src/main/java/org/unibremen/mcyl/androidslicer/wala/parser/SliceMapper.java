@@ -13,10 +13,12 @@ import java.util.regex.Pattern;
 
 import org.unibremen.mcyl.androidslicer.service.SliceLogger;
 
-//TODO source: Philip,
-// mcyl refactor for higher code quality
-// mcyl fix breaking changes since 1.5
-// mcyl add method and class comment lines
+/**
+ * This is an implementation of a mapper class to get the actual source code lines from their corresponding line numbers.
+ * The code based on the work by Markus Gulman (Masterthesis 2014) and Philip Phu Dang Hoan Nguyen (Masterthesis 2018) but has been 
+ * heavily altered by Michael Cyl with bug fixed, improvements and refactorings. Most notable changes the ability to extract source
+ * code comments and better formatting of closing brackets for code blocks.
+ */
 public class SliceMapper {
 
 	private static final Pattern commentsPattern = Pattern.compile("^\\s*[\\/\\/.*|\\*.*].*");

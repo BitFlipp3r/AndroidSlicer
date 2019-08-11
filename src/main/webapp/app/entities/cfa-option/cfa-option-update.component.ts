@@ -17,9 +17,7 @@ export class CFAOptionUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     type: [null, [Validators.required]],
-    key: [null, [Validators.required]],
     description: [],
-    cfaLevel: [],
     isDefault: []
   });
 
@@ -42,9 +40,7 @@ export class CFAOptionUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: cFAOption.id,
       type: cFAOption.type,
-      key: cFAOption.key,
       description: cFAOption.description,
-      cfaLevel: cFAOption.cfaLevel,
       isDefault: cFAOption.isDefault
     });
   }
@@ -100,9 +96,7 @@ export class CFAOptionUpdateComponent implements OnInit {
       ...new CFAOption(),
       id: this.editForm.get(['id']).value,
       type: this.editForm.get(['type']).value,
-      key: this.editForm.get(['key']).value,
       description: this.editForm.get(['description']).value,
-      cfaLevel: this.editForm.get(['cfaLevel']).value,
       isDefault: this.editForm.get(['isDefault']).value
     };
   }

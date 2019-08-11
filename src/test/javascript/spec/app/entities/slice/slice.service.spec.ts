@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { SliceService } from 'app/entities/slice/slice.service';
 import { ISlice, Slice, ReflectionOptions, DataDependenceOptions, ControlDependenceOptions } from 'app/shared/model/slice.model';
-import { CFAOptionType } from 'app/shared/model/cfa-option.model';
+import { CFAType } from 'app/shared/model/cfa-option.model';
 
 describe('Service Tests', () => {
   describe('Slice Service', () => {
@@ -34,8 +34,7 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         false,
-        'AAAAAAA',
-        CFAOptionType.ZeroCFA,
+        CFAType.ZERO_CFA,
         0,
         ReflectionOptions.FULL,
         DataDependenceOptions.FULL,
@@ -84,9 +83,8 @@ describe('Service Tests', () => {
             log: 'BBBBBB',
             threadId: 'BBBBBB',
             running: true,
-            cfaOptionName: 'BBBBBB',
-            cfaOptionType: 'BBBBBB',
-            cfaOptionLevel: 1,
+            cfaType: 'BBBBBB',
+            cfaLevel: 1,
             reflectionOptions: 'BBBBBB',
             dataDependenceOptions: 'BBBBBB',
             controlDependenceOptions: 'BBBBBB'

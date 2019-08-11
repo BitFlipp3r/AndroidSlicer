@@ -3,15 +3,8 @@
     "fields": [
         {
             "fieldName": "type",
-            "fieldType": "CFAOptionType",
-            "fieldValues": "ZeroCFA,ZeroOneCFA,VanillaZeroOneCFA,NCFA,VanillaNCFA,ZeroContainerCFA,ZeroOneContainerCFA,VanillaZeroOneContainerCFA",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "key",
-            "fieldType": "CFAOption",
+            "fieldType": "CFAType",
+            "fieldValues": "ZERO_CFA,ZERO_ONE_CFA,VANILLA_ZERO_ONE_CFA,N_CFA,VANILLA_N_CFA,ZERO_CONTAINER_CFA,ZERO_ONE_CONTAINER_CFA,VANILLA_ZERO_ONE_CONTAINER_CFA",
             "fieldValidateRules": [
                 "required"
             ]
@@ -20,10 +13,6 @@
             "fieldName": "description",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text"
-        },
-        {
-            "fieldName": "cfaLevel",
-            "fieldType": "Integer"
         },
         {
             "fieldName": "isDefault",

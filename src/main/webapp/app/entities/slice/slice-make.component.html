@@ -79,22 +79,36 @@
                         </small>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="form-control-label" for="field_cfaOptions">CFA Options</label>
-                    <div>Options for setting different context-sensitivities for pointer analysis.</div>
-                    <p-dropdown [options]="cfaOptionsList" id="field_cfaOptions" name="cfaOptions" formControlName="cfaOptions" lazy="true" [style]="{'display':'block','width':'100%'}" required="true">
-                       <ng-template let-option pTemplate="item">
-                           <span>{{option.value.key}}</span><span *ngIf="option.value.isDefault"><b> (Recommended)</b></span><br>
-                           <span>{{option.value.description}}</span>
-                       </ng-template>
-                   </p-dropdown>
+                    <div class="row no-gutters mx-lg-n1">
+                    <div [ngClass]="{'col-12 px-lg-1': !cfaLevelNeeded, 'col-10 px-lg-1': cfaLevelNeeded}">
+                        <div>Options for setting different context-sensitivities for pointer analysis.</div>
+                        <p-dropdown [options]="cfaOptionsList" id="field_cfaOptions" name="cfaOptions" formControlName="cfaOptions" lazy="true" [style]="{'display':'block','width':'100%'}" required="true" (onChange)="onCfaOptionSelection()">
+                           <ng-template let-option pTemplate="item">
+                               <span>{{option.value.type}}</span><span *ngIf="option.value.isDefault"><b> (Recommended)</b></span><br>
+                               <span>{{option.value.description}}</span>
+                           </ng-template>
+                       </p-dropdown>
+                    </div>
+                    <div  *ngIf="cfaLevelNeeded" class="col-2 px-lg-1">
+                        <span class="px-lg-1" for="field_cfaLevel">n (CFA-Level)</span>   
+                        <div class="align-middle">
+                        <p-spinner name="cfaLevel" id="field_cfaLevel" formControlName="cfaLevel" [min]="0" style="display: block; position: absolute; width: 97%;"></p-spinner>   
+                        </div>
+                    </div>
+                    </div>
+                    <div *ngIf="(createForm.get('cfaOptions').invalid && (createForm.get('cfaOptions').dirty || createForm.get('cfaOptions').touched)) ||
+                                (cfaLevelNeeded && (createForm.get('cfaLevel').invalid && (createForm.get('cfaLevel').dirty || createForm.get('cfaLevel').touched)))">
+                        <small class="form-text text-danger"
+                            *ngIf="(createForm.get('cfaOptions').errors && createForm.get('cfaOptions').errors.required) ||
+                                   (cfaLevelNeeded && (createForm.get('cfaLevel').errors && createForm.get('cfaLevel').errors.required))">
+                            This field is required.
+                        </small>
+                    </div>
                 </div>
-                <div *ngIf="createForm.get('reflectionOptions').invalid && (createForm.get('reflectionOptions').dirty || createForm.get('reflectionOptions').touched)">
-                    <small class="form-text text-danger"
-                        *ngIf="createForm.get('reflectionOptions').errors.required">
-                        This field is required.
-                    </small>
-                </div>
+
                 <div class="form-group">
                     <label class="form-control-label" for="field_reflectionOptions">Reflection Options</label>
                     <div>Options for handling reflection during call graph construction.</div>

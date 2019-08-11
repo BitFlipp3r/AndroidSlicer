@@ -13,7 +13,7 @@ import com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAOptionType;
+import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAType;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -65,15 +65,11 @@ public class Slice implements Serializable {
     private Boolean running;
 
     @NotNull
-    @Field("cfa_option_name")
-    private String cfaOptionName;
-
-    @NotNull
     @Field("cfa_option_type")
-    private CFAOptionType cfaOptionType;
+    private CFAType cfaType;
 
     @Field("cfa_option_level")
-    private Integer cfaOptionLevel;
+    private Integer cfaLevel;
 
     /**
      * com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions
@@ -212,38 +208,25 @@ public class Slice implements Serializable {
         this.running = running;
     }
 
-    public String getCfaOptionName() {
-        return cfaOptionName;
+    public CFAType getCfaType() {
+        return cfaType;
     }
 
-    public Slice cfaOptionName(String cfaOptionName) {
-        this.cfaOptionName = cfaOptionName;
+    public Slice cfaType(CFAType cfaType) {
+        this.cfaType = cfaType;
         return this;
     }
 
-    public void setCfaOptionName(String cfaOptionName) {
-        this.cfaOptionName = cfaOptionName;
+    public void setCfaType(CFAType cfaType) {
+        this.cfaType = cfaType;
     }
 
-    public CFAOptionType getCfaOptionType() {
-        return cfaOptionType;
+    public Integer getcfaLevel() {
+        return cfaLevel;
     }
 
-    public Slice cfaOptionType(CFAOptionType cfaOptionType) {
-        this.cfaOptionType = cfaOptionType;
-        return this;
-    }
-
-    public void setCfaOptionType(CFAOptionType cfaOptionType) {
-        this.cfaOptionType = cfaOptionType;
-    }
-
-    public Integer getCfaOptionLevel() {
-        return cfaOptionLevel;
-    }
-
-    public Slice cfaOptionLevel(Integer cfaOptionLevel) {
-        this.cfaOptionLevel = cfaOptionLevel;
+    public Slice cfaLevel(Integer cfaLevel) {
+        this.cfaLevel = cfaLevel;
         return this;
     }
     public ReflectionOptions getReflectionOptions() {
@@ -314,9 +297,8 @@ public class Slice implements Serializable {
             ", log='" + getLog() + "'" +
             ", threadId='" + getThreadId() + "'" +
             ", running='" + isRunning() + "'" +
-            ", cfaOptionName='" + getCfaOptionName() + "'" +
-            ", cfaOptionType='" + getCfaOptionType() + "'" +
-            ", cfaOptionLevel=" + getCfaOptionLevel() +
+            ", cfaType='" + getCfaType() + "'" +
+            ", cfaLevel=" + getcfaLevel() +
             ", reflectionOptions='" + getReflectionOptions() + "'" +
             ", dataDependenceOptions='" + getDataDependenceOptions() + "'" +
             ", controlDependenceOptions='" + getControlDependenceOptions() + "'" +

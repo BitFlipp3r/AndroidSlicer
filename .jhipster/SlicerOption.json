@@ -4,7 +4,7 @@
         {
             "fieldName": "type",
             "fieldType": "SlicerOptionType",
-            "fieldValues": "ReflectionOption,DataDependenceOption,ControlDependenceOption",
+            "fieldValues": "REFLECTION_OPTION,DATA_DEPENDENCE_OPTION,CONTROL_DEPENDENCE_OPTION",
             "fieldValidateRules": [
                 "required"
             ]
