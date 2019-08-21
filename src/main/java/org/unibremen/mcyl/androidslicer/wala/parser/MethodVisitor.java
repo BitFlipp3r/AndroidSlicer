@@ -268,8 +268,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
             return;
         }
 
-        // Fix Philip
-        // Setting Class Body
+        // pnguyen: setting class body
         Node parentNode = methodDeclaration.getParentNode().get();
         int firstLine = parentNode.getBegin().get().line;
         if (parentNode.toString().startsWith("@")) {
@@ -296,7 +295,6 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                 classNodes.get(firstBodyIndex).getBegin().get().line - 1,
                 sourceLineNumbers);
         }
-        // End Fix Philip
 
         sourceLineNumbers.add(parentNode.getEnd().get().line);
         List<Node> methodNodes = methodDeclaration.getBody().get().getChildNodes();
@@ -323,16 +321,14 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
         }
     }
 
-    // Fix Philip: ConstructorDeclaration was ignored and led 
-    // to wrong reconstructed code
+    // pnguyen: ConstructorDeclaration was ignored and led to wrong reconstructed code
     @Override
     public void visit(ConstructorDeclaration constructorDeclaration, Object arg) {
         if (!areSlicedLineNumbersInNode(constructorDeclaration)) {
             return;
         }
 
-        // Fix Philip
-        // Setting Class Body
+        // pnguyen: setting class body
         Node parentNode = constructorDeclaration.getParentNode().get();
         int firstLine = parentNode.getBegin().get().line;
         if (parentNode.toString().startsWith("@")) {
@@ -352,7 +348,6 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                 classNodes.get(0).getBegin().get().line - 1,
                 sourceLineNumbers);
         }
-        // End Fix Philip
 
         sourceLineNumbers.add(parentNode.getEnd().get().line);
         List<Node> constructorNodes = constructorDeclaration.getBody().getChildNodes();

@@ -45,7 +45,7 @@ public class InitialSetupMigration {
         SlicerSetting seedStatements = new SlicerSetting();
         seedStatements.setKey(Constants.SEED_STATEMENTS_KEY);
         seedStatements.setValue(
-                "checkCallingOrSelfPermission;checkCallingOrSelfUriPermission;checkCallingPermission;checkCallingUriPermission;checkPermission;checkSelfPermission;checkUriPermission;enforceCallingOrSelfPermission;enforceCallingOrSelfUriPermission;enforceCallingPermission;enforceCallingUriPermission;enforcePermission;enforceUriPermission;checkUriPermission;clearCallingIdentity;restoreCallingIdentity;SecurityException");
+                "checkCallingOrSelfPermission;checkCallingOrSelfUriPermission;checkCallingPermission;checkCallingUriPermission;checkPermission;checkSelfPermission;checkUriPermission;enforceCallingOrSelfPermission;enforceCallingOrSelfUriPermission;enforceCallingPermission;enforceCallingUriPermission;enforcePermission;enforceUriPermission;checkUriPermission;SecurityException");
         mongoTemplate.save(seedStatements);
 
         SlicerSetting exlusionList = new SlicerSetting();
