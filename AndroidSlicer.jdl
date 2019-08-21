@@ -24,25 +24,57 @@ application {
 entity Slice {
   androidVersion Integer required,
   androidClassName String required,
-  /** JSON-List with entry method names */
+  /**
+   * JSON-List with entry method names
+   */
   entryMethods TextBlob required,
-  /** JSON-List with seed statement names */
+  /**
+   * JSON-List with seed statement names
+   */
   seedStatements TextBlob required,
   slice TextBlob,
   log TextBlob,
   threadId String,
   running Boolean,
-  /** com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions */
+  cfaType CFAType required,
+  cfaLevel Integer,
+  /**
+   * com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions
+   */
   reflectionOptions ReflectionOptions required,
-  /** com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions */
+  /**
+   * com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions
+   */
   dataDependenceOptions DataDependenceOptions required,
-  /** com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions */
+  /**
+   * com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions
+   */
   controlDependenceOptions ControlDependenceOptions required
 }
 
 entity SlicerSetting {
   key String required,
   value String required
+}
+
+entity CFAOption {
+  type CFAType required,
+  description TextBlob,
+  /**
+   * There can only be one default. This handled during create/save process.
+   */
+  isDefault Boolean
+}
+
+enum CFAType {
+  ZERO_CFA,
+  ZERO_ONE_CFA,
+  VANILLA_ZERO_ONE_CFA,
+  N_CFA,
+  VANILLA_N_CFA,
+  ZERO_CONTAINER_CFA,
+  ZERO_ONE_CONTAINER_CFA,
+  VANILLA_ZERO_ONE_CONTAINER_CFA
 }
 
 entity SlicerOption {

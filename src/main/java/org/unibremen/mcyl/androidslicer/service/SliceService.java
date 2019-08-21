@@ -48,7 +48,7 @@ public class SliceService {
      * Process a slice.
      *
      * @param slice the entity to save
-     * @return the persisted entity
+     * @return the persistend entity
      */
     @Async
     public CompletableFuture<Slice> process(Slice slice) {

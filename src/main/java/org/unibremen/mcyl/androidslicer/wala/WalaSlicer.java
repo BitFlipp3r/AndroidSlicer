@@ -50,7 +50,6 @@ import com.ibm.wala.util.config.AnalysisScopeReader;
 import com.ibm.wala.util.intset.IntSet;
 import com.ibm.wala.util.strings.Atom;
 
-import org.unibremen.mcyl.androidslicer.domain.CFAOption;
 import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAType;
 import org.unibremen.mcyl.androidslicer.service.SliceLogger;
 
