@@ -2,6 +2,7 @@ package org.unibremen.mcyl.androidslicer.wala.parser;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -31,8 +32,8 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
  * This is an implementation of the of the MethodVisitor-pattern for the JavaParser described in their ebook.
  * The code based on the work by Markus Gulman (Masterthesis 2014) and Philip Phu Dang Hoan Nguyen (Masterthesis 2018) but has been 
  * heavily altered by Michael Cyl with bug fixed, improvements and refactorings. Most notable changes are the update from Version 1.5
- * to 3.14.9 along with the fix of all breaking changes and the addition of missing statement types like SynchronizedStmt, ExpressionStmt
- * and changes to handling of special statements like return statements.
+ * to 3.14.9 along with the fix of all breaking changes and the addition of missing statement types like SynchronizedStmt, ExpressionStmt,
+ * FinallyBlocks and changes to handling of special statements like return statements.
  */
 public class MethodVisitor extends VoidVisitorAdapter<Object> {
 
@@ -166,20 +167,34 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
 
             if (node instanceof TryStmt) {
                 TryStmt tryStmt = (TryStmt) node;
-                sourceLineNumbers.remove(node.getEnd().get().line);
                 for (Node child : tryStmt.getChildNodes()) {
                     addStatementBody(child, line);
                 }
 
-            }
+                 //mcyl: added catch clauses
+                for (CatchClause catchClause : tryStmt.getCatchClauses()) {
+                    if (isLineInNode(catchClause, line)){
+                        // add catch all lines of catch predicate
+                        addAllLinesFromBeginToEnd(
+                            catchClause.getBegin().get().line,
+                            catchClause.getBody().getBegin().get().line,
+                            sourceLineNumbers);
+                        // add statements
+                        for (Node child : catchClause.getChildNodes()) {
+                            addStatementBody(child, line);
+                        }
+                    }
 
-            //mcyl: added catch clauses
-            if (node instanceof CatchClause) {
-                CatchClause catchClause = (CatchClause) node;
-                addAllLinesFromBeginToEnd(
-                    catchClause.getBody().getBegin().get().line,
-                    catchClause.getBody().getEnd().get().line, 
-                    sourceLineNumbers);
+                }
+                
+                //mcyl: added finally blocks
+                Optional<BlockStmt> finallyBlock = tryStmt.getFinallyBlock();
+                if (finallyBlock.isPresent() && isLineInNode(finallyBlock.get(), line)) {
+                    // add statements
+                    for (Node child : finallyBlock.get().getChildNodes()) {
+                        addStatementBody(child, line);
+                    }                  
+                }
             }
 
             // mcyl: fix for multiline expression statements
