@@ -191,6 +191,8 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                 Optional<BlockStmt> finallyBlock = tryStmt.getFinallyBlock();
                 if (finallyBlock.isPresent() && isLineInNode(finallyBlock.get(), line)) {
                     // add statements
+                    sourceLineNumbers.add(finallyBlock.get().getBegin().get().line);
+                    sourceLineNumbers.add(finallyBlock.get().getEnd().get().line);
                     for (Node child : finallyBlock.get().getChildNodes()) {
                         addStatementBody(child, line);
                     }                  
