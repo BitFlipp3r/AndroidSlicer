@@ -126,6 +126,18 @@ public class SlicerOptionResource {
     }
 
     /**
+     * {@code GET  /all-slicer-option} : get all the slicerOptions without paging.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of slicerOptions in body.
+     */
+    @GetMapping("/all-slicer-options")
+    public ResponseEntity<List<SlicerOption>> getAllSlicerOptions() {
+        log.debug("REST request to get a all SlicerOptions");
+        List<SlicerOption> slicerOptions = slicerOptionRepository.findAll();
+        return ResponseEntity.ok().body(slicerOptions);
+    }
+
+    /**
      * {@code GET  /slicer-options/:id} : get the "id" slicerOption.
      *
      * @param id the id of the slicerOption to retrieve.

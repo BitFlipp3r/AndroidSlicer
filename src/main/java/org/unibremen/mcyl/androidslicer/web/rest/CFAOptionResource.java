@@ -118,6 +118,18 @@ public class CFAOptionResource {
     }
 
     /**
+     * {@code GET  /all-cfa-option} : get all the cfaOptions without paging.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of cfaOptions in body.
+     */
+    @GetMapping("/all-cfa-options")
+    public ResponseEntity<List<CFAOption>> getAllCFAOptions() {
+        log.debug("REST request to get a all CFAOptions");
+        List<CFAOption> cfaOptions = cFAOptionRepository.findAll();
+        return ResponseEntity.ok().body(cfaOptions);
+    }
+
+    /**
      * {@code GET  /cfa-options/:id} : get the "id" cFAOption.
      *
      * @param id the id of the cFAOption to retrieve.

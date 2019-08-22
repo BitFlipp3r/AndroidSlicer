@@ -32,6 +32,11 @@ export class SlicerOptionService {
     return this.http.get<ISlicerOption[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  getAll(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<ISlicerOption[]>(SERVER_API_URL + 'api/all-slicer-options', { params: options, observe: 'response' });
+  }
+
   delete(id: string): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

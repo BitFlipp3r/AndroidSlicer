@@ -82,7 +82,7 @@ export class SliceMakeComponent implements OnInit {
       (res: HttpErrorResponse) => this.onError(res.message)
     );
 
-    this.cfaOptionService.query().subscribe(
+    this.cfaOptionService.getAll().subscribe(
       (res: HttpResponse<ICFAOption[]>) => {
         for (const cfaOption of res.body) {
           const cfaOptionItem: SelectItem = { label: cfaOption.type, value: cfaOption };
@@ -96,7 +96,7 @@ export class SliceMakeComponent implements OnInit {
       (res: HttpErrorResponse) => this.onError(res.message)
     );
 
-    this.slicerOptionService.query().subscribe(
+    this.slicerOptionService.getAll().subscribe(
       (res: HttpResponse<ISlicerOption[]>) => {
         for (const slicerOption of res.body) {
           const slicerOptionItem: SelectItem = { label: slicerOption.key, value: slicerOption };
