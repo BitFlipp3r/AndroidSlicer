@@ -67,7 +67,7 @@
             "fieldName": "reflectionOptions",
             "javadoc": "com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions",
             "fieldType": "ReflectionOptions",
-            "fieldValues": "FULL,NO_FLOW_TO_CASTS,NO_FLOW_TO_CASTS_NO_METHOD_INVOKE,NO_METHOD_INVOKE,NO_STRING_CONSTANTS,NONE,ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE",
+            "fieldValues": "FULL,APPLICATION_GET_METHOD,NO_FLOW_TO_CASTS,NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD,NO_METHOD_INVOKE,NO_FLOW_TO_CASTS_NO_METHOD_INVOKE,ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE,ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD,MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD,NO_STRING_CONSTANTS,STRING_ONLY,NONE",
             "fieldValidateRules": [
                 "required"
             ]

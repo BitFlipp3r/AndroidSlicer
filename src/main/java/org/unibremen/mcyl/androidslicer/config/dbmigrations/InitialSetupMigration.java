@@ -94,73 +94,150 @@ public class InitialSetupMigration {
      */
     @ChangeSet(order = "02", author = "initiator", id = "02-addSlicerOptions")
     public void addSlicerOptions(MongoTemplate mongoTemplate) {
+
+        /* Reflection Options */
+
         SlicerOption reflectionOption_FULL = new SlicerOption();
         reflectionOption_FULL.setType(SlicerOptionType.REFLECTION_OPTION);
         reflectionOption_FULL.setKey("FULL");
-        reflectionOption_FULL.setDescription("Analyzes Integer.MAX_VALUE flows from newInstance() calls to casts.");
+        reflectionOption_FULL.setDescription(
+                "Analyzes all reflections, including:\n" +
+                "1. Flows from calls of newInstance() to casts, where a new instance is cast to a specific objet type.\n" +
+                "    e.g. Class c = Class.forName('Simple'); Simple s = (Simple) c.newInstance();\n" +
+                "2. Calls to Method.invoke(), where the underlying method represented by a method object is invoked.\n" +
+                "   e.g. Method m = c.getDeclaredMethod(String name, Class<?>... parameterTypes); Object mo = m.invoke(null, Object... args);\n" +
+                "3. Calls to Class.getMethod(), where a method object that reflects member method of the class is returned.\n" +
+                "   e.g. Method m = c.getMethod(String name, Class<?>... parameterTypes);.");
         reflectionOption_FULL.setIsDefault(false);
         mongoTemplate.save(reflectionOption_FULL);
+
+        SlicerOption reflectionOption_APPLICATION_GET_METHOD = new SlicerOption();
+        reflectionOption_APPLICATION_GET_METHOD.setType(SlicerOptionType.REFLECTION_OPTION);
+        reflectionOption_APPLICATION_GET_METHOD.setKey("APPLICATION_GET_METHOD");
+        reflectionOption_APPLICATION_GET_METHOD.setDescription(
+                "Like FULL, but models calls to Class.getMethod() only for application classes, meaning classes which are inside the android.jar-Archive.");
+        reflectionOption_APPLICATION_GET_METHOD.setIsDefault(false);
+        mongoTemplate.save(reflectionOption_APPLICATION_GET_METHOD);
 
         SlicerOption reflectionOption_NO_FLOW_TO_CASTS = new SlicerOption();
         reflectionOption_NO_FLOW_TO_CASTS.setType(SlicerOptionType.REFLECTION_OPTION);
         reflectionOption_NO_FLOW_TO_CASTS.setKey("NO_FLOW_TO_CASTS");
-        reflectionOption_NO_FLOW_TO_CASTS.setDescription("Analyzes no flows from newInstance() calls to casts.");
+        reflectionOption_NO_FLOW_TO_CASTS.setDescription(
+                "Does not analyze any flows from calls of newInstance() to casts, where a new instance is cast to a specific objet type.");
         reflectionOption_NO_FLOW_TO_CASTS.setIsDefault(false);
         mongoTemplate.save(reflectionOption_NO_FLOW_TO_CASTS);
 
-        SlicerOption reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE = new SlicerOption();
-        reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE.setType(SlicerOptionType.REFLECTION_OPTION);
-        reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE.setKey("NO_FLOW_TO_CASTS_NO_METHOD_INVOKE");
-        reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE.setDescription(
-                "Analyzes no flows from newInstance() calls to casts and ignores calls to Method.invoke().");
-        reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE.setIsDefault(false);
-        mongoTemplate.save(reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE);
+        SlicerOption reflectionOption_NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD = new SlicerOption();
+        reflectionOption_NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setType(SlicerOptionType.REFLECTION_OPTION);
+        reflectionOption_NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setKey("NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD");
+        reflectionOption_NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setDescription(
+                "Like FULL, but models calls to Class.getMethod() only for application classes and does not analyze any calls of newInstance() casts.");
+                reflectionOption_NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setIsDefault(false);
+        mongoTemplate.save(reflectionOption_NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD);
 
         SlicerOption reflectionOption_NO_METHOD_INVOKE = new SlicerOption();
         reflectionOption_NO_METHOD_INVOKE.setType(SlicerOptionType.REFLECTION_OPTION);
         reflectionOption_NO_METHOD_INVOKE.setKey("NO_METHOD_INVOKE");
         reflectionOption_NO_METHOD_INVOKE.setDescription(
-                "Analyzes Integer.MAX_VALUE flows from newInstance() calls to casts and ignores calls to Method.invoke().");
+                "Like FULL, but does not analyze any calls to Method.invoke(), where the underlying method represented by a method object is invoked.");
         reflectionOption_NO_METHOD_INVOKE.setIsDefault(false);
         mongoTemplate.save(reflectionOption_NO_METHOD_INVOKE);
+
+        SlicerOption reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE = new SlicerOption();
+        reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE.setType(SlicerOptionType.REFLECTION_OPTION);
+        reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE.setKey("NO_FLOW_TO_CASTS_NO_METHOD_INVOKE");
+        reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE.setDescription(
+                "Does not analyze any flows from calls of newInstance() to casts or any calls to Method.invoke().");
+        reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE.setIsDefault(false);
+        mongoTemplate.save(reflectionOption_NO_FLOW_TO_CASTS_NO_METHOD_INVOKE);
+
+        SlicerOption reflectionOption_ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE = new SlicerOption();
+        reflectionOption_ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE.setType(SlicerOptionType.REFLECTION_OPTION);
+        reflectionOption_ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE.setKey("ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE");
+        reflectionOption_ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE.setDescription(
+                "The analyzed number of flows from newInstance() calls to casts is limited to 1. Does not analyze any calls to Method.invoke().");
+        reflectionOption_ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE.setIsDefault(false);
+        mongoTemplate.save(reflectionOption_ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE);
+
+        SlicerOption reflectionOption_ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD = new SlicerOption();
+        reflectionOption_ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setType(SlicerOptionType.REFLECTION_OPTION);
+        reflectionOption_ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setKey("ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD");
+        reflectionOption_ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setDescription(
+                "The analyzed number of flows from newInstance() calls to casts is limited to 1 and the algorithm models calls to Class.getMethod() only for application classes.");
+                reflectionOption_ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setIsDefault(false);
+        mongoTemplate.save(reflectionOption_ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD);
+
+        SlicerOption reflectionOption_MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD = new SlicerOption();
+        reflectionOption_MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setType(SlicerOptionType.REFLECTION_OPTION);
+        reflectionOption_MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setKey("MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD");
+        reflectionOption_MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setDescription(
+                "The analyzed number of flows from newInstance() calls to casts is limited to 100 and the algorithm models calls to Class.getMethod() only for application classes.");
+                reflectionOption_MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD.setIsDefault(false);
+        mongoTemplate.save(reflectionOption_MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD);
 
         SlicerOption reflectionOption_NO_STRING_CONSTANTS = new SlicerOption();
         reflectionOption_NO_STRING_CONSTANTS.setType(SlicerOptionType.REFLECTION_OPTION);
         reflectionOption_NO_STRING_CONSTANTS.setKey("NO_STRING_CONSTANTS");
         reflectionOption_NO_STRING_CONSTANTS.setDescription(
-                "Analyzes Integer.MAX_VALUE flows from newInstance() calls to casts and ignores calls to reflective methods with String constant arguments.");
+                "Like FULL, but ignores calls to reflective methods, which take string constant as arguments.");
         reflectionOption_NO_STRING_CONSTANTS.setIsDefault(false);
         mongoTemplate.save(reflectionOption_NO_STRING_CONSTANTS);
+
+        SlicerOption reflectionOption_STRING_ONLY = new SlicerOption();
+        reflectionOption_STRING_ONLY.setType(SlicerOptionType.REFLECTION_OPTION);
+        reflectionOption_STRING_ONLY.setKey("STRING_ONLY");
+        reflectionOption_STRING_ONLY.setDescription(
+                "Does not analyze any flows from calls of newInstance() to casts or any calls to Method.invoke(), but only calls to reflective methods, which take string constant as arguments.");
+                reflectionOption_STRING_ONLY.setIsDefault(false);
+        mongoTemplate.save(reflectionOption_STRING_ONLY);
 
         SlicerOption reflectionOption_NONE = new SlicerOption();
         reflectionOption_NONE.setType(SlicerOptionType.REFLECTION_OPTION);
         reflectionOption_NONE.setKey("NONE");
         reflectionOption_NONE.setDescription(
-                "Analyzes no flows from newInstance() calls to casts and ignores calls to Method.invoke() and ignores calls to reflective methods with String constant arguments.");
+                "Does not analyze any reflections. This is recommended since reflections are not used often in the android framework.");
         reflectionOption_NONE.setIsDefault(true);
         mongoTemplate.save(reflectionOption_NONE);
 
-        SlicerOption reflectionOption_FONE_FLOW_TO_CASTS_NO_METHOD_INVOKE = new SlicerOption();
-        reflectionOption_FONE_FLOW_TO_CASTS_NO_METHOD_INVOKE.setType(SlicerOptionType.REFLECTION_OPTION);
-        reflectionOption_FONE_FLOW_TO_CASTS_NO_METHOD_INVOKE.setKey("ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE");
-        reflectionOption_FONE_FLOW_TO_CASTS_NO_METHOD_INVOKE.setDescription(
-                "Analyzes one flow from newInstance() calls to casts and and ignores calls to Method.invoke().");
-        reflectionOption_FONE_FLOW_TO_CASTS_NO_METHOD_INVOKE.setIsDefault(false);
-        mongoTemplate.save(reflectionOption_FONE_FLOW_TO_CASTS_NO_METHOD_INVOKE);
+        /* Data Dependence Options */
 
         SlicerOption dataDependenceOptions_FULL = new SlicerOption();
         dataDependenceOptions_FULL.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
         dataDependenceOptions_FULL.setKey("FULL");
         dataDependenceOptions_FULL.setDescription(
-                "Tracks all data dependencies. Produces the largest SDG and uses the most computing resouces.");
+                "Tracks all data dependencies. Produces the largest SDG and uses the most computing resources.");
         dataDependenceOptions_FULL.setIsDefault(false);
         mongoTemplate.save(dataDependenceOptions_FULL);
+
+        SlicerOption dataDependenceOptions_NO_BASE_PTRS = new SlicerOption();
+        dataDependenceOptions_NO_BASE_PTRS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
+        dataDependenceOptions_NO_BASE_PTRS.setKey("NO_BASE_PTRS");
+        dataDependenceOptions_NO_BASE_PTRS.setDescription(
+                "Ignore data dependence edges that define base pointers for indirect memory access. Base pointers are more commonly known as 'frame pointers' which point to the location where the stack pointer was, just before a method call moved the stack pointer to the methods own local variables.");
+        dataDependenceOptions_NO_BASE_PTRS.setIsDefault(false);
+        mongoTemplate.save(dataDependenceOptions_NO_BASE_PTRS);
+
+        SlicerOption dataDependenceOptions_NO_HEAP = new SlicerOption();
+        dataDependenceOptions_NO_HEAP.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
+        dataDependenceOptions_NO_HEAP.setKey("NO_HEAP");
+        dataDependenceOptions_NO_HEAP
+                .setDescription("Ignores all data dependence edges to and from heap locations, e.g. due to accessing an objects member variable. This recommended because heap data dependencies consume a large of amount of memory during analysis.");
+        dataDependenceOptions_NO_HEAP.setIsDefault(true);
+        mongoTemplate.save(dataDependenceOptions_NO_HEAP);
+
+        SlicerOption dataDependenceOptions_NO_EXCEPTIONS = new SlicerOption();
+        dataDependenceOptions_NO_EXCEPTIONS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
+        dataDependenceOptions_NO_EXCEPTIONS.setKey("NO_EXCEPTIONS");
+        dataDependenceOptions_NO_EXCEPTIONS
+                .setDescription("Ignores all data dependence edges to and from throw and catch statements.");
+        dataDependenceOptions_NO_EXCEPTIONS.setIsDefault(false);
+        mongoTemplate.save(dataDependenceOptions_NO_EXCEPTIONS);
 
         SlicerOption dataDependenceOptions_NO_BASE_NO_EXCEPTIONS = new SlicerOption();
         dataDependenceOptions_NO_BASE_NO_EXCEPTIONS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
         dataDependenceOptions_NO_BASE_NO_EXCEPTIONS.setKey("NO_BASE_NO_EXCEPTIONS");
         dataDependenceOptions_NO_BASE_NO_EXCEPTIONS.setDescription(
-                "Like FULL, but ignore data dependence edges that define base pointers for indirect memory access and ignore all data dependence edges to/from throw and catch statements.");
+                "Ignores data dependence edges that define base pointers and exclude all edges to/from throw and catch statements.");
         dataDependenceOptions_NO_BASE_NO_EXCEPTIONS.setIsDefault(false);
         mongoTemplate.save(dataDependenceOptions_NO_BASE_NO_EXCEPTIONS);
 
@@ -168,70 +245,48 @@ public class InitialSetupMigration {
         dataDependenceOptions_NO_BASE_NO_HEAP.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
         dataDependenceOptions_NO_BASE_NO_HEAP.setKey("NO_BASE_NO_HEAP");
         dataDependenceOptions_NO_BASE_NO_HEAP.setDescription(
-                "Like NO_BASE_PTS, and additionally ignore all data dependence edges to/from heap locations.");
+                "Ignores data dependence edges that define base pointers and exclude all edges to and from heap locations.");
         dataDependenceOptions_NO_BASE_NO_HEAP.setIsDefault(false);
         mongoTemplate.save(dataDependenceOptions_NO_BASE_NO_HEAP);
-
-        SlicerOption dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS = new SlicerOption();
-        dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
-        dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS.setKey("NO_BASE_NO_HEAP_NO_EXCEPTIONS");
-        dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS.setDescription(
-                "Like FULL, but ignore data dependence edges that define base pointers for indirect memory access and ignore all data dependence edges to/from heap locations and ignore all data dependence edges to/from throw and catch statements.");
-        dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS.setIsDefault(false);
-        mongoTemplate.save(dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS);
-
-        SlicerOption dataDependenceOptions_NO_BASE_PTRS = new SlicerOption();
-        dataDependenceOptions_NO_BASE_PTRS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
-        dataDependenceOptions_NO_BASE_PTRS.setKey("NO_BASE_PTRS");
-        dataDependenceOptions_NO_BASE_PTRS.setDescription(
-                "Like FULL, but ignore data dependence edges that define base pointers for indirect memory access.");
-        dataDependenceOptions_NO_BASE_PTRS.setIsDefault(false);
-        mongoTemplate.save(dataDependenceOptions_NO_BASE_PTRS);
-
-        SlicerOption dataDependenceOptions_NO_EXCEPTIONS = new SlicerOption();
-        dataDependenceOptions_NO_EXCEPTIONS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
-        dataDependenceOptions_NO_EXCEPTIONS.setKey("NO_EXCEPTIONS");
-        dataDependenceOptions_NO_EXCEPTIONS
-                .setDescription("Like FULL, ignore all data dependence edges to/from throw and catch statements.");
-        dataDependenceOptions_NO_EXCEPTIONS.setIsDefault(false);
-        mongoTemplate.save(dataDependenceOptions_NO_EXCEPTIONS);
-
-        SlicerOption dataDependenceOptions_NO_HEAP = new SlicerOption();
-        dataDependenceOptions_NO_HEAP.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
-        dataDependenceOptions_NO_HEAP.setKey("NO_HEAP");
-        dataDependenceOptions_NO_HEAP
-                .setDescription("Like FULL, and additionally ignore all data dependence edges to/from heap locations.");
-        dataDependenceOptions_NO_HEAP.setIsDefault(false);
-        mongoTemplate.save(dataDependenceOptions_NO_HEAP);
 
         SlicerOption dataDependenceOptions_NO_HEAP_NO_EXCEPTIONS = new SlicerOption();
         dataDependenceOptions_NO_HEAP_NO_EXCEPTIONS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
         dataDependenceOptions_NO_HEAP_NO_EXCEPTIONS.setKey("NO_HEAP_NO_EXCEPTIONS");
         dataDependenceOptions_NO_HEAP_NO_EXCEPTIONS.setDescription(
-                "Like FULL, and additionally ignore all data dependence edges to/from heap locations and ignore all data dependence edges to/from throw and catch statements.");
+                "Ignore all data dependence edges to/from heap locations and and exclude all edges to/from throw and catch statements.");
         dataDependenceOptions_NO_HEAP_NO_EXCEPTIONS.setIsDefault(false);
         mongoTemplate.save(dataDependenceOptions_NO_HEAP_NO_EXCEPTIONS);
 
-        SlicerOption dataDependenceOptions_NONE = new SlicerOption();
-        dataDependenceOptions_NONE.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
-        dataDependenceOptions_NONE.setKey("NONE");
-        dataDependenceOptions_NONE.setDescription(
-                "Ignore all data dependencies. Produces the smallest SDG and uses the least computing resouces.");
-        dataDependenceOptions_NONE.setIsDefault(true);
-        mongoTemplate.save(dataDependenceOptions_NONE);
+        SlicerOption dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS = new SlicerOption();
+        dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
+        dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS.setKey("NO_BASE_NO_HEAP_NO_EXCEPTIONS");
+        dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS.setDescription(
+                "Ignore data dependence edges that define base pointers, to/from heap locations and to/from throw and catch statements. Therefore only local, stack-based data dependence edges will be analyzed.");
+        dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS.setIsDefault(false);
+        mongoTemplate.save(dataDependenceOptions_NO_BASE_NO_HEAP_NO_EXCEPTIONS);
 
         SlicerOption dataDependenceOptions_REFLECTION = new SlicerOption();
         dataDependenceOptions_REFLECTION.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
         dataDependenceOptions_REFLECTION.setKey("REFLECTION");
         dataDependenceOptions_REFLECTION.setDescription(
-                "Like NO_BASE_NO_HEAP, but also ignore data dependence edges originating from checkcast statements. This is the dependence algorithm used to unsoundly track from newInstance to casts.");
+                "Like NO_BASE_NO_HEAP, but also excludes data dependence edges originating from checkcast instructions. The checkcast instruction is very similar to the instanceof instruction but throws an exception instead of returning a boolean. This is the dependence algorithm used to unsoundly track from newInstance to casts.");
         dataDependenceOptions_REFLECTION.setIsDefault(false);
         mongoTemplate.save(dataDependenceOptions_REFLECTION);
+
+        SlicerOption dataDependenceOptions_NONE = new SlicerOption();
+        dataDependenceOptions_NONE.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
+        dataDependenceOptions_NONE.setKey("NONE");
+        dataDependenceOptions_NONE.setDescription(
+                "Ignore all data dependencies. Produces the smallest SDG and uses the least computing resources.");
+        dataDependenceOptions_NONE.setIsDefault(true);
+        mongoTemplate.save(dataDependenceOptions_NONE);
+
+        /* Control Dependence Options */
 
         SlicerOption controlDependenceOptions_FULL = new SlicerOption();
         controlDependenceOptions_FULL.setType(SlicerOptionType.CONTROL_DEPENDENCE_OPTION);
         controlDependenceOptions_FULL.setKey("FULL");
-        controlDependenceOptions_FULL.setDescription("Track all control dependencies.");
+        controlDependenceOptions_FULL.setDescription("Track all control dependencies. This option should be preferred to analyse SecurityExceptions.");
         controlDependenceOptions_FULL.setIsDefault(false);
         mongoTemplate.save(controlDependenceOptions_FULL);
 
@@ -239,20 +294,19 @@ public class InitialSetupMigration {
         controlDependenceOptions_NO_EXCEPTIONAL_EDGES.setType(SlicerOptionType.CONTROL_DEPENDENCE_OPTION);
         controlDependenceOptions_NO_EXCEPTIONAL_EDGES.setKey("NO_EXCEPTIONAL_EDGES");
         controlDependenceOptions_NO_EXCEPTIONAL_EDGES
-                .setDescription("Control dependencies transmitted via exception objects will be ignored.");
+                .setDescription("Control dependencies transmitted via exception objects will be ignored. This is useful to reduce analysis costs but it does not to track SecurityExceptions.");
         controlDependenceOptions_NO_EXCEPTIONAL_EDGES.setIsDefault(true);
         mongoTemplate.save(controlDependenceOptions_NO_EXCEPTIONAL_EDGES);
 
         SlicerOption controlDependenceOptions_NONE = new SlicerOption();
         controlDependenceOptions_NONE.setType(SlicerOptionType.CONTROL_DEPENDENCE_OPTION);
         controlDependenceOptions_NONE.setKey("NONE");
-        controlDependenceOptions_NONE.setDescription("Ignore all control dependencies.");
+        controlDependenceOptions_NONE.setDescription("Ignore all control dependencies. Produces the smallest and fastest slices.");
         controlDependenceOptions_NONE.setIsDefault(false);
         mongoTemplate.save(controlDependenceOptions_NONE);
     }
 
-
-        /*
+    /*
      * sources:
      * http://wala.sourceforge.net/javadocs/trunk/com/ibm/wala/ipa/callgraph/impl/Util.html
      */
