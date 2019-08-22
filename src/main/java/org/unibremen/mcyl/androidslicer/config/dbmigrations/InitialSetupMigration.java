@@ -101,13 +101,7 @@ public class InitialSetupMigration {
         reflectionOption_FULL.setType(SlicerOptionType.REFLECTION_OPTION);
         reflectionOption_FULL.setKey("FULL");
         reflectionOption_FULL.setDescription(
-                "Analyzes all reflections, including:\n" +
-                "1. Flows from calls of newInstance() to casts, where a new instance is cast to a specific objet type.\n" +
-                "    e.g. Class c = Class.forName('Simple'); Simple s = (Simple) c.newInstance();\n" +
-                "2. Calls to Method.invoke(), where the underlying method represented by a method object is invoked.\n" +
-                "   e.g. Method m = c.getDeclaredMethod(String name, Class<?>... parameterTypes); Object mo = m.invoke(null, Object... args);\n" +
-                "3. Calls to Class.getMethod(), where a method object that reflects member method of the class is returned.\n" +
-                "   e.g. Method m = c.getMethod(String name, Class<?>... parameterTypes);.");
+                "Analyzes all reflections, including 1: Flows from calls of newInstance() to casts, where a new instance is cast to a specific objet type. 2: Calls to Method.invoke(), where the underlying method represented by a method object is invoked. 3: Calls to Class.getMethod(), where a method object that reflects member method of the class is returned.");
         reflectionOption_FULL.setIsDefault(false);
         mongoTemplate.save(reflectionOption_FULL);
 
