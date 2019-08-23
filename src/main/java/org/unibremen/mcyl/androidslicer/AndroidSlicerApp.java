@@ -53,6 +53,9 @@ public class AndroidSlicerApp implements InitializingBean {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
+        if(args.length > 0){
+            System.out.println(args[0]);
+        }
         SpringApplication app = new SpringApplication(AndroidSlicerApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();

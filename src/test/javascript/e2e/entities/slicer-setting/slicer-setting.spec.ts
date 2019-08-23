@@ -39,9 +39,17 @@ describe('SlicerSetting e2e test', () => {
     const nbButtonsBeforeCreate = await slicerSettingComponentsPage.countDeleteButtons();
 
     await slicerSettingComponentsPage.clickOnCreateButton();
-    await promise.all([slicerSettingUpdatePage.setKeyInput('key'), slicerSettingUpdatePage.setValueInput('value')]);
+    await promise.all([
+      slicerSettingUpdatePage.setKeyInput('key'),
+      slicerSettingUpdatePage.setValueInput('value'),
+      slicerSettingUpdatePage.setDescriptionInput('description')
+    ]);
     expect(await slicerSettingUpdatePage.getKeyInput()).to.eq('key', 'Expected Key value to be equals to key');
     expect(await slicerSettingUpdatePage.getValueInput()).to.eq('value', 'Expected Value value to be equals to value');
+    expect(await slicerSettingUpdatePage.getDescriptionInput()).to.eq(
+      'description',
+      'Expected Description value to be equals to description'
+    );
     await slicerSettingUpdatePage.save();
     expect(await slicerSettingUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

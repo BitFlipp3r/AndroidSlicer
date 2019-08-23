@@ -25,6 +25,9 @@ public class SlicerSetting implements Serializable {
     @Field("value")
     private String value;
 
+    @Field("description")
+    private String description;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
         return id;
@@ -59,6 +62,19 @@ public class SlicerSetting implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public SlicerSetting description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -83,6 +99,7 @@ public class SlicerSetting implements Serializable {
             "id=" + getId() +
             ", key='" + getKey() + "'" +
             ", value='" + getValue() + "'" +
+            ", description='" + getDescription() + "'" +
             "}";
     }
 }

@@ -13,10 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
+
 
 import java.util.List;
 
@@ -30,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link SlicerSettingResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
-@ActiveProfiles("dev,embedded-mongo")
 public class SlicerSettingResourceIT {
 
     private static final String DEFAULT_KEY = "AAAAAAAAAA";
@@ -38,6 +37,9 @@ public class SlicerSettingResourceIT {
 
     private static final String DEFAULT_VALUE = "AAAAAAAAAA";
     private static final String UPDATED_VALUE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     @Autowired
     private SlicerSettingRepository slicerSettingRepository;
@@ -79,7 +81,8 @@ public class SlicerSettingResourceIT {
     public static SlicerSetting createEntity() {
         SlicerSetting slicerSetting = new SlicerSetting()
             .key(DEFAULT_KEY)
-            .value(DEFAULT_VALUE);
+            .value(DEFAULT_VALUE)
+            .description(DEFAULT_DESCRIPTION);
         return slicerSetting;
     }
     /**
@@ -91,7 +94,8 @@ public class SlicerSettingResourceIT {
     public static SlicerSetting createUpdatedEntity() {
         SlicerSetting slicerSetting = new SlicerSetting()
             .key(UPDATED_KEY)
-            .value(UPDATED_VALUE);
+            .value(UPDATED_VALUE)
+            .description(UPDATED_DESCRIPTION);
         return slicerSetting;
     }
 
@@ -117,6 +121,7 @@ public class SlicerSettingResourceIT {
         SlicerSetting testSlicerSetting = slicerSettingList.get(slicerSettingList.size() - 1);
         assertThat(testSlicerSetting.getKey()).isEqualTo(DEFAULT_KEY);
         assertThat(testSlicerSetting.getValue()).isEqualTo(DEFAULT_VALUE);
+        assertThat(testSlicerSetting.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 
     @Test
@@ -178,12 +183,13 @@ public class SlicerSettingResourceIT {
         slicerSettingRepository.save(slicerSetting);
 
         // Get all the slicerSettingList
-        restSlicerSettingMockMvc.perform(get("/api/slicer-setting?sort=id,desc"))
+        restSlicerSettingMockMvc.perform(get("/api/slicer-settings?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(slicerSetting.getId())))
             .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY.toString())))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())));
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
     
     @Test
@@ -197,7 +203,8 @@ public class SlicerSettingResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(slicerSetting.getId()))
             .andExpect(jsonPath("$.key").value(DEFAULT_KEY.toString()))
-            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE.toString()));
+            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE.toString()))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
     }
 
     @Test
@@ -218,7 +225,8 @@ public class SlicerSettingResourceIT {
         SlicerSetting updatedSlicerSetting = slicerSettingRepository.findById(slicerSetting.getId()).get();
         updatedSlicerSetting
             .key(UPDATED_KEY)
-            .value(UPDATED_VALUE);
+            .value(UPDATED_VALUE)
+            .description(UPDATED_DESCRIPTION);
 
         restSlicerSettingMockMvc.perform(put("/api/slicer-settings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -231,6 +239,7 @@ public class SlicerSettingResourceIT {
         SlicerSetting testSlicerSetting = slicerSettingList.get(slicerSettingList.size() - 1);
         assertThat(testSlicerSetting.getKey()).isEqualTo(UPDATED_KEY);
         assertThat(testSlicerSetting.getValue()).isEqualTo(UPDATED_VALUE);
+        assertThat(testSlicerSetting.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
     @Test

@@ -16,7 +16,8 @@ export class SlicerSettingUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     key: [null, [Validators.required]],
-    value: [null, [Validators.required]]
+    value: [null, [Validators.required]],
+    description: []
   });
 
   constructor(protected slicerSettingService: SlicerSettingService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -32,7 +33,8 @@ export class SlicerSettingUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: slicerSetting.id,
       key: slicerSetting.key,
-      value: slicerSetting.value
+      value: slicerSetting.value,
+      description: slicerSetting.description
     });
   }
 
@@ -55,7 +57,8 @@ export class SlicerSettingUpdateComponent implements OnInit {
       ...new SlicerSetting(),
       id: this.editForm.get(['id']).value,
       key: this.editForm.get(['key']).value,
-      value: this.editForm.get(['value']).value
+      value: this.editForm.get(['value']).value,
+      description: this.editForm.get(['description']).value
     };
   }
 

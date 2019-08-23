@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(SlicerSettingService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new SlicerSetting('ID', 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new SlicerSetting('ID', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -60,7 +60,8 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             key: 'BBBBBB',
-            value: 'BBBBBB'
+            value: 'BBBBBB',
+            description: 'BBBBBB'
           },
           elemDefault
         );
@@ -79,7 +80,8 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             key: 'BBBBBB',
-            value: 'BBBBBB'
+            value: 'BBBBBB',
+            description: 'BBBBBB'
           },
           elemDefault
         );

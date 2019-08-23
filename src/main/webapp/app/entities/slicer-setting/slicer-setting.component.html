@@ -1,7 +1,7 @@
 <div>
     <h2 id="page-heading">
         <span>Slicer Settings</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-slicer-setting" [routerLink]="['/slicer-settings/new']">
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-slicer-setting" [routerLink]="['/slicer-setting/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span >
             Create a new Slicer Setting
@@ -17,15 +17,19 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="key"><span>Key</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="value"><span>Value</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="description"><span>Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let slicerSetting of slicerSettings ;trackBy: trackId">
+                <td><a [routerLink]="['/slicer-setting', slicerSetting.id, 'view' ]">{{slicerSetting.id}}</a></td>
                 <td>{{slicerSetting.key}}</td>
                 <td>{{slicerSetting.value}}</td>
+                <td>{{slicerSetting.description}}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"

@@ -74,6 +74,7 @@ class SlicerSettingGatlingTest extends Simulation {
                 "id":null
                 , "key":"SAMPLE_TEXT"
                 , "value":"SAMPLE_TEXT"
+                , "description":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_slicerSetting_url"))).exitHereIfFailed

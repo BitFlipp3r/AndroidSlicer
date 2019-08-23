@@ -272,7 +272,7 @@ public class InitialSetupMigration {
         dataDependenceOptions_NONE.setKey("NONE");
         dataDependenceOptions_NONE.setDescription(
                 "Ignore all data dependencies. Produces the smallest SDG and uses the least computing resources.");
-        dataDependenceOptions_NONE.setIsDefault(true);
+        dataDependenceOptions_NONE.setIsDefault(false);
         mongoTemplate.save(dataDependenceOptions_NONE);
 
         /* Control Dependence Options */

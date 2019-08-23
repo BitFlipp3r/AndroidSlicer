@@ -28,6 +28,7 @@ export class SlicerSettingUpdatePage {
   cancelButton = element(by.id('cancel-save'));
   keyInput = element(by.id('field_key'));
   valueInput = element(by.id('field_value'));
+  descriptionInput = element(by.id('field_description'));
 
   async getPageTitle() {
     return this.pageTitle.getText();
@@ -47,6 +48,14 @@ export class SlicerSettingUpdatePage {
 
   async getValueInput() {
     return await this.valueInput.getAttribute('value');
+  }
+
+  async setDescriptionInput(description) {
+    await this.descriptionInput.sendKeys(description);
+  }
+
+  async getDescriptionInput() {
+    return await this.descriptionInput.getAttribute('value');
   }
 
   async save(timeout?: number) {
