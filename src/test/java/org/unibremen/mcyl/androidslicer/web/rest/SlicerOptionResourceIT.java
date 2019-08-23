@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
@@ -32,14 +32,12 @@ import org.unibremen.mcyl.androidslicer.domain.enumeration.SlicerOptionType;
  * Integration tests for the {@link SlicerOptionResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
-@ActiveProfiles("dev,embedded-mongo")
+@Import(TestMongoConfig.class)
 public class SlicerOptionResourceIT {
 
     private static final SlicerOptionType DEFAULT_TYPE = SlicerOptionType.REFLECTION_OPTION;
-    private static final SlicerOptionType UPDATED_TYPE = SlicerOptionType.DATA_DEPENDENCE_OPTION;
 
     private static final String DEFAULT_KEY = "AAAAAAAAAA";
-    private static final String UPDATED_KEY = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -100,8 +98,6 @@ public class SlicerOptionResourceIT {
      */
     public static SlicerOption createUpdatedEntity() {
         SlicerOption slicerOption = new SlicerOption()
-            .type(UPDATED_TYPE)
-            .key(UPDATED_KEY)
             .description(UPDATED_DESCRIPTION)
             .isDefault(UPDATED_IS_DEFAULT);
         return slicerOption;
@@ -164,8 +160,6 @@ public class SlicerOptionResourceIT {
         // Update the slicerOption
         SlicerOption updatedSlicerOption = slicerOptionRepository.findById(slicerOption.getId()).get();
         updatedSlicerOption
-            .type(UPDATED_TYPE)
-            .key(UPDATED_KEY)
             .description(UPDATED_DESCRIPTION)
             .isDefault(UPDATED_IS_DEFAULT);
 
@@ -178,8 +172,6 @@ public class SlicerOptionResourceIT {
         List<SlicerOption> slicerOptionList = slicerOptionRepository.findAll();
         assertThat(slicerOptionList).hasSize(databaseSizeBeforeUpdate);
         SlicerOption testSlicerOption = slicerOptionList.get(slicerOptionList.size() - 1);
-        assertThat(testSlicerOption.getType()).isEqualTo(UPDATED_TYPE);
-        assertThat(testSlicerOption.getKey()).isEqualTo(UPDATED_KEY);
         assertThat(testSlicerOption.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testSlicerOption.getIsDefault()).isEqualTo(UPDATED_IS_DEFAULT);
     }

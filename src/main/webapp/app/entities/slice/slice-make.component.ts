@@ -72,6 +72,12 @@ export class SliceMakeComponent implements OnInit {
     this.androidOptionsService.getAndroidVersions().subscribe(
       (res: HttpResponse<IAndroidVersion[]>) => {
         this.versionOptions = res.body;
+
+        // preselect if only one
+        if (this.versionOptions && this.versionOptions.length === 1) {
+          this.createForm.get(['androidVersion']).patchValue(this.versionOptions[0]);
+          this.onVersionSelection();
+        }
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );

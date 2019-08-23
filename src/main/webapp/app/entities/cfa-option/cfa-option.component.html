@@ -7,9 +7,9 @@
     <div class="alert alert-warning" *ngIf="cFAOptions?.length === 0">
         <span>No CFA Options found</span>
     </div>
-    <span>
+    <h4>
         These are the available cfa algorithms for points-to computations during call graph and sdg constructions. You can change the description and set a default value which will be pre-selected when creating a new slice.
-    </span>
+    </h4>
     <div class="table-responsive" *ngIf="cFAOptions?.length > 0">
         <table class="table table-striped">
             <thead>

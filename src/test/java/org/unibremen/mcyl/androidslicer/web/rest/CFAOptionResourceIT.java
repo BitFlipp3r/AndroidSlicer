@@ -1,43 +1,41 @@
 package org.unibremen.mcyl.androidslicer.web.rest;
 
-import org.unibremen.mcyl.androidslicer.AndroidSlicerApp;
-import org.unibremen.mcyl.androidslicer.domain.CFAOption;
-import org.unibremen.mcyl.androidslicer.repository.CFAOptionRepository;
-import org.unibremen.mcyl.androidslicer.web.rest.errors.ExceptionTranslator;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.unibremen.mcyl.androidslicer.web.rest.TestUtil.createFormattingConversionService;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
-
-
-import java.util.List;
-
-import static org.unibremen.mcyl.androidslicer.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import org.unibremen.mcyl.androidslicer.AndroidSlicerApp;
+import org.unibremen.mcyl.androidslicer.domain.CFAOption;
 import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAType;
+import org.unibremen.mcyl.androidslicer.repository.CFAOptionRepository;
+import org.unibremen.mcyl.androidslicer.web.rest.errors.ExceptionTranslator;
 /**
  * Integration tests for the {@link CFAOptionResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
-@ActiveProfiles("dev,embedded-mongo")
+@Import(TestMongoConfig.class)
 public class CFAOptionResourceIT {
 
     private static final CFAType DEFAULT_TYPE = CFAType.ZERO_CFA;
-    private static final CFAType UPDATED_TYPE = CFAType.ZERO_ONE_CFA;
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -97,7 +95,7 @@ public class CFAOptionResourceIT {
      */
     public static CFAOption createUpdatedEntity() {
         CFAOption cFAOption = new CFAOption()
-            .type(UPDATED_TYPE)
+
             .description(UPDATED_DESCRIPTION)
             .isDefault(UPDATED_IS_DEFAULT);
         return cFAOption;
@@ -156,7 +154,6 @@ public class CFAOptionResourceIT {
         // Update the cFAOption
         CFAOption updatedCFAOption = cFAOptionRepository.findById(cFAOption.getId()).get();
         updatedCFAOption
-            .type(UPDATED_TYPE)
             .description(UPDATED_DESCRIPTION)
             .isDefault(UPDATED_IS_DEFAULT);
 
@@ -169,7 +166,6 @@ public class CFAOptionResourceIT {
         List<CFAOption> cFAOptionList = cFAOptionRepository.findAll();
         assertThat(cFAOptionList).hasSize(databaseSizeBeforeUpdate);
         CFAOption testCFAOption = cFAOptionList.get(cFAOptionList.size() - 1);
-        assertThat(testCFAOption.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testCFAOption.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCFAOption.getIsDefault()).isEqualTo(UPDATED_IS_DEFAULT);
     }

@@ -1,47 +1,46 @@
 package org.unibremen.mcyl.androidslicer.web.rest;
 
-import org.unibremen.mcyl.androidslicer.AndroidSlicerApp;
-import org.unibremen.mcyl.androidslicer.domain.SlicerSetting;
-import org.unibremen.mcyl.androidslicer.repository.SlicerSettingRepository;
-import org.unibremen.mcyl.androidslicer.web.rest.errors.ExceptionTranslator;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.unibremen.mcyl.androidslicer.web.rest.TestUtil.createFormattingConversionService;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-
-
-import java.util.List;
-
-import static org.unibremen.mcyl.androidslicer.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.unibremen.mcyl.androidslicer.AndroidSlicerApp;
+import org.unibremen.mcyl.androidslicer.domain.SlicerSetting;
+import org.unibremen.mcyl.androidslicer.repository.SlicerSettingRepository;
+import org.unibremen.mcyl.androidslicer.web.rest.errors.ExceptionTranslator;
 
 /**
  * Integration tests for the {@link SlicerSettingResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
-@ActiveProfiles("dev,embedded-mongo")
+@Import(TestMongoConfig.class)
 public class SlicerSettingResourceIT {
 
     private static final String DEFAULT_KEY = "AAAAAAAAAA";
-    private static final String UPDATED_KEY = "BBBBBBBBBB";
 
     private static final String DEFAULT_VALUE = "AAAAAAAAAA";
     private static final String UPDATED_VALUE = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     @Autowired
     private SlicerSettingRepository slicerSettingRepository;
@@ -95,9 +94,7 @@ public class SlicerSettingResourceIT {
      */
     public static SlicerSetting createUpdatedEntity() {
         SlicerSetting slicerSetting = new SlicerSetting()
-            .key(UPDATED_KEY)
-            .value(UPDATED_VALUE)
-            .description(UPDATED_DESCRIPTION);
+            .value(UPDATED_VALUE);
         return slicerSetting;
     }
 
@@ -155,9 +152,7 @@ public class SlicerSettingResourceIT {
         // Update the slicerSetting
         SlicerSetting updatedSlicerSetting = slicerSettingRepository.findById(slicerSetting.getId()).get();
         updatedSlicerSetting
-            .key(UPDATED_KEY)
-            .value(UPDATED_VALUE)
-            .description(UPDATED_DESCRIPTION);
+            .value(UPDATED_VALUE);
 
         restSlicerSettingMockMvc.perform(put("/api/slicer-settings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -168,9 +163,7 @@ public class SlicerSettingResourceIT {
         List<SlicerSetting> slicerSettingList = slicerSettingRepository.findAll();
         assertThat(slicerSettingList).hasSize(databaseSizeBeforeUpdate);
         SlicerSetting testSlicerSetting = slicerSettingList.get(slicerSettingList.size() - 1);
-        assertThat(testSlicerSetting.getKey()).isEqualTo(UPDATED_KEY);
         assertThat(testSlicerSetting.getValue()).isEqualTo(UPDATED_VALUE);
-        assertThat(testSlicerSetting.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
     @Test

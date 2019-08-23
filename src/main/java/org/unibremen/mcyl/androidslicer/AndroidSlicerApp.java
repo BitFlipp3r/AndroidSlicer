@@ -12,6 +12,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 
 import java.net.InetAddress;
@@ -53,9 +54,15 @@ public class AndroidSlicerApp implements InitializingBean {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
-        if(args.length > 0){
-            System.out.println(args[0]);
+        if(args.length > 0 && (args[0].equals("-h") | args[0].equals("--help"))){
+            System.out.println("");
+            System.out.println("The Android-Slicer does not need any parameters.");
+            System.out.println("However, you can configure an embedded MongoDB server by setting the profile with: --spring.profiles.active=prod,embedded-mongo ");
+            System.out.println("Furthermore, you can use any JVM (or GraalVM) parameter. -Xmx might be useful to increase the maximum amount of memory.");
+            System.out.println("");
+            System.exit(0);
         }
+
         SpringApplication app = new SpringApplication(AndroidSlicerApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();

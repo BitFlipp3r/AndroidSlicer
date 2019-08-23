@@ -38,7 +38,6 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: android_slicer_db
-      port: 27017
   mail:
     host: localhost
     port: 25

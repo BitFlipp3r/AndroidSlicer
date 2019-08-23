@@ -49,7 +49,7 @@ public class InitialSetupMigration {
         seedStatements.setKey(Constants.SEED_STATEMENTS_KEY);
         seedStatements.setValue(
                 "checkCallingOrSelfPermission; checkCallingOrSelfUriPermission; checkCallingPermission; checkCallingUriPermission;checkPermission; checkSelfPermission; checkUriPermission; enforceCallingOrSelfPermission; enforceCallingOrSelfUriPermission; enforceCallingPermission; enforceCallingUriPermission; enforcePermission; enforceUriPermission; checkUriPermission; SecurityException");
-        serviceRegex.setDescription("These are the default service hook-methods that are available as standard selection options for seed statements. This default list can be edited here. Entries should be separated with a semicolon.");
+        seedStatements.setDescription("These are the default service hook-methods from android. They are available as standard selection options for seed statements. This default list can be edited here. Entries should be separated with a semicolon.");
         mongoTemplate.save(seedStatements);
 
         SlicerSetting exlusionList = new SlicerSetting();

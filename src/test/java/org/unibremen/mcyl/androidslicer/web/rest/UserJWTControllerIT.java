@@ -8,8 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.not;
  * Integration tests for the {@link UserJWTController} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
-@ActiveProfiles("dev,embedded-mongo")
+@Import(TestMongoConfig.class)
 public class UserJWTControllerIT {
 
     @Autowired

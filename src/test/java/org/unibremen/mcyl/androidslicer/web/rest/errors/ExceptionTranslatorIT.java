@@ -1,13 +1,14 @@
 package org.unibremen.mcyl.androidslicer.web.rest.errors;
 
 import org.unibremen.mcyl.androidslicer.AndroidSlicerApp;
+import org.unibremen.mcyl.androidslicer.web.rest.TestMongoConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -17,11 +18,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
-@ActiveProfiles("dev,embedded-mongo")
+@Import(TestMongoConfig.class)
 public class ExceptionTranslatorIT {
 
     @Autowired
