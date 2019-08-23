@@ -43,20 +43,6 @@ describe('Component Tests', () => {
         expect(service.update).toHaveBeenCalledWith(entity);
         expect(comp.isSaving).toEqual(false);
       }));
-
-      it('Should call create service on save for new entity', fakeAsync(() => {
-        // GIVEN
-        const entity = new CFAOption();
-        spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
-        comp.updateForm(entity);
-        // WHEN
-        comp.save();
-        tick(); // simulate async
-
-        // THEN
-        expect(service.create).toHaveBeenCalledWith(entity);
-        expect(comp.isSaving).toEqual(false);
-      }));
     });
   });
 });

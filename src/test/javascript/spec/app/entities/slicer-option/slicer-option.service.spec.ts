@@ -39,23 +39,6 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: elemDefault });
       });
 
-      it('should create a SlicerOption', async () => {
-        const returnedFromService = Object.assign(
-          {
-            id: 'ID'
-          },
-          elemDefault
-        );
-        const expected = Object.assign({}, returnedFromService);
-        service
-          .create(new SlicerOption(null))
-          .pipe(take(1))
-          .subscribe(resp => (expectedResult = resp));
-        const req = httpMock.expectOne({ method: 'POST' });
-        req.flush(returnedFromService);
-        expect(expectedResult).toMatchObject({ body: expected });
-      });
-
       it('should update a SlicerOption', async () => {
         const returnedFromService = Object.assign(
           {
@@ -99,14 +82,6 @@ describe('Service Tests', () => {
         req.flush([returnedFromService]);
         httpMock.verify();
         expect(expectedResult).toContainEqual(expected);
-      });
-
-      it('should delete a SlicerOption', async () => {
-        const rxPromise = service.delete('123').subscribe(resp => (expectedResult = resp.ok));
-
-        const req = httpMock.expectOne({ method: 'DELETE' });
-        req.flush({ status: 200 });
-        expect(expectedResult);
       });
     });
 

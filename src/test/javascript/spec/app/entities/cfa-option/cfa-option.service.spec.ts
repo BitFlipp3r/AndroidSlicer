@@ -39,23 +39,6 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: elemDefault });
       });
 
-      it('should create a CFAOption', async () => {
-        const returnedFromService = Object.assign(
-          {
-            id: 'ID'
-          },
-          elemDefault
-        );
-        const expected = Object.assign({}, returnedFromService);
-        service
-          .create(new CFAOption(null))
-          .pipe(take(1))
-          .subscribe(resp => (expectedResult = resp));
-        const req = httpMock.expectOne({ method: 'POST' });
-        req.flush(returnedFromService);
-        expect(expectedResult).toMatchObject({ body: expected });
-      });
-
       it('should update a CFAOption', async () => {
         const returnedFromService = Object.assign(
           {
@@ -97,14 +80,6 @@ describe('Service Tests', () => {
         req.flush([returnedFromService]);
         httpMock.verify();
         expect(expectedResult).toContainEqual(expected);
-      });
-
-      it('should delete a CFAOption', async () => {
-        const rxPromise = service.delete('123').subscribe(resp => (expectedResult = resp.ok));
-
-        const req = httpMock.expectOne({ method: 'DELETE' });
-        req.flush({ status: 200 });
-        expect(expectedResult);
       });
     });
 

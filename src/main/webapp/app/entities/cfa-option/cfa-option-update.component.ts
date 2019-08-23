@@ -86,8 +86,6 @@ export class CFAOptionUpdateComponent implements OnInit {
     const cFAOption = this.createFromForm();
     if (cFAOption.id !== undefined) {
       this.subscribeToSaveResponse(this.cFAOptionService.update(cFAOption));
-    } else {
-      this.subscribeToSaveResponse(this.cFAOptionService.create(cFAOption));
     }
   }
 

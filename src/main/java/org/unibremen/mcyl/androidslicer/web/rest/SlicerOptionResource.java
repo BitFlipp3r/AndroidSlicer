@@ -1,6 +1,5 @@
 package org.unibremen.mcyl.androidslicer.web.rest;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,35 +51,6 @@ public class SlicerOptionResource {
     }
 
     /**
-     * {@code POST  /slicer-option} : Create a new slicerOption.
-     *
-     * @param slicerOption the slicerOption to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-     *         body the new slicerOption, or with status {@code 400 (Bad Request)}
-     *         if the slicerOption has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PostMapping("/slicer-options")
-    public ResponseEntity<SlicerOption> createSlicerOption(@Valid @RequestBody SlicerOption slicerOption)
-            throws URISyntaxException {
-        log.debug("REST request to save SlicerOption : {}", slicerOption);
-        if (slicerOption.getId() != null) {
-            throw new BadRequestAlertException("A new slicerOption cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-
-        // remove other default settings if this is a new default
-        if (slicerOption.getIsDefault()) {
-            removeDefaults(slicerOption.getType());
-        }
-
-        SlicerOption result = slicerOptionRepository.save(slicerOption);
-        return ResponseEntity
-                .created(new URI("/api/slicer-options/" + result.getId())).headers(HeaderUtil
-                        .createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-                .body(result);
-    }
-
-    /**
      * {@code PUT  /slicer-option} : Updates an existing slicerOption.
      *
      * @param slicerOption the slicerOption to update.
@@ -97,7 +65,13 @@ public class SlicerOptionResource {
     public ResponseEntity<SlicerOption> updateSlicerOption(@Valid @RequestBody SlicerOption slicerOption)
             throws URISyntaxException {
         log.debug("REST request to update SlicerOption : {}", slicerOption);
+        
+        // security first
         if (slicerOption.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        SlicerOption slicerOptionToUpdate = slicerOptionRepository.findById(slicerOption.getId()).orElse(null);
+        if (slicerOptionToUpdate == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
@@ -106,7 +80,10 @@ public class SlicerOptionResource {
             removeDefaults(slicerOption.getType());
         }
 
-        SlicerOption result = slicerOptionRepository.save(slicerOption);
+        slicerOptionToUpdate.setDescription(slicerOption.getDescription());
+        slicerOptionToUpdate.setIsDefault(slicerOption.getIsDefault());
+
+        SlicerOption result = slicerOptionRepository.save(slicerOptionToUpdate);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME,
                 slicerOption.getId().toString())).body(result);
     }
@@ -149,20 +126,6 @@ public class SlicerOptionResource {
         log.debug("REST request to get SlicerOption : {}", id);
         Optional<SlicerOption> slicerOption = slicerOptionRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(slicerOption);
-    }
-
-    /**
-     * {@code DELETE  /slicer-options/:id} : delete the "id" slicerOption.
-     *
-     * @param id the id of the slicerOption to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DeleteMapping("/slicer-options/{id}")
-    public ResponseEntity<Void> deleteSlicerOption(@PathVariable String id) {
-        log.debug("REST request to delete SlicerOption : {}", id);
-        slicerOptionRepository.deleteById(id);
-        return ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
     }
 
     private void removeDefaults(SlicerOptionType slicerOptionType) {

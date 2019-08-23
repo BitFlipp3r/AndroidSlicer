@@ -47,8 +47,6 @@ export class SlicerSettingUpdateComponent implements OnInit {
     const slicerSetting = this.createFromForm();
     if (slicerSetting.id !== undefined) {
       this.subscribeToSaveResponse(this.slicerSettingService.update(slicerSetting));
-    } else {
-      this.subscribeToSaveResponse(this.slicerSettingService.create(slicerSetting));
     }
   }
 

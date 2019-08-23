@@ -10,7 +10,6 @@ import { CFAOptionService } from './cfa-option.service';
 import { CFAOptionComponent } from './cfa-option.component';
 import { CFAOptionDetailComponent } from './cfa-option-detail.component';
 import { CFAOptionUpdateComponent } from './cfa-option-update.component';
-import { CFAOptionDeletePopupComponent } from './cfa-option-delete-dialog.component';
 import { ICFAOption } from 'app/shared/model/cfa-option.model';
 
 @Injectable({ providedIn: 'root' })
@@ -56,18 +55,6 @@ export const cFAOptionRoute: Routes = [
     canActivate: [UserRouteAccessService]
   },
   {
-    path: 'new',
-    component: CFAOptionUpdateComponent,
-    resolve: {
-      cFAOption: CFAOptionResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'CFA Option'
-    },
-    canActivate: [UserRouteAccessService]
-  },
-  {
     path: ':id/edit',
     component: CFAOptionUpdateComponent,
     resolve: {
@@ -78,21 +65,5 @@ export const cFAOptionRoute: Routes = [
       pageTitle: 'CFA Option'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const cFAOptionPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: CFAOptionDeletePopupComponent,
-    resolve: {
-      cFAOption: CFAOptionResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'CFA Options'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

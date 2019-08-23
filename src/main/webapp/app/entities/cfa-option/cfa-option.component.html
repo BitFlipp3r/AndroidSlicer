@@ -1,18 +1,15 @@
 <div>
     <h2 id="page-heading">
         <span>CFA Options</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-cfa-option" [routerLink]="['/cfa-options/new']">
-            <fa-icon [icon]="'plus'"></fa-icon>
-            <span >
-            Create a new CFA Option
-            </span>
-        </button>
     </h2>
     <jhi-alert></jhi-alert>
     <br/>
     <div class="alert alert-warning" *ngIf="cFAOptions?.length === 0">
         <span>No CFA Options found</span>
     </div>
+    <span>
+        These are the available cfa algorithms for points-to computations during call graph and sdg constructions. You can change the description and set a default value which will be pre-selected when creating a new slice.
+    </span>
     <div class="table-responsive" *ngIf="cFAOptions?.length > 0">
         <table class="table table-striped">
             <thead>
@@ -41,14 +38,6 @@
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline">Edit</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/cfa-options', { outlets: { popup: cFAOption.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <fa-icon [icon]="'times'"></fa-icon>
-                            <span class="d-none d-md-inline">Delete</span>
                         </button>
                     </div>
                 </td>

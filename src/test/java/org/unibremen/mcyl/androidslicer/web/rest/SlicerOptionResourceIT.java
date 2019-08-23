@@ -113,78 +113,7 @@ public class SlicerOptionResourceIT {
         slicerOption = createEntity();
     }
 
-    @Test
-    public void createSlicerOption() throws Exception {
-        int databaseSizeBeforeCreate = slicerOptionRepository.findAll().size();
 
-        // Create the SlicerOption
-        restSlicerOptionMockMvc.perform(post("/api/slicer-options")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(slicerOption)))
-            .andExpect(status().isCreated());
-
-        // Validate the SlicerOption in the database
-        List<SlicerOption> slicerOptionList = slicerOptionRepository.findAll();
-        assertThat(slicerOptionList).hasSize(databaseSizeBeforeCreate + 1);
-        SlicerOption testSlicerOption = slicerOptionList.get(slicerOptionList.size() - 1);
-        assertThat(testSlicerOption.getType()).isEqualTo(DEFAULT_TYPE);
-        assertThat(testSlicerOption.getKey()).isEqualTo(DEFAULT_KEY);
-        assertThat(testSlicerOption.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testSlicerOption.getIsDefault()).isEqualTo(DEFAULT_IS_DEFAULT);
-    }
-
-    @Test
-    public void createSlicerOptionWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = slicerOptionRepository.findAll().size();
-
-        // Create the SlicerOption with an existing ID
-        slicerOption.setId("existing_id");
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restSlicerOptionMockMvc.perform(post("/api/slicer-options")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(slicerOption)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the SlicerOption in the database
-        List<SlicerOption> slicerOptionList = slicerOptionRepository.findAll();
-        assertThat(slicerOptionList).hasSize(databaseSizeBeforeCreate);
-    }
-
-
-    @Test
-    public void checkTypeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = slicerOptionRepository.findAll().size();
-        // set the field null
-        slicerOption.setType(null);
-
-        // Create the SlicerOption, which fails.
-
-        restSlicerOptionMockMvc.perform(post("/api/slicer-options")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(slicerOption)))
-            .andExpect(status().isBadRequest());
-
-        List<SlicerOption> slicerOptionList = slicerOptionRepository.findAll();
-        assertThat(slicerOptionList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    public void checkKeyIsRequired() throws Exception {
-        int databaseSizeBeforeTest = slicerOptionRepository.findAll().size();
-        // set the field null
-        slicerOption.setKey(null);
-
-        // Create the SlicerOption, which fails.
-
-        restSlicerOptionMockMvc.perform(post("/api/slicer-options")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(slicerOption)))
-            .andExpect(status().isBadRequest());
-
-        List<SlicerOption> slicerOptionList = slicerOptionRepository.findAll();
-        assertThat(slicerOptionList).hasSize(databaseSizeBeforeTest);
-    }
 
     @Test
     public void getAllSlicerOptions() throws Exception {
@@ -270,23 +199,6 @@ public class SlicerOptionResourceIT {
         // Validate the SlicerOption in the database
         List<SlicerOption> slicerOptionList = slicerOptionRepository.findAll();
         assertThat(slicerOptionList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    public void deleteSlicerOption() throws Exception {
-        // Initialize the database
-        slicerOptionRepository.save(slicerOption);
-
-        int databaseSizeBeforeDelete = slicerOptionRepository.findAll().size();
-
-        // Delete the slicerOption
-        restSlicerOptionMockMvc.perform(delete("/api/slicer-options/{id}", slicerOption.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
-
-        // Validate the database contains one less item
-        List<SlicerOption> slicerOptionList = slicerOptionRepository.findAll();
-        assertThat(slicerOptionList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test

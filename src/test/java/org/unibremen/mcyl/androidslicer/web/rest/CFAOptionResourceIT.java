@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.Base64Utils;
@@ -32,6 +33,7 @@ import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAType;
  * Integration tests for the {@link CFAOptionResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
+@ActiveProfiles("dev,embedded-mongo")
 public class CFAOptionResourceIT {
 
     private static final CFAType DEFAULT_TYPE = CFAType.ZERO_CFA;
@@ -105,61 +107,6 @@ public class CFAOptionResourceIT {
     public void initTest() {
         cFAOptionRepository.deleteAll();
         cFAOption = createEntity();
-    }
-
-    @Test
-    public void createCFAOption() throws Exception {
-        int databaseSizeBeforeCreate = cFAOptionRepository.findAll().size();
-
-        // Create the CFAOption
-        restCFAOptionMockMvc.perform(post("/api/cfa-options")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(cFAOption)))
-            .andExpect(status().isCreated());
-
-        // Validate the CFAOption in the database
-        List<CFAOption> cFAOptionList = cFAOptionRepository.findAll();
-        assertThat(cFAOptionList).hasSize(databaseSizeBeforeCreate + 1);
-        CFAOption testCFAOption = cFAOptionList.get(cFAOptionList.size() - 1);
-        assertThat(testCFAOption.getType()).isEqualTo(DEFAULT_TYPE);
-        assertThat(testCFAOption.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testCFAOption.getIsDefault()).isEqualTo(DEFAULT_IS_DEFAULT);
-    }
-
-    @Test
-    public void createCFAOptionWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = cFAOptionRepository.findAll().size();
-
-        // Create the CFAOption with an existing ID
-        cFAOption.setId("existing_id");
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restCFAOptionMockMvc.perform(post("/api/cfa-options")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(cFAOption)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the CFAOption in the database
-        List<CFAOption> cFAOptionList = cFAOptionRepository.findAll();
-        assertThat(cFAOptionList).hasSize(databaseSizeBeforeCreate);
-    }
-
-
-    @Test
-    public void checkTypeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = cFAOptionRepository.findAll().size();
-        // set the field null
-        cFAOption.setType(null);
-
-        // Create the CFAOption, which fails.
-
-        restCFAOptionMockMvc.perform(post("/api/cfa-options")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(cFAOption)))
-            .andExpect(status().isBadRequest());
-
-        List<CFAOption> cFAOptionList = cFAOptionRepository.findAll();
-        assertThat(cFAOptionList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -244,23 +191,7 @@ public class CFAOptionResourceIT {
         assertThat(cFAOptionList).hasSize(databaseSizeBeforeUpdate);
     }
 
-    @Test
-    public void deleteCFAOption() throws Exception {
-        // Initialize the database
-        cFAOptionRepository.save(cFAOption);
-
-        int databaseSizeBeforeDelete = cFAOptionRepository.findAll().size();
-
-        // Delete the cFAOption
-        restCFAOptionMockMvc.perform(delete("/api/cfa-options/{id}", cFAOption.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
-
-        // Validate the database contains one less item
-        List<CFAOption> cFAOptionList = cFAOptionRepository.findAll();
-        assertThat(cFAOptionList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
+   
     @Test
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(CFAOption.class);

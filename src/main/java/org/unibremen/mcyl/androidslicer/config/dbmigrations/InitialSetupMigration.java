@@ -319,7 +319,7 @@ public class InitialSetupMigration {
 
         CFAOption zeroOneCFA = new CFAOption();
         zeroOneCFA.setType(CFAType.ZERO_ONE_CFA);
-        zeroOneCFA.setDescription("Creates a 0-1-CFA call graph builder. More expensive than 0-CFA since a call stack based instance-context is created for every object, with one level of call stack tracing. There is still only a single level of method reference-context, meaning 0 level of call stack tracing. Appropriate for most slicing szenarios.");
+        zeroOneCFA.setDescription("Creates a 0-1-CFA call graph builder. More expensive than 0-CFA since a call stack based instance-context is created for every object, with one level of call stack tracing. There is still only a single level of method reference-context, meaning 0 level of call stack tracing. Appropriate for most slicing szenarios since it's the best tradeoff between precision and computing resources.");
         zeroOneCFA.setIsDefault(true);
         mongoTemplate.save(zeroOneCFA);
 

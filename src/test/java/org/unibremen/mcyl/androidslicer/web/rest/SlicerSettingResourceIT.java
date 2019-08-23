@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link SlicerSettingResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
+@ActiveProfiles("dev,embedded-mongo")
 public class SlicerSettingResourceIT {
 
     private static final String DEFAULT_KEY = "AAAAAAAAAA";
@@ -105,77 +107,6 @@ public class SlicerSettingResourceIT {
         slicerSetting = createEntity();
     }
 
-    @Test
-    public void createSlicerSetting() throws Exception {
-        int databaseSizeBeforeCreate = slicerSettingRepository.findAll().size();
-
-        // Create the SlicerSetting
-        restSlicerSettingMockMvc.perform(post("/api/slicer-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(slicerSetting)))
-            .andExpect(status().isCreated());
-
-        // Validate the SlicerSetting in the database
-        List<SlicerSetting> slicerSettingList = slicerSettingRepository.findAll();
-        assertThat(slicerSettingList).hasSize(databaseSizeBeforeCreate + 1);
-        SlicerSetting testSlicerSetting = slicerSettingList.get(slicerSettingList.size() - 1);
-        assertThat(testSlicerSetting.getKey()).isEqualTo(DEFAULT_KEY);
-        assertThat(testSlicerSetting.getValue()).isEqualTo(DEFAULT_VALUE);
-        assertThat(testSlicerSetting.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-    }
-
-    @Test
-    public void createSlicerSettingWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = slicerSettingRepository.findAll().size();
-
-        // Create the SlicerSetting with an existing ID
-        slicerSetting.setId("existing_id");
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restSlicerSettingMockMvc.perform(post("/api/slicer-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(slicerSetting)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the SlicerSetting in the database
-        List<SlicerSetting> slicerSettingList = slicerSettingRepository.findAll();
-        assertThat(slicerSettingList).hasSize(databaseSizeBeforeCreate);
-    }
-
-
-    @Test
-    public void checkKeyIsRequired() throws Exception {
-        int databaseSizeBeforeTest = slicerSettingRepository.findAll().size();
-        // set the field null
-        slicerSetting.setKey(null);
-
-        // Create the SlicerSetting, which fails.
-
-        restSlicerSettingMockMvc.perform(post("/api/slicer-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(slicerSetting)))
-            .andExpect(status().isBadRequest());
-
-        List<SlicerSetting> slicerSettingList = slicerSettingRepository.findAll();
-        assertThat(slicerSettingList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    public void checkValueIsRequired() throws Exception {
-        int databaseSizeBeforeTest = slicerSettingRepository.findAll().size();
-        // set the field null
-        slicerSetting.setValue(null);
-
-        // Create the SlicerSetting, which fails.
-
-        restSlicerSettingMockMvc.perform(post("/api/slicer-settings")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(slicerSetting)))
-            .andExpect(status().isBadRequest());
-
-        List<SlicerSetting> slicerSettingList = slicerSettingRepository.findAll();
-        assertThat(slicerSettingList).hasSize(databaseSizeBeforeTest);
-    }
 
     @Test
     public void getAllSlicerSettings() throws Exception {
@@ -257,23 +188,6 @@ public class SlicerSettingResourceIT {
         // Validate the SlicerSetting in the database
         List<SlicerSetting> slicerSettingList = slicerSettingRepository.findAll();
         assertThat(slicerSettingList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    public void deleteSlicerSetting() throws Exception {
-        // Initialize the database
-        slicerSettingRepository.save(slicerSetting);
-
-        int databaseSizeBeforeDelete = slicerSettingRepository.findAll().size();
-
-        // Delete the slicerSetting
-        restSlicerSettingMockMvc.perform(delete("/api/slicer-settings/{id}", slicerSetting.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
-
-        // Validate the database contains one less item
-        List<SlicerSetting> slicerSettingList = slicerSettingRepository.findAll();
-        assertThat(slicerSettingList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test

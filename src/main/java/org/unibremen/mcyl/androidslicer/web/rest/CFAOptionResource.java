@@ -1,6 +1,5 @@
 package org.unibremen.mcyl.androidslicer.web.rest;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,30 +49,6 @@ public class CFAOptionResource {
     }
 
     /**
-     * {@code POST  /cfa-options} : Create a new cFAOption.
-     *
-     * @param cFAOption the cFAOption to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new cFAOption, or with status {@code 400 (Bad Request)} if the cFAOption has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PostMapping("/cfa-options")
-    public ResponseEntity<CFAOption> createCFAOption(@Valid @RequestBody CFAOption cFAOption) throws URISyntaxException {
-        log.debug("REST request to save CFAOption : {}", cFAOption);
-        if (cFAOption.getId() != null) {
-            throw new BadRequestAlertException("A new cFAOption cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-
-        if(cFAOption.getIsDefault()){
-            removeDefaults();
-        }
-
-        CFAOption result = cFAOptionRepository.save(cFAOption);
-        return ResponseEntity.created(new URI("/api/cfa-options/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
-    }
-
-    /**
      * {@code PUT  /cfa-options} : Updates an existing cFAOption.
      *
      * @param cFAOption the cFAOption to update.
@@ -87,15 +60,25 @@ public class CFAOptionResource {
     @PutMapping("/cfa-options")
     public ResponseEntity<CFAOption> updateCFAOption(@Valid @RequestBody CFAOption cFAOption) throws URISyntaxException {
         log.debug("REST request to update CFAOption : {}", cFAOption);
+
+        // security first
         if (cFAOption.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        CFAOption cFAOptionToUpdate = cFAOptionRepository.findById(cFAOption.getId()).orElse(null);
+        if (cFAOptionToUpdate == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
 
+        // remove other default settings if this is a new default
         if(cFAOption.getIsDefault()){
             removeDefaults();
         }
 
-        CFAOption result = cFAOptionRepository.save(cFAOption);
+        cFAOptionToUpdate.setDescription(cFAOption.getDescription());
+        cFAOptionToUpdate.setIsDefault(cFAOption.getIsDefault());
+
+        CFAOption result = cFAOptionRepository.save(cFAOptionToUpdate);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, cFAOption.getId().toString()))
             .body(result);
@@ -140,19 +123,6 @@ public class CFAOptionResource {
         log.debug("REST request to get CFAOption : {}", id);
         Optional<CFAOption> cFAOption = cFAOptionRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(cFAOption);
-    }
-
-    /**
-     * {@code DELETE  /cfa-options/:id} : delete the "id" cFAOption.
-     *
-     * @param id the id of the cFAOption to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DeleteMapping("/cfa-options/{id}")
-    public ResponseEntity<Void> deleteCFAOption(@PathVariable String id) {
-        log.debug("REST request to delete CFAOption : {}", id);
-        cFAOptionRepository.deleteById(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
     }
 
     private void removeDefaults() {

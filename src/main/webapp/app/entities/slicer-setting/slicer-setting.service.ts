@@ -15,10 +15,6 @@ export class SlicerSettingService {
 
   constructor(protected http: HttpClient) {}
 
-  create(slicerSetting: ISlicerSetting): Observable<EntityResponseType> {
-    return this.http.post<ISlicerSetting>(this.resourceUrl, slicerSetting, { observe: 'response' });
-  }
-
   update(slicerSetting: ISlicerSetting): Observable<EntityResponseType> {
     return this.http.put<ISlicerSetting>(this.resourceUrl, slicerSetting, { observe: 'response' });
   }
@@ -30,9 +26,5 @@ export class SlicerSettingService {
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ISlicerSetting[]>(this.resourceUrl, { params: options, observe: 'response' });
-  }
-
-  delete(id: string): Observable<HttpResponse<any>> {
-    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 }

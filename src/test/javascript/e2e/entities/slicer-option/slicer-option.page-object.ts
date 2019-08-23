@@ -1,21 +1,7 @@
 import { browser, ExpectedConditions, element, by, ElementFinder } from 'protractor';
 
 export class SlicerOptionComponentsPage {
-  createButton = element(by.id('jh-create-entity'));
-  deleteButtons = element.all(by.css('jhi-slicer-option div table .btn-danger'));
   title = element.all(by.css('jhi-slicer-option div h2#page-heading span')).first();
-
-  async clickOnCreateButton(timeout?: number) {
-    await this.createButton.click();
-  }
-
-  async clickOnLastDeleteButton(timeout?: number) {
-    await this.deleteButtons.last().click();
-  }
-
-  async countDeleteButtons() {
-    return this.deleteButtons.count();
-  }
 
   async getTitle() {
     return this.title.getText();
@@ -79,18 +65,5 @@ export class SlicerOptionUpdatePage {
 
   getSaveButton(): ElementFinder {
     return this.saveButton;
-  }
-}
-
-export class SlicerOptionDeleteDialog {
-  private dialogTitle = element(by.id('jhi-delete-slicerOption-heading'));
-  private confirmButton = element(by.id('jhi-confirm-delete-slicerOption'));
-
-  async getDialogTitle() {
-    return this.dialogTitle.getText();
-  }
-
-  async clickOnConfirmButton(timeout?: number) {
-    await this.confirmButton.click();
   }
 }

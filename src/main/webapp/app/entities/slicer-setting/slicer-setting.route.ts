@@ -10,7 +10,6 @@ import { SlicerSettingService } from './slicer-setting.service';
 import { SlicerSettingComponent } from './slicer-setting.component';
 import { SlicerSettingDetailComponent } from './slicer-setting-detail.component';
 import { SlicerSettingUpdateComponent } from './slicer-setting-update.component';
-import { SlicerSettingDeletePopupComponent } from './slicer-setting-delete-dialog.component';
 import { ISlicerSetting } from 'app/shared/model/slicer-setting.model';
 
 @Injectable({ providedIn: 'root' })
@@ -56,18 +55,6 @@ export const slicerSettingRoute: Routes = [
     canActivate: [UserRouteAccessService]
   },
   {
-    path: 'new',
-    component: SlicerSettingUpdateComponent,
-    resolve: {
-      slicerSetting: SlicerSettingResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'Slicer Setting'
-    },
-    canActivate: [UserRouteAccessService]
-  },
-  {
     path: ':id/edit',
     component: SlicerSettingUpdateComponent,
     resolve: {
@@ -78,21 +65,5 @@ export const slicerSettingRoute: Routes = [
       pageTitle: 'Slicer Setting'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const slicerSettingPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: SlicerSettingDeletePopupComponent,
-    resolve: {
-      slicerSetting: SlicerSettingResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'Slicer Settings'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

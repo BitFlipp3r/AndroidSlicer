@@ -1,18 +1,15 @@
 <div>
     <h2 id="page-heading">
         <span>Slicer Options</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-slicer-option" [routerLink]="['/slicer-options/new']">
-            <fa-icon [icon]="'plus'"></fa-icon>
-            <span >
-            Create a new Slicer Option
-            </span>
-        </button>
     </h2>
     <jhi-alert></jhi-alert>
     <br/>
     <div class="alert alert-warning" *ngIf="slicerOptions?.length === 0">
         <span>No slicerOptions found</span>
     </div>
+    <span>
+       These are the available options for handling reflection as well as data- and control dependence during call graph and system dependence graph (SDG) construction. You can change the description and set a default value for each type which will be pre-selected when creating a new slice.
+    </span>
     <div class="table-responsive" *ngIf="slicerOptions?.length > 0">
         <table class="table table-striped">
             <thead>
@@ -43,14 +40,6 @@
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline">Edit</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/slicer-options', { outlets: { popup: slicerOption.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <fa-icon [icon]="'times'"></fa-icon>
-                            <span class="d-none d-md-inline">Delete</span>
                         </button>
                     </div>
                 </td>

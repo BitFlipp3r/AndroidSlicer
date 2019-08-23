@@ -6,7 +6,7 @@
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group">
                     <label class="form-control-label" for="field_type">Type</label>
-                    <select class="form-control" name="type" formControlName="type" id="field_type">
+                    <select class="form-control" name="type" formControlName="type" id="field_type" readonly>
                         <option value="REFLECTION_OPTION">Reflection Option</option>
                         <option value="DATA_DEPENDENCE_OPTION">Data Dependence Option</option>
                         <option value="CONTROL_DEPENDENCE_OPTION">Control Dependence Option</option>
@@ -21,7 +21,7 @@
                 <div class="form-group">
                     <label class="form-control-label" for="field_key">Key</label>
                     <input type="text" class="form-control" name="key" id="field_key"
-                           formControlName="key"/>
+                           formControlName="key" readonly/>
                     <div *ngIf="editForm.get('key').invalid && (editForm.get('key').dirty || editForm.get('key').touched)">
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('key').errors.required">

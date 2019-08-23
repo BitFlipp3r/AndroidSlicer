@@ -15,10 +15,6 @@ export class CFAOptionService {
 
   constructor(protected http: HttpClient) {}
 
-  create(cFAOption: ICFAOption): Observable<EntityResponseType> {
-    return this.http.post<ICFAOption>(this.resourceUrl, cFAOption, { observe: 'response' });
-  }
-
   update(cFAOption: ICFAOption): Observable<EntityResponseType> {
     return this.http.put<ICFAOption>(this.resourceUrl, cFAOption, { observe: 'response' });
   }
@@ -35,9 +31,5 @@ export class CFAOptionService {
   getAll(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ICFAOption[]>(SERVER_API_URL + 'api/all-cfa-options', { params: options, observe: 'response' });
-  }
-
-  delete(id: string): Observable<HttpResponse<any>> {
-    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 }

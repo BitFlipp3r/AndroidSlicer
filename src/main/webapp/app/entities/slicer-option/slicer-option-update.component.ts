@@ -56,8 +56,6 @@ export class SlicerOptionUpdateComponent implements OnInit {
     const slicerOption = this.createFromForm();
     if (slicerOption.id !== undefined) {
       this.subscribeToSaveResponse(this.slicerOptionService.update(slicerOption));
-    } else {
-      this.subscribeToSaveResponse(this.slicerOptionService.create(slicerOption));
     }
   }
 
