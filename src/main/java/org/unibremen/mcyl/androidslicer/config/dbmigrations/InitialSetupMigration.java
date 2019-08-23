@@ -30,22 +30,26 @@ public class InitialSetupMigration {
         SlicerSetting androidSourcePath = new SlicerSetting();
         androidSourcePath.setKey(Constants.ANDROID_SOURCE_PATH_KEY);
         androidSourcePath.setValue("~" + File.separator + "android-resources");
+        androidSourcePath.setDescription("This is the file path to the android source code files (system services and AIDL-files). The files should be inside a subfolder named android-xx, where xx represents the API-Level. Can be relative to the execution directory of the Android-Slicer or an absolute Path.");
         mongoTemplate.save(androidSourcePath);
 
         SlicerSetting androidPlatformPath = new SlicerSetting();
         androidPlatformPath.setKey(Constants.ANDROID_PLATFORM_PATH_KEY);
         androidPlatformPath.setValue("~" + File.separator + "android-resources");
+        androidPlatformPath.setDescription("This is the file path to the android binary code (android.jar). The android.jar should be inside a subfolder named android-xx, where xx represents the API-Level. Can be relative to the execution directory of the Android-Slicer or an absolute Path.");
         mongoTemplate.save(androidPlatformPath);
 
         SlicerSetting serviceRegex = new SlicerSetting();
         serviceRegex.setKey(Constants.SERVICE_REGEX_KEY);
         serviceRegex.setValue(".*ManagerService.java");
+        serviceRegex.setDescription("This is the regular expression which the Android-Slicer uses to find system service source files inside the source code files location.");
         mongoTemplate.save(serviceRegex);
 
         SlicerSetting seedStatements = new SlicerSetting();
         seedStatements.setKey(Constants.SEED_STATEMENTS_KEY);
         seedStatements.setValue(
-                "checkCallingOrSelfPermission;checkCallingOrSelfUriPermission;checkCallingPermission;checkCallingUriPermission;checkPermission;checkSelfPermission;checkUriPermission;enforceCallingOrSelfPermission;enforceCallingOrSelfUriPermission;enforceCallingPermission;enforceCallingUriPermission;enforcePermission;enforceUriPermission;checkUriPermission;SecurityException");
+                "checkCallingOrSelfPermission; checkCallingOrSelfUriPermission; checkCallingPermission; checkCallingUriPermission;checkPermission; checkSelfPermission; checkUriPermission; enforceCallingOrSelfPermission; enforceCallingOrSelfUriPermission; enforceCallingPermission; enforceCallingUriPermission; enforcePermission; enforceUriPermission; checkUriPermission; SecurityException");
+        serviceRegex.setDescription("These are the default service hook-methods that are available as standard selection options for seed statements. This default list can be edited here. Entries should be separated with a semicolon.");
         mongoTemplate.save(seedStatements);
 
         SlicerSetting exlusionList = new SlicerSetting();
@@ -82,6 +86,7 @@ public class InitialSetupMigration {
         }
 
         exlusionList.setValue(result.toString());
+        exlusionList.setDescription("These classes will be excluded during the slicing analysis to prevent the slicer to go too deep into the java framework. Entries should be separated with new lines.");
         mongoTemplate.save(exlusionList);
 
     }
