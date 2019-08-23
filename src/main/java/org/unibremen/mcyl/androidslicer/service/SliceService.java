@@ -81,10 +81,6 @@ public class SliceService {
         String androidBinaryPath = "";
         if(androidBinaryPathSetting != null){
             androidBinaryPath = androidBinaryPathSetting.getValue();
-            // replace "~" with working dir
-            if(androidBinaryPath.startsWith("~")){
-                androidBinaryPath = androidBinaryPath.replace("~", System.getProperty("user.dir"));
-            }
         }
 
         File appJar = 
@@ -126,7 +122,6 @@ public class SliceService {
 
                 String sourceLocation = slicerSettingRepository
                     .findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get()
-                    .getValue().replace("~", System.getProperty("user.dir"))
                     + File.separator
                     + "android-"
                     + slice.getAndroidVersion()

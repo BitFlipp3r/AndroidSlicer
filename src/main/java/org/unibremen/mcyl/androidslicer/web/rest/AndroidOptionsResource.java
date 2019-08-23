@@ -70,10 +70,6 @@ public class AndroidOptionsResource {
         String androidSourcesPath = "";
         if(androidSourcesPathSetting != null){
             androidSourcesPath = androidSourcesPathSetting.getValue();
-            // replace "~" with working dir
-            if(androidSourcesPath.startsWith("~")){
-                androidSourcesPath = androidSourcesPath.replace("~", System.getProperty("user.dir"));
-            }
         }
         
         if (!androidSourcesPath.isEmpty()) {
@@ -153,7 +149,6 @@ public class AndroidOptionsResource {
 
         String sourceFilePath = slicerSettingRepository
         .findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get()
-        .getValue().replace("~", System.getProperty("user.dir"))
         + File.separator
         + "android-"
         + androidVersion
