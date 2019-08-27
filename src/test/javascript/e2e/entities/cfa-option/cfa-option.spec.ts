@@ -1,15 +1,14 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { CFAOptionComponentsPage, CFAOptionUpdatePage } from './cfa-option.page-object';
+import { CFAOptionComponentsPage } from './cfa-option.page-object';
 
 const expect = chai.expect;
 
 describe('CFAOption e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let cFAOptionUpdatePage: CFAOptionUpdatePage;
   let cFAOptionComponentsPage: CFAOptionComponentsPage;
 
   before(async () => {

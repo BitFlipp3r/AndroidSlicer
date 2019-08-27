@@ -148,7 +148,7 @@ public class AndroidOptionsResource {
         log.debug("REST request to get android source file");
 
         String sourceFilePath = slicerSettingRepository
-        .findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get()
+        .findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get().getValue()
         + File.separator
         + "android-"
         + androidVersion

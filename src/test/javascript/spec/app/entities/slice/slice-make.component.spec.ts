@@ -35,6 +35,8 @@ describe('Component Tests', () => {
         const entity = new Slice();
         spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
         // WHEN
+        // TODO: set needed fields
+        // createForm.get(['androidVersion']).patchValue ...
         comp.save();
         tick(); // simulate async
 

@@ -121,7 +121,7 @@ public class SliceService {
             for (Map.Entry<String, Set<Integer>> sliceLineNumbersEntry : sliceLineNumbers.entrySet()) {
 
                 String sourceLocation = slicerSettingRepository
-                    .findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get()
+                    .findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get().getValue()
                     + File.separator
                     + "android-"
                     + slice.getAndroidVersion()

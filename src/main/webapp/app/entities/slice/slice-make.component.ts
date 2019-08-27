@@ -236,13 +236,13 @@ export class SliceMakeComponent implements OnInit {
   }
 
   addEntryMethodOption(event: KeyboardEvent) {
-    const selectedEntryMethodOptions = this.createForm.get(['entryMethods']).value;
+    const selectedEntryMethodOptions = this.createForm.get(['entryMethods']).value || [];
     this.addMultiSelectOption(event, this.entryMethodOptions, selectedEntryMethodOptions);
     this.createForm.get(['entryMethods']).patchValue(selectedEntryMethodOptions);
   }
 
   addSeedStatementOption(event: KeyboardEvent) {
-    const selectedSeedStatementOptions = this.createForm.get(['seedStatements']).value;
+    const selectedSeedStatementOptions = this.createForm.get(['seedStatements']).value || [];
     this.addMultiSelectOption(event, this.seedStatementOptions, selectedSeedStatementOptions);
     this.createForm.get(['seedStatements']).patchValue(selectedSeedStatementOptions);
   }

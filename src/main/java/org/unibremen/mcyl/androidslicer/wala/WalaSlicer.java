@@ -274,7 +274,11 @@ public class WalaSlicer {
         return entrypoints;
     }
 
-    // source: PN, modified by MC
+    /**
+     * Based on the work by Markus Gulman (Masterthesis 2014) and Philip Phu Dang Hoan Nguyen (Masterthesis 2018). Modified by 
+     * Michael Cyl to search inner classes (like AlarmMangerService$1) and to add CGNode for all inner methods, i.e. callees of
+     * the entry methods, as well.
+     */
     public static Set<CGNode> findMethods(CallGraph cg, Set<String> methodNames,  Set<CGNode> methodNodes, String androidClassName, SliceLogger logger) throws WalaException {
 
         for (Iterator<? extends CGNode> nodeIt = cg.iterator(); nodeIt.hasNext();) {

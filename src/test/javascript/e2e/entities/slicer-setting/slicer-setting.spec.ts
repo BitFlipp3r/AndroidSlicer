@@ -1,15 +1,14 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { SlicerSettingComponentsPage, SlicerSettingUpdatePage } from './slicer-setting.page-object';
+import { SlicerSettingComponentsPage } from './slicer-setting.page-object';
 
 const expect = chai.expect;
 
 describe('SlicerSetting e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let slicerSettingUpdatePage: SlicerSettingUpdatePage;
   let slicerSettingComponentsPage: SlicerSettingComponentsPage;
 
   before(async () => {

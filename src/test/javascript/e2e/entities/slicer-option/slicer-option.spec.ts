@@ -1,15 +1,14 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { SlicerOptionComponentsPage, SlicerOptionUpdatePage } from './slicer-option.page-object';
+import { SlicerOptionComponentsPage } from './slicer-option.page-object';
 
 const expect = chai.expect;
 
 describe('SlicerOption e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let slicerOptionUpdatePage: SlicerOptionUpdatePage;
   let slicerOptionComponentsPage: SlicerOptionComponentsPage;
 
   before(async () => {
