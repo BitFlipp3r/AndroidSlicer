@@ -236,20 +236,24 @@ export class SliceMakeComponent implements OnInit {
   }
 
   addEntryMethodOption(event: KeyboardEvent) {
-    const selectedEntryMethodOptions = this.createForm.get(['entryMethods']).value || [];
-    this.addMultiSelectOption(event, this.entryMethodOptions, selectedEntryMethodOptions);
-    this.createForm.get(['entryMethods']).patchValue(selectedEntryMethodOptions);
+    if (event.key === 'Enter') {
+      const selectedEntryMethodOptions = this.createForm.get(['entryMethods']).value || [];
+      this.addMultiSelectOption(event, this.entryMethodOptions, selectedEntryMethodOptions);
+      this.createForm.get(['entryMethods']).patchValue(selectedEntryMethodOptions);
+    }
   }
 
   addSeedStatementOption(event: KeyboardEvent) {
-    const selectedSeedStatementOptions = this.createForm.get(['seedStatements']).value || [];
-    this.addMultiSelectOption(event, this.seedStatementOptions, selectedSeedStatementOptions);
-    this.createForm.get(['seedStatements']).patchValue(selectedSeedStatementOptions);
+    if (event.key === 'Enter') {
+      const selectedSeedStatementOptions = this.createForm.get(['seedStatements']).value || [];
+      this.addMultiSelectOption(event, this.seedStatementOptions, selectedSeedStatementOptions);
+      this.createForm.get(['seedStatements']).patchValue(selectedSeedStatementOptions);
+    }
   }
 
   private addMultiSelectOption(event, options, selectedOptions) {
     if (event.key === 'Enter') {
-      const tokenInput = event.srcElement as any;
+      const tokenInput = event.srcElement || (event.target as any);
       if (tokenInput.value) {
         // add value to available options
         if (!options.includes(tokenInput.value)) {

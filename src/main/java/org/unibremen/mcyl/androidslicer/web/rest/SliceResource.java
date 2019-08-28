@@ -118,7 +118,7 @@ public class SliceResource {
         if (id != null && !id.isEmpty()){
             Slice slice = sliceRepository.findById(id).get();
             Thread slicerThread = Thread.getAllStackTraces().keySet().stream().filter(thread -> thread.getName().equals(slice.getThreadId())).findFirst().orElse(null);
-            if(slicerThread != null){
+            if(slicerThread != null && slicerThread.isAlive()){
                 slicerThread.interrupt();
             }
             sliceRepository.deleteById(id);
