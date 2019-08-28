@@ -4,12 +4,15 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import com.ibm.wala.util.CancelException;
 import com.ibm.wala.util.WalaException;
@@ -74,7 +77,6 @@ public class SliceService {
             throw new CompletionException(e);
         }
 
-
         SlicerSetting androidBinaryPathSetting = 
         slicerSettingRepository.findOneByKey(Constants.ANDROID_PLATFORM_PATH_KEY).get();
     
@@ -88,6 +90,17 @@ public class SliceService {
 
         if (!appJar.exists()) {
             logger.log("Android Binary Jar not found");
+        }
+
+        // check if any seed statement is an invalid regex (and remove it)
+        for (Iterator<String> seedStatementIterator =  slice.getSeedStatements().iterator(); seedStatementIterator.hasNext();) {
+            String seedStatement = seedStatementIterator.next();
+            try {
+                Pattern.compile(seedStatement);
+                } catch (PatternSyntaxException e) {
+                logger.log("WARNING: " + seedStatement + " is not a valid regular expression and will be removed!");
+                seedStatementIterator.remove();
+            }
         }
 
         Map<String, Set<Integer>> sliceLineNumbers = null;

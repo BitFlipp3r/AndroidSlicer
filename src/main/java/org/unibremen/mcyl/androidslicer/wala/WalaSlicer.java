@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.StreamSupport;
 
 import com.ibm.wala.classLoader.IClass;
@@ -75,7 +76,7 @@ public class WalaSlicer {
         IClassHierarchy cha = ClassHierarchyFactory.make(scope);
 
         /* make entry points */
-        logger.log("\n== GET ENTRY POINTS ==");
+        logger.log("\n== GET ENTRY POINTS =="); 
         Iterable<Entrypoint> entrypoints = getEntrypoints(scope, cha, androidClassName, entryMethods, logger);
 
         if (!entrypoints.iterator().hasNext()) {
@@ -359,10 +360,10 @@ public class WalaSlicer {
 
                     // check all seed statements
                     for (String seedStatementName : seedStatements) {
-                        if (call.getCallSite().getDeclaredTarget().getName().toString().equals(seedStatementName)) {
+                        if (Pattern.matches(seedStatementName, call.getCallSite().getDeclaredTarget().getName().toString())) {
                             IntSet indices = ir.getCallInstructionIndices(call.getCallSite());
                             statements.add(new NormalStatement(node, indices.intIterator().next()));
-                            logger.log("~ Found seed statement: " + seedStatementName + " in " + node + ".");
+                            logger.log("~ Found seed statement: " + call.getCallSite().getDeclaredTarget().getName().toString() + " in " + node + ".");
                         }
                     }
                 }
