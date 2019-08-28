@@ -21,7 +21,7 @@ import org.unibremen.mcyl.androidslicer.service.SliceLogger;
  */
 public class SliceMapper {
 
-	private static final Pattern commentsPattern = Pattern.compile("^\\s*[\\/\\/.*|\\*.*].*");
+	private static final Pattern commentsPattern = Pattern.compile("^\\s*[\\/\\/.*\\*.*].*");
 	private static final Pattern closingBracketPattern = Pattern.compile("\\s*\\)*};?\\s*");
 
 	public String getLinesOfCode(final String sourceCodeFileName, final Set<Integer> sliceLineNumbers, SliceLogger logger) {
@@ -51,7 +51,8 @@ public class SliceMapper {
 					builder.append(sourceCodeLine);
 					builder.append("\n");
 					
-					// add extra line break after "}" if the next line is not "}"
+					// add extra line break after "}" (if the next line is not "}")
+					// to have a space between methods
 					String nextSourceCodeLine = sourceCodeFileMap.get(sliceLineNumber + 1);
 					if(nextSourceCodeLine != null &&
 					   closingBracketPattern.matcher(sourceCodeLine).matches() &&
