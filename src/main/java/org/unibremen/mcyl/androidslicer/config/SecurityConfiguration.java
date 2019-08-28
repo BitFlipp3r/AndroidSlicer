@@ -11,7 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.web.filter.CorsFilter;
-import org.unibremen.mcyl.androidslicer.security.AuthoritiesConstants;
+// import org.unibremen.mcyl.androidslicer.security.AuthoritiesConstants;
 import org.unibremen.mcyl.androidslicer.security.jwt.JWTConfigurer;
 import org.unibremen.mcyl.androidslicer.security.jwt.TokenProvider;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
@@ -69,11 +69,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .authorizeRequests()
             .antMatchers("/api/authenticate").permitAll()
-            .antMatchers("/api/**").authenticated()
+            .antMatchers("/management/prometheus").permitAll() //.antMatchers("/api/**").authenticated() /** Use this line to use authentication for API */
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/management/**").permitAll() //.antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
         .and()
             .httpBasic()
         .and()

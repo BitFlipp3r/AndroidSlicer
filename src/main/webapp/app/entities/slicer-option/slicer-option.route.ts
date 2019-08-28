@@ -36,7 +36,7 @@ export const slicerOptionRoute: Routes = [
       pagingParams: JhiResolvePagingParams
     },
     data: {
-      authorities: ['ROLE_USER'],
+      // authorities: ['ROLE_USER'],
       defaultSort: 'id,asc',
       pageTitle: 'Slicer Options'
     },
@@ -49,7 +49,7 @@ export const slicerOptionRoute: Routes = [
       slicerOption: SlicerOptionResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      // authorities: ['ROLE_USER'],
       pageTitle: 'Slicer Option'
     },
     canActivate: [UserRouteAccessService]
@@ -61,7 +61,7 @@ export const slicerOptionRoute: Routes = [
       slicerOption: SlicerOptionResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      // authorities: ['ROLE_USER'],
       pageTitle: 'Slicer Option'
     },
     canActivate: [UserRouteAccessService]

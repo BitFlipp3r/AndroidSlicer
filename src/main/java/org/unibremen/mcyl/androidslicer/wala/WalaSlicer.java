@@ -58,8 +58,8 @@ import org.unibremen.mcyl.androidslicer.service.SliceLogger;
  * This is an implementation of the WALA slicing algorithm described here: http://wala.sourceforge.net/wiki/index.php/UserGuide:Slicer
  * The code based on the work by Markus Gulman (Masterthesis 2014) and Philip Phu Dang Hoan Nguyen (Masterthesis 2018) but has been 
  * heavily altered by Michael Cyl with bug fixed, improvements and refactorings. Most notable changes are the option to choose cfa level
- * for pointer analysis, the usage of multiple entry methods and seed statements, a search for inner classes and a deep search for 
- * seed statements.
+ * for pointer analysis, the usage of multiple entry methods and seed statements (regex inclusive), a search for inner classes and a 
+ * deep search for seed statements.
  */
 public class WalaSlicer {
 
@@ -360,6 +360,7 @@ public class WalaSlicer {
 
                     // check all seed statements
                     for (String seedStatementName : seedStatements) {
+                        // mcyl: use regex for seed statements
                         if (Pattern.matches(seedStatementName, call.getCallSite().getDeclaredTarget().getName().toString())) {
                             IntSet indices = ir.getCallInstructionIndices(call.getCallSite());
                             statements.add(new NormalStatement(node, indices.intIterator().next()));

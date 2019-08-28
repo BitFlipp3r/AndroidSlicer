@@ -4,9 +4,11 @@
     </div>
     <div class="col-md-9">
         <h1 class="display-4">Welcome!</h1>
-        <p class="lead">This is your homepage</p>
+        <p class="lead">This is the Android-SLicer. A tool which is designed to check android system services for security issues based on program slicing. The slicing is done by WALA.</p>
 
-        <div [ngSwitch]="isAuthenticated()">
+        <p class="lead">Head over to the "Slice"-tab on the navigation bar and create a new slice.</p>
+
+        <!-- <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
                 <span id="home-logged-message" *ngIf="account"
                    > You are logged in as user "{{account.login}}". </span>
@@ -16,7 +18,7 @@
                 <span>If you want to </span>
                 <a class="alert-link" (click)="login()">sign in</a><span>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin").</span>
             </div>
-        </div>
+        </div> -->
 
         <p>
             If you have any question on WALA:

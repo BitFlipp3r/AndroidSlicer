@@ -36,7 +36,7 @@ export const cFAOptionRoute: Routes = [
       pagingParams: JhiResolvePagingParams
     },
     data: {
-      authorities: ['ROLE_USER'],
+      // authorities: ['ROLE_USER'],
       defaultSort: 'id,asc',
       pageTitle: 'CFA Options'
     },
@@ -49,7 +49,7 @@ export const cFAOptionRoute: Routes = [
       cFAOption: CFAOptionResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      // authorities: ['ROLE_USER'],
       pageTitle: 'CFA Option'
     },
     canActivate: [UserRouteAccessService]
@@ -61,7 +61,7 @@ export const cFAOptionRoute: Routes = [
       cFAOption: CFAOptionResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      // authorities: ['ROLE_USER'],
       pageTitle: 'CFA Option'
     },
     canActivate: [UserRouteAccessService]

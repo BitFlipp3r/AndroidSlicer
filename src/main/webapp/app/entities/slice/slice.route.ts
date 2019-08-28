@@ -37,7 +37,7 @@ export const sliceRoute: Routes = [
       pagingParams: JhiResolvePagingParams
     },
     data: {
-      authorities: ['ROLE_USER'],
+      // authorities: ['ROLE_USER'],
       defaultSort: 'id,asc',
       pageTitle: 'Slices'
     },
@@ -50,7 +50,7 @@ export const sliceRoute: Routes = [
       slice: SliceResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      // authorities: ['ROLE_USER'],
       pageTitle: 'Slice'
     },
     canActivate: [UserRouteAccessService]
@@ -62,7 +62,7 @@ export const sliceRoute: Routes = [
       slice: SliceResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      // authorities: ['ROLE_USER'],
       pageTitle: 'Slice'
     },
     canActivate: [UserRouteAccessService]
@@ -77,7 +77,7 @@ export const slicePopupRoute: Routes = [
       slice: SliceResolve
     },
     data: {
-      authorities: ['ROLE_USER'],
+      // authorities: ['ROLE_USER'],
       pageTitle: 'Slice'
     },
     canActivate: [UserRouteAccessService],

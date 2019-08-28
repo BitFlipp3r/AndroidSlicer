@@ -171,7 +171,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                     addStatementBody(child, line);
                 }
 
-                 //mcyl: added catch clauses
+                 // mcyl: added catch clauses
                 for (CatchClause catchClause : tryStmt.getCatchClauses()) {
                     if (isLineInNode(catchClause, line)){
                         // add catch all lines of catch predicate
