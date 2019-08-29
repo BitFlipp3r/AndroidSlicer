@@ -15,13 +15,18 @@
                 </dd>
                 <dt><span ngbTooltip="JSON-List with entry method names">Entry Methods</span></dt>
                 <dd>
-                    <span>{{slice.entryMethods}}</span>
+                    <ul class="list-inline">
+                        <li class="list-inline-item" *ngFor="let entryMethod of slice.entryMethods"><span class="badge badge-info">{{entryMethod}}</span></li>
+                    </ul>
                 </dd>
                 <dt><span ngbTooltip="JSON-List with seed statement names">Seed Statements</span></dt>
                 <dd>
-                    <span>{{slice.seedStatements}}</span>
+                    <ul class="list-inline">
+                        <li class="list-inline-item" *ngFor="let seedStatement of slice.seedStatements"><span class="badge badge-info">{{seedStatement}}</span></li>
+                    </ul>
                 </dd>
                 <div *ngIf="slice.slice">
+                    <div class="ui-tabview-panels">
                     <dt><span>Slice</span></dt>
                     <div class="form-group row justify-content-md-left mb-2">
                         
@@ -48,6 +53,7 @@
                         <dd>
                             <ngx-monaco-diff-editor [options]="editorOptions" [originalModel]="sourceFileModel" [modifiedModel]="sliceCodeModel" class="code-editor border rounded"></ngx-monaco-diff-editor>
                         </dd>
+                    </div>
                     </div>
                 </div>
                 <dt><span>CFA Option</span></dt>
