@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -37,22 +38,31 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
  */
 public class MethodVisitor extends VoidVisitorAdapter<Object> {
 
-    // out
-    private Set<Integer> sourceLineNumbers;
-
     // in
     private Set<Integer> slicedLineNumbers;
 
-    public MethodVisitor(final Set<Integer> slicedLineNumbers) {
+    // out
+    private Set<Integer> sourceLineNumbers;
+
+    // use this to always take the class declaration into the slice
+    private String mainClassName;
+
+    public MethodVisitor(final Set<Integer> slicedLineNumbers, String mainClassName) {
         super();
         this.slicedLineNumbers = slicedLineNumbers;
         this.sourceLineNumbers = new HashSet<Integer>(slicedLineNumbers);
+        this.mainClassName = mainClassName;
     }
 
     // add all kinds of ast statements
     // see:
     // https://static.javadoc.io/com.github.javaparser/javaparser-core/3.5.0/com/github/javaparser/ast/stmt/Statement.html
     public void addStatementBody(Node node, int line) {
+
+        if(node instanceof ClassOrInterfaceDeclaration)
+        {
+            int a = 0;
+        }
 
         if (node instanceof BlockStmt) {
             BlockStmt blockStmt = (BlockStmt) node;
@@ -324,32 +334,39 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
     // pnguyen: ConstructorDeclaration was ignored and led to wrong reconstructed code
     @Override
     public void visit(ConstructorDeclaration constructorDeclaration, Object arg) {
+        // mcyl:  set class body if slice line is inside note or if its the main class (i.e. entry class)
+        if(areSlicedLineNumbersInNode(constructorDeclaration) | 
+            constructorDeclaration.getNameAsString().equals(this.mainClassName)) {
+                Node parentNode = constructorDeclaration.getParentNode().get();
+                int firstLine = parentNode.getBegin().get().line;
+                if (parentNode.toString().startsWith("@")) {
+                    firstLine++;
+                }
+        
+                sourceLineNumbers.add(firstLine);
+                if (!parentNode.toString().contains("{")) {
+                    sourceLineNumbers.add(firstLine + 1);
+                }
+                // Add all lines between class and constructor, because there is nothing in
+                // between (Fix for brackets in next line)
+                List<Node> classNodes = parentNode.getChildNodes();
+                if (classNodes.size() > 1) {
+                    addAllLinesFromBeginToEnd(
+                        firstLine,
+                        classNodes.get(0).getBegin().get().line - 1,
+                        sourceLineNumbers);
+                }
+                
+                sourceLineNumbers.add(parentNode.getEnd().get().line);
+        }
+
+        /**
+         * search inside of constructor if slice node line is inside or else return
+         */ 
         if (!areSlicedLineNumbersInNode(constructorDeclaration)) {
             return;
         }
 
-        // pnguyen: setting class body
-        Node parentNode = constructorDeclaration.getParentNode().get();
-        int firstLine = parentNode.getBegin().get().line;
-        if (parentNode.toString().startsWith("@")) {
-            firstLine++;
-        }
-
-        sourceLineNumbers.add(firstLine);
-        if (!parentNode.toString().contains("{")) {
-            sourceLineNumbers.add(firstLine + 1);
-        }
-        // Add all lines between class and constructor, because there is nothing in
-        // between (Fix for brackets in next line)
-        List<Node> classNodes = parentNode.getChildNodes();
-        if (classNodes.size() > 1) {
-            addAllLinesFromBeginToEnd(
-                firstLine,
-                classNodes.get(0).getBegin().get().line - 1,
-                sourceLineNumbers);
-        }
-
-        sourceLineNumbers.add(parentNode.getEnd().get().line);
         List<Node> constructorNodes = constructorDeclaration.getBody().getChildNodes();
     
         // Add all lines between method and first brackets

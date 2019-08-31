@@ -145,3 +145,6 @@ Desktop.ini
 # ESLint
 ######################
 .eslintcache
+
+
+/output/

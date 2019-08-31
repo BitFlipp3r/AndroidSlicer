@@ -34,13 +34,23 @@ export const enum ControlDependenceOptions {
   NONE = 'NONE'
 }
 
+export interface ISlicedClass {
+  className?: string;
+  packagePath?: string;
+  code?: string;
+}
+
+export class SlicedClass implements ISlicedClass {
+  constructor(public className?: string, public packagePath?: string, public code?: string) {}
+}
+
 export interface ISlice {
   id?: string;
   androidVersion?: number;
   androidClassName?: string;
   entryMethods?: string[];
   seedStatements?: string[];
-  slice?: any;
+  slicedClasses?: ISlicedClass[];
   log?: any;
   threadId?: string;
   running?: boolean;

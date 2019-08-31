@@ -19,6 +19,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SpinnerModule } from 'primeng/spinner';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { TabMenuModule } from 'primeng/tabmenu';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 @NgModule({
@@ -30,6 +31,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     CheckboxModule,
     AutoCompleteModule,
     SpinnerModule,
+    TabMenuModule,
     MonacoEditorModule
   ],
   declarations: [SliceComponent, SliceDetailComponent, SliceMakeComponent, SliceDeleteDialogComponent, SliceDeletePopupComponent],

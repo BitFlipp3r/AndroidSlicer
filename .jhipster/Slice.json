@@ -34,9 +34,10 @@
             ]
         },
         {
-            "fieldName": "slice",
+            "javadoc": "Set of sliced classes with class name and code",
+            "fieldName": "slicedClasses",
             "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
+            "fieldTypeBlobContent": "any"
         },
         {
             "fieldName": "log",

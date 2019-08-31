@@ -24,6 +24,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.unibremen.mcyl.androidslicer.config.Constants;
 import org.unibremen.mcyl.androidslicer.domain.Slice;
+import org.unibremen.mcyl.androidslicer.domain.SlicedClass;
 import org.unibremen.mcyl.androidslicer.domain.SlicerSetting;
 import org.unibremen.mcyl.androidslicer.repository.SliceRepository;
 import org.unibremen.mcyl.androidslicer.repository.SlicerSettingRepository;
@@ -127,35 +128,89 @@ public class SliceService {
         if (sliceLineNumbers != null) {
 
             SliceMapper sliceMapper = new SliceMapper();
-            StringBuilder builder = new StringBuilder();
-
             logger.log("\n== RECONSTRUCTING CODE ==");
+
+            // save to file if the setting is enabled
+            SlicerSetting saveToFileSetting = 
+            slicerSettingRepository.findOneByKey(Constants.SAVE_TO_FILE_KEY).get();
+            SlicerSetting outputDirSetting = 
+            slicerSettingRepository.findOneByKey(Constants.OUTPUT_DIR_KEY).get();
+            boolean saveToFile = false;
+            File outputDirectory = null;
+
+            /* e.g. "com/android/server/AlarmManagerService.java" -> "AlarmManagerService" */
+            String androidClassName = slice.getAndroidClassName()
+                .substring(slice.getAndroidClassName().lastIndexOf("/") + 1, slice.getAndroidClassName().length());
+            // remove .java
+            androidClassName = androidClassName.substring(0, androidClassName.lastIndexOf("."));
+
+            if(saveToFileSetting != null && 
+                Boolean.parseBoolean(saveToFileSetting.getValue()) &&
+                outputDirSetting != null && 
+                !outputDirSetting.getValue().isEmpty()){
+                    
+                    // check dir or create it
+                    outputDirectory = new File(outputDirSetting.getValue() +
+                    File.separator +
+                    androidClassName +
+                    "-" +
+                    slice.getId());
+
+                    if (!outputDirectory.exists()){
+                        outputDirectory.mkdirs();
+                    }
+                    saveToFile = true;                                 
+            }
 
             for (Map.Entry<String, Set<Integer>> sliceLineNumbersEntry : sliceLineNumbers.entrySet()) {
 
+                StringBuilder builder = new StringBuilder();
+
+                String packageAndJavaClass = sliceLineNumbersEntry.getKey(); //e.g. com/android/server/AlarmManagerService
                 String sourceLocation = slicerSettingRepository
                     .findOneByKey(Constants.ANDROID_SOURCE_PATH_KEY).get().getValue()
                     + File.separator
                     + "android-"
                     + slice.getAndroidVersion()
                     + File.separator
-                    + sliceLineNumbersEntry.getKey().replace("/", File.separator);
+                    + packageAndJavaClass.replace("/", File.separator);
 
                 // use TreeSet to sort line numbers
-                logger.log("Slice line numbers for file " + sliceLineNumbersEntry.getKey() + ": " + new TreeSet<>(sliceLineNumbersEntry.getValue()));
+                logger.log("Slice line numbers for file " + packageAndJavaClass + ": " + new TreeSet<>(sliceLineNumbersEntry.getValue()));
 
                 try {
-                    Set<Integer> sourceCodeLines = Parser.getModifiedSlice(sourceLocation, sliceLineNumbersEntry.getValue(), logger);
+                    Set<Integer> sourceCodeLines = Parser.getModifiedSlice(sourceLocation, sliceLineNumbersEntry.getValue(), androidClassName, logger);
                     if (sourceCodeLines != null) {
                         logger.log("Lines of source code: " + new TreeSet<>(sourceCodeLines));
+                        /**
+                         * Gets the actual source code lines based on the line numbers.
+                         */
                         builder.append(sliceMapper.getLinesOfCode(sourceLocation, sourceCodeLines, logger));
+
+                        // add the slice code to the slice entity
+                        String javaClassFileName = packageAndJavaClass.substring(packageAndJavaClass.lastIndexOf("/") + 1, packageAndJavaClass.length());
+                        String packagePath = packageAndJavaClass.substring(0, packageAndJavaClass.lastIndexOf("/"));
+                        slice.getSlicedClasses().add(new SlicedClass(javaClassFileName, packagePath, builder.toString()));
+
+                        if(saveToFile){
+                            File javaFileForSlicedClass = new File(outputDirectory + File.separator + javaClassFileName);
+                            try{
+                                FileWriter fw = new FileWriter(javaFileForSlicedClass.getAbsoluteFile());
+                                BufferedWriter bw = new BufferedWriter(fw);
+                                bw.write(builder.toString());
+                                bw.close();
+                            }
+                            catch (IOException ex){
+                                ex.printStackTrace();
+                                logger.log("Could not save slice code for file '" + packageAndJavaClass + "': " + ex);
+                            }
+                        }
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     logger.log("Could not reconstruct code with parser for file '" + sliceLineNumbersEntry.getKey() + "': " + ex);
                 }
             }
-            slice.setSlice(builder.toString());
         }
 
         slice.setRunning(false);

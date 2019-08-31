@@ -52,8 +52,8 @@ public class Slice implements Serializable {
     @Field("seed_statements")
     private Set<String> seedStatements = new HashSet<String>();
 
-    @Field("slice")
-    private String slice;
+    @Field("sliced_classes")
+    private Set<SlicedClass> slicedClasses = new HashSet<SlicedClass>();
 
     @Field("log")
     private String log;
@@ -156,17 +156,17 @@ public class Slice implements Serializable {
         this.seedStatements = seedStatements;
     }
 
-    public String getSlice() {
-        return slice;
+    public Set<SlicedClass> getSlicedClasses() {
+        return slicedClasses;
     }
 
-    public Slice slice(String slice) {
-        this.slice = slice;
+    public Slice slicedClasses(Set<SlicedClass> slicedClasses) {
+        this.slicedClasses = slicedClasses;
         return this;
     }
 
-    public void setSlice(String slice) {
-        this.slice = slice;
+    public void setSlicedClasses(Set<SlicedClass> slicedClasses) {
+        this.slicedClasses = slicedClasses;
     }
 
     public String getLog() {
@@ -293,7 +293,7 @@ public class Slice implements Serializable {
             ", androidClassName='" + getAndroidClassName() + "'" +
             ", entryMethods='" + getEntryMethods() + "'" +
             ", seedStatements='" + getSeedStatements() + "'" +
-            ", slice='" + getSlice() + "'" +
+            ", slice='" + getSlicedClasses() + "'" +
             ", log='" + getLog() + "'" +
             ", threadId='" + getThreadId() + "'" +
             ", running='" + isRunning() + "'" +

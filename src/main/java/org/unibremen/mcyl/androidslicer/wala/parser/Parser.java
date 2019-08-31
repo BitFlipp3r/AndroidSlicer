@@ -33,8 +33,8 @@ public class Parser {
 		return null;
 	}
 
-	public static Set<Integer> getModifiedSlice(final String javaPath, final Set<Integer> sliceLines, SliceLogger logger) {
-		MethodVisitor visitor = new MethodVisitor(sliceLines);
+	public static Set<Integer> getModifiedSlice(final String javaPath, final Set<Integer> sliceLines, String androidClassName, SliceLogger logger) {
+		MethodVisitor visitor = new MethodVisitor(sliceLines, androidClassName);
 
 		try {
 			CompilationUnit compilationUnit = getCu(javaPath, logger);

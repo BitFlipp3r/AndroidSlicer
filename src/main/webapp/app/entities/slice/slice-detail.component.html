@@ -25,35 +25,42 @@
                         <li class="list-inline-item" *ngFor="let seedStatement of slice.seedStatements"><span class="badge badge-info">{{seedStatement}}</span></li>
                     </ul>
                 </dd>
-                <div *ngIf="slice.slice">
-                    <div class="ui-tabview-panels">
+                <div *ngIf="slicingFinished && activeItem">
                     <dt><span>Slice</span></dt>
-                    <div class="form-group row justify-content-md-left mb-2">
-                        
-                        <div class="col-md-auto align-middle">
-                            <label class="align-middle pr-2" for="field_showDiff" >Show Diff</label>
-                            <p-inputSwitch  class="align-middle pt-2" name="showDiff" id="field_showDiff" [(ngModel)]="showDiff" (onChange)="loadSourceFile()"></p-inputSwitch>
+                    <p-tabMenu [model]="slicedClassItems" [activeItem]="activeItem">
+                         <ng-template pTemplate="item" let-item let-i="index">
+                            <fa-icon icon="bookmark" fixedWidth="true"></fa-icon>
+                            <span  ngbTooltip="{{item.label}}">{{item.title}}</span>
+                            <div class="tabmenu-click-item" (click)="onSliceClassSelected($event, i)" ngbTooltip="{{item.label}}">
+                            </div>
+                        </ng-template>
+                    </p-tabMenu>
+                    <div class="p-2 border border-top-0" style="position: sticky;">
+                        <div class="form-group row justify-content-md-left mb-2">                      
+                            <div class="col-md-auto align-middle">
+                                <label class="align-middle pr-2" for="field_showDiff" >Show Diff</label>
+                                <p-inputSwitch class="align-middle pt-2" name="showDiff" id="field_showDiff" [(ngModel)]="showDiff" (onChange)="setDiffEditorModels()"></p-inputSwitch>
+                            </div>
+                            <div class="col-md-auto align-middle">
+                                <p-checkbox  name="showSideBySide" label="View Side by Side" [(ngModel)]="sideBySide" binary="true" (onChange)="updateDiff()" [disabled]="!showDiff"></p-checkbox>
+                            </div>
                         </div>
-                        <div class="col-md-auto align-middle">
-                            <p-checkbox  name="showSideBySide" label="View Side by Side" [(ngModel)]="editorOptions.renderSideBySide" binary="true"(onChange)="reloadDiff()" [disabled]="!showDiff"></p-checkbox>
+                        <dd>
+                            <div *ngIf="!showDiff">
+                                <div *ngIf="sliceCodes && currentSliceIndex !== undefined && sliceCodes[currentSliceIndex]">
+                                <p class="border-bottom"><ngx-monaco-editor [options]="editorOptions" [(ngModel)]="sliceCodes[currentSliceIndex]" class="code-editor"></ngx-monaco-editor></p>
+                                </div>
+                                <div *ngIf="sourceCodes && currentSliceIndex !== undefined && sourceCodes[currentSliceIndex]">        
+                                <p class="form-control-label">Source File:</p>
+                                <p><ngx-monaco-editor [options]="editorOptions" [(ngModel)]="sourceCodes[currentSliceIndex]" class="code-editor"></ngx-monaco-editor></p>
+                                </div>        
+                            </div>
+                            <div *ngIf="showDiff">
+                                <ngx-monaco-diff-editor [options]="diffEditorOptions" [originalModel]="sourceFileDiffModel" [modifiedModel]="sliceCodeDiffModel" class="code-editor" (onInit)="onInitDiffEditor($event)""></ngx-monaco-diff-editor>
+                            </div>
+                        </dd>
+                        <div *ngIf="isCodeLoadingOrPrecessing" id="overlay">
                         </div>
-                    </div>
-                    <div *ngIf="!showDiff">                       
-                        <dd>
-                            <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="slice.slice" class="code-editor border rounded"></ngx-monaco-editor>
-                        </dd>
-                    <div *ngIf="sourceFile">        
-                        <dt><span>Source File</span></dt>
-                        <dd>
-                            <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="sourceFile" class="code-editor border rounded"></ngx-monaco-editor>
-                        </dd>
-                    </div>        
-                    </div>
-                    <div *ngIf="showDiff && sourceFileModel && sliceCodeModel">
-                        <dd>
-                            <ngx-monaco-diff-editor [options]="editorOptions" [originalModel]="sourceFileModel" [modifiedModel]="sliceCodeModel" class="code-editor border rounded"></ngx-monaco-diff-editor>
-                        </dd>
-                    </div>
                     </div>
                 </div>
                 <dt><span>CFA Option</span></dt>

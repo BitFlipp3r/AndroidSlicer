@@ -42,7 +42,8 @@ import {
   faHome,
   faFileCode,
   faCogs,
-  faLayerGroup
+  faLayerGroup,
+  faBookmark
 } from '@fortawesome/free-solid-svg-icons';
 
 // Adds the SVG icon to the library so you can use it in your page
@@ -84,5 +85,6 @@ library.add(faFileCode);
 library.add(faCogs);
 library.add(faSync);
 library.add(faLayerGroup);
+library.add(faBookmark);
 
 // jhipster-needle-add-element-to-vendor - JHipster will add new menu items here

@@ -52,8 +52,20 @@ public class InitialSetupMigration {
         seedStatements.setDescription("These are the default service hook-methods from android. They are available as standard selection options for seed statements. This default list can be edited here. Entries should be separated with a semicolon.");
         mongoTemplate.save(seedStatements);
 
-        SlicerSetting exlusionList = new SlicerSetting();
-        exlusionList.setKey(Constants.EXCLUSION_LIST_KEY);
+        SlicerSetting saveToFile = new SlicerSetting();
+        saveToFile.setKey(Constants.SAVE_TO_FILE_KEY);
+        saveToFile.setValue("true");
+        saveToFile.setDescription("Set this to true/false to enable/disable the saving of slices as java-files to disc.");
+        mongoTemplate.save(saveToFile);
+
+        SlicerSetting outputDir = new SlicerSetting();
+        outputDir.setKey(Constants.OUTPUT_DIR_KEY);
+        outputDir.setValue("output");
+        outputDir.setDescription("If saving of slices to java-files is enabled, this specifies the output location. The folder will be created in case it does not exist.");
+        mongoTemplate.save(outputDir);
+
+        SlicerSetting exclusionList = new SlicerSetting();
+        exclusionList.setKey(Constants.EXCLUSION_LIST_KEY);
         StringBuilder result = new StringBuilder("");
 
         // Get file from resources folder
@@ -85,9 +97,9 @@ public class InitialSetupMigration {
             }
         }
 
-        exlusionList.setValue(result.toString());
-        exlusionList.setDescription("These classes will be excluded during the slicing analysis to prevent the slicer to go too deep into the java framework. Entries should be separated with new lines.");
-        mongoTemplate.save(exlusionList);
+        exclusionList.setValue(result.toString());
+        exclusionList.setDescription("These classes will be excluded during the slicing analysis to prevent the slicer to go too deep into the java framework. Entries should be separated with new lines.");
+        mongoTemplate.save(exclusionList);
 
     }
 
@@ -212,7 +224,7 @@ public class InitialSetupMigration {
         dataDependenceOptions_NO_BASE_PTRS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
         dataDependenceOptions_NO_BASE_PTRS.setKey("NO_BASE_PTRS");
         dataDependenceOptions_NO_BASE_PTRS.setDescription(
-                "Ignore data dependence edges that define base pointers for indirect memory access. Base pointers are more commonly known as 'frame pointers' which point to the location where the stack pointer was, just before a method call moved the stack pointer to the methods own local variables.");
+                "Ignore data dependence edges that define base pointers for indirect memory access. Base pointers are more commonly known as 'frame pointers' which point to the location where the stack pointer was, just before a method call moved the stack pointer to the methods own local variables. This is mostly relevant for forward slicing algorithms. WALA gives the example of not tracking forward dependencies from definitions (i.e. set instrustions) of x to y=x.f ");
         dataDependenceOptions_NO_BASE_PTRS.setIsDefault(false);
         mongoTemplate.save(dataDependenceOptions_NO_BASE_PTRS);
 

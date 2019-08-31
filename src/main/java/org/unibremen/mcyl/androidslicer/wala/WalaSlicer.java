@@ -131,11 +131,6 @@ public class WalaSlicer {
             throw new WalaException("Call Graph Builder could not be initialized.");
         }
 
-        cgBuilder = Util.makeZeroOneContainerCFABuilder(options, cache, cha, scope);
-        // CallGraphBuilder builder = Util.makeNCFABuilder(2, options, cache, cha,
-        // scope);
-        // CallGraphBuilder builder = Util.makeVanillaNCFABuilder(2, options, cache,
-        // cha, scope);
         CallGraph cg = cgBuilder.makeCallGraph(options, null);
         long end = System.currentTimeMillis();
         logger.log("Took " + (end - start) + "ms.");

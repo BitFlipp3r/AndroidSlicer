@@ -10,6 +10,8 @@ import { AndroidOptionsService } from 'app/shared/services/android-options.servi
 import { HttpErrorResponse } from '@angular/common/http';
 import { DiffEditorModel } from 'ngx-monaco-editor';
 
+import { MenuItem } from 'primeng/api';
+
 @Component({
   selector: 'jhi-slice-detail',
   templateUrl: './slice-detail.component.html'
@@ -17,15 +19,29 @@ import { DiffEditorModel } from 'ngx-monaco-editor';
 export class SliceDetailComponent implements OnInit {
   slice: ISlice;
 
-  editorOptions = { theme: 'vs', language: 'java', renderSideBySide: false, followsCaret: true, ignoreCharChanges: true };
+  slicedClassItems: MenuItem[] = [];
+  activeItem: MenuItem;
 
-  sourceFile: string;
+  editorOptions = { theme: 'vs', language: 'java', followsCaret: true, ignoreCharChanges: true };
 
-  sliceCodeModel: DiffEditorModel;
-  sourceFileModel: DiffEditorModel;
+  private diffEditor: any;
+  sideBySide = false;
+  diffEditorOptions;
 
-  poll: boolean;
+  sliceCodes: string[] = [];
+  sourceCodes: string[] = [];
+  // keep track of the slice code positions in sliceCodes to bring source codes in the right order after they have loaded
+  private classesIndexMap: string[] = [];
 
+  sliceCodeDiffModel: DiffEditorModel;
+  sourceFileDiffModel: DiffEditorModel;
+
+  currentSliceIndex: number;
+
+  private poll: boolean;
+
+  isCodeLoadingOrPrecessing = true;
+  slicingFinished = false;
   showDiff = false;
   scrollLog = true;
 
@@ -47,7 +63,7 @@ export class SliceDetailComponent implements OnInit {
         this.refresh();
         this.poll = true;
       } else {
-        this.loadSourceFile();
+        this.onSlicingFinished();
       }
     });
 
@@ -84,7 +100,7 @@ export class SliceDetailComponent implements OnInit {
         }, 100);
 
         if (!this.slice.running) {
-          this.loadSourceFile();
+          this.onSlicingFinished();
         }
       });
   }
@@ -93,30 +109,80 @@ export class SliceDetailComponent implements OnInit {
     this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  loadSourceFile() {
-    if (!this.sourceFileModel) {
-      // get source file for comparison
-      this.androidOptionsService.getServiceSource(this.slice.androidVersion, this.slice.androidClassName).subscribe(
-        (res: any) => {
-          this.sourceFile = res.body;
+  private onSlicingFinished(): void {
+    this.slice.slicedClasses.forEach(slicedClass => {
+      const slicedPathAndClassName = slicedClass.packagePath + '/' + slicedClass.className;
+      if (slicedPathAndClassName === this.slice.androidClassName) {
+        // add android main class (i.e. entry class) to first position
+        this.sliceCodes.unshift(slicedClass.code);
+        this.classesIndexMap.unshift(slicedClass.className);
+        this.slicedClassItems.unshift({ title: slicedClass.className, label: slicedPathAndClassName });
+      } else {
+        this.sliceCodes.push(slicedClass.code);
+        this.classesIndexMap.push(slicedClass.className);
+        this.slicedClassItems.push({ title: slicedClass.className, label: slicedPathAndClassName });
+      }
+    });
 
-          this.sliceCodeModel = { language: 'java', code: this.slice.slice };
-          this.sourceFileModel = { language: 'java', code: this.sourceFile };
+    this.currentSliceIndex = 0;
+    this.activeItem = this.slicedClassItems[0];
+
+    this.loadSourceFiles();
+
+    this.slicingFinished = true;
+  }
+
+  onSliceClassSelected(event, index) {
+    this.currentSliceIndex = index;
+    this.activeItem = this.slicedClassItems[index];
+    this.setDiffEditorModels();
+    event.preventDefault();
+  }
+
+  private loadSourceFiles() {
+    this.slice.slicedClasses.forEach(slicedClass => {
+      // get source file for comparison
+      const slicedPathAndClassName = slicedClass.packagePath + '/' + slicedClass.className;
+      this.androidOptionsService.getServiceSource(this.slice.androidVersion, slicedPathAndClassName).subscribe(
+        (res: any) => {
+          this.sourceCodes[this.classesIndexMap.indexOf(slicedClass.className)] = res.body;
+          // remove loading overlay if all source classes are loaded
+          if (this.sourceCodes.length === this.sliceCodes.length) {
+            this.isCodeLoadingOrPrecessing = false;
+          }
         },
         (res: HttpErrorResponse) => this.onError(res.message)
       );
+    });
+  }
+
+  onInitDiffEditor(editor) {
+    this.diffEditor = editor;
+    this.diffEditor.onDidUpdateDiff(() => {
+      this.isCodeLoadingOrPrecessing = false;
+    });
+  }
+
+  updateDiff() {
+    if (this.showDiff && this.diffEditor) {
+      this.isCodeLoadingOrPrecessing = true;
+      this.diffEditorOptions = {
+        theme: 'vs',
+        language: 'java',
+        renderSideBySide: this.sideBySide,
+        followsCaret: true,
+        ignoreCharChanges: true
+      };
+      this.diffEditor.updateOptions(this.diffEditorOptions);
     }
   }
 
-  // force a re-rendering of the div container
-  reloadDiff() {
-    if (this.showDiff) {
-      this.sliceCodeModel = null;
-      this.sourceFileModel = null;
-      setTimeout(() => {
-        this.sliceCodeModel = { language: 'java', code: this.slice.slice };
-        this.sourceFileModel = { language: 'java', code: this.sourceFile };
-      }, 10);
+  setDiffEditorModels(): void {
+    if (this.showDiff && this.sliceCodes[this.currentSliceIndex] && this.sourceCodes[this.currentSliceIndex]) {
+      this.sliceCodeDiffModel = { language: 'java', code: this.sliceCodes[this.currentSliceIndex] };
+      this.sourceFileDiffModel = { language: 'java', code: this.sourceCodes[this.currentSliceIndex] };
+      this.isCodeLoadingOrPrecessing = true;
+      this.updateDiff();
     }
   }
 }

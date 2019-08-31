@@ -29,7 +29,7 @@
     "monaco-editor": "^0.17.1",
     "ng-jhipster": "0.10.1",
     "ngx-cookie": "4.0.2",
-    "ngx-monaco-editor": "^7.0.0",
+    "ngx-monaco-editor": "^8.0.0",
     "ngx-infinite-scroll": "7.2.0",
     "ngx-webstorage": "4.0.1",
     "primeicons": "^1.0.0",

@@ -32,7 +32,10 @@ entity Slice {
    * JSON-List with seed statement names
    */
   seedStatements TextBlob required,
-  slice TextBlob,
+  /**
+   * Set of sliced classes with class name and code
+   */
+  slicedClasses Blob,
   log TextBlob,
   threadId String,
   running Boolean,
