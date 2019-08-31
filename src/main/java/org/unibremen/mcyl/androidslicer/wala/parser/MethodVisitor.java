@@ -59,11 +59,6 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
     // https://static.javadoc.io/com.github.javaparser/javaparser-core/3.5.0/com/github/javaparser/ast/stmt/Statement.html
     public void addStatementBody(Node node, int line) {
 
-        if(node instanceof ClassOrInterfaceDeclaration)
-        {
-            int a = 0;
-        }
-
         if (node instanceof BlockStmt) {
             BlockStmt blockStmt = (BlockStmt) node;
             for (Statement stmt : blockStmt.getStatements()) {
@@ -278,35 +273,13 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
             return;
         }
 
-        // pnguyen: setting class body
         Node parentNode = methodDeclaration.getParentNode().get();
-        int firstLine = parentNode.getBegin().get().line;
-        if (parentNode.toString().startsWith("@")) {
-            firstLine++;
-        }
-        sourceLineNumbers.add(firstLine);
-        if (!parentNode.toString().contains("{")) {
-            sourceLineNumbers.add(firstLine + 1);
-        }
 
-        // Add all lines between class and first node (Fix for brackets in next line)
-        List<Node> classNodes = parentNode.getChildNodes();
-        if (!classNodes.isEmpty()) {
-            int firstBodyIndex = 0;
-            for (Node classNode : classNodes) {
-                if (classNode instanceof ClassOrInterfaceType) {
-                    firstBodyIndex++;
-                } else
-                    break;
-            }
+        // mcyl: fix for pngyens of set the class body  
+        if(parentNode instanceof ClassOrInterfaceDeclaration){          
+           setClassBody((ClassOrInterfaceDeclaration)parentNode);
+        }        
 
-            addAllLinesFromBeginToEnd(
-                firstLine,
-                classNodes.get(firstBodyIndex).getBegin().get().line - 1,
-                sourceLineNumbers);
-        }
-
-        sourceLineNumbers.add(parentNode.getEnd().get().line);
         List<Node> methodNodes = methodDeclaration.getBody().get().getChildNodes();
 
         // Add all lines between method and first brackets
@@ -334,30 +307,14 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
     // pnguyen: ConstructorDeclaration was ignored and led to wrong reconstructed code
     @Override
     public void visit(ConstructorDeclaration constructorDeclaration, Object arg) {
-        // mcyl:  set class body if slice line is inside note or if its the main class (i.e. entry class)
+        // mcyl: set class body if slice line is inside note or if its the main class (i.e. entry class)
         if(areSlicedLineNumbersInNode(constructorDeclaration) | 
             constructorDeclaration.getNameAsString().equals(this.mainClassName)) {
-                Node parentNode = constructorDeclaration.getParentNode().get();
-                int firstLine = parentNode.getBegin().get().line;
-                if (parentNode.toString().startsWith("@")) {
-                    firstLine++;
-                }
-        
-                sourceLineNumbers.add(firstLine);
-                if (!parentNode.toString().contains("{")) {
-                    sourceLineNumbers.add(firstLine + 1);
-                }
-                // Add all lines between class and constructor, because there is nothing in
-                // between (Fix for brackets in next line)
-                List<Node> classNodes = parentNode.getChildNodes();
-                if (classNodes.size() > 1) {
-                    addAllLinesFromBeginToEnd(
-                        firstLine,
-                        classNodes.get(0).getBegin().get().line - 1,
-                        sourceLineNumbers);
-                }
-                
-                sourceLineNumbers.add(parentNode.getEnd().get().line);
+              
+                Node parentNode = constructorDeclaration.getParentNode().get();         
+                if(parentNode instanceof ClassOrInterfaceDeclaration){          
+                   setClassBody((ClassOrInterfaceDeclaration)parentNode);
+                }                                                 
         }
 
         /**
@@ -406,6 +363,23 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
             }
         }
         return false;
+    }
+
+    private void setClassBody(ClassOrInterfaceDeclaration classNode){
+        sourceLineNumbers.add(classNode.getBegin().get().line);
+
+        // mcyl: check if any implements or extends reach to another line
+        Set<Node> extendsAndImplementsNodes = new HashSet<Node>();
+        extendsAndImplementsNodes.addAll(classNode.getExtendedTypes());
+        extendsAndImplementsNodes.addAll(classNode.getImplementedTypes());
+        for(Node extendsAndImplementsNode : extendsAndImplementsNodes){
+            addAllLinesFromBeginToEnd(
+                classNode.getBegin().get().line,
+                extendsAndImplementsNode.getEnd().get().line ,
+                sourceLineNumbers);
+        }
+
+        sourceLineNumbers.add(classNode.getEnd().get().line);
     }
 
     // --------------------- Note -------------------------------------

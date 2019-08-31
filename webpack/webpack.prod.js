@@ -139,7 +139,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             whitelist: [
                 'close', // Toast close button
                 'fade', 'show', // Popups
-                'pagination' // Pager
+                'pagination', // Pager
+                'tooltip' // override for ngb-tooltip text color
             ], 
             // selectors beginning pattern and all children of the selectors are preserved
             // see: https://www.purgecss.com/configuration
