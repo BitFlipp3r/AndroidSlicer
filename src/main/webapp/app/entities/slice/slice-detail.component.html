@@ -13,25 +13,32 @@
                 <dd>
                     <span>{{slice.androidClassName}}</span>
                 </dd>
-                <dt><span ngbTooltip="JSON-List with entry method names">Entry Methods</span></dt>
+                <dt><span>Entry Methods</span></dt>
                 <dd>
                     <ul class="list-inline">
                         <li class="list-inline-item" *ngFor="let entryMethod of slice.entryMethods"><span class="badge badge-info">{{entryMethod}}</span></li>
                     </ul>
                 </dd>
-                <dt><span ngbTooltip="JSON-List with seed statement names">Seed Statements</span></dt>
+                <dt><span>Seed Statements</span></dt>
                 <dd>
                     <ul class="list-inline">
                         <li class="list-inline-item" *ngFor="let seedStatement of slice.seedStatements"><span class="badge badge-info">{{seedStatement}}</span></li>
                     </ul>
                 </dd>
                 <div *ngIf="slicingFinished && activeItem">
-                    <dt><span>Slice</span></dt>
+                    <div class="row justify-content-between">
+                        <div class="col-1">
+                            <dt><span>Slice</span></dt>
+                        </div>
+                        <div class="col-1 m-1">
+                            <button type="button" class="btn btn-light btn-sm float-right" (click)="downloadSlices()">Download</button>
+                        </div>
+                    </div>
                     <p-tabMenu [model]="slicedClassItems" [activeItem]="activeItem">
                          <ng-template pTemplate="item" let-item let-i="index">
                             <fa-icon icon="bookmark" fixedWidth="true"></fa-icon>
-                            <span  ngbTooltip="{{item.label}}">{{item.title}}</span>
-                            <div class="tabmenu-click-item" (click)="onSliceClassSelected($event, i)" ngbTooltip="{{item.label}}">
+                            <span>{{item.label}}</span>
+                            <div class="tabmenu-click-item" (click)="onSliceClassSelected($event, i)">
                             </div>
                         </ng-template>
                     </p-tabMenu>

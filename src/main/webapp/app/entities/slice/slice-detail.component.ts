@@ -11,6 +11,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DiffEditorModel } from 'ngx-monaco-editor';
 
 import { MenuItem } from 'primeng/api';
+import * as JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'jhi-slice-detail',
@@ -116,11 +118,11 @@ export class SliceDetailComponent implements OnInit {
         // add android main class (i.e. entry class) to first position
         this.sliceCodes.unshift(slicedClass.code);
         this.classesIndexMap.unshift(slicedClass.className);
-        this.slicedClassItems.unshift({ title: slicedClass.className, label: slicedPathAndClassName });
+        this.slicedClassItems.unshift({ title: slicedPathAndClassName, label: slicedClass.className });
       } else {
         this.sliceCodes.push(slicedClass.code);
         this.classesIndexMap.push(slicedClass.className);
-        this.slicedClassItems.push({ title: slicedClass.className, label: slicedPathAndClassName });
+        this.slicedClassItems.push({ title: slicedPathAndClassName, label: slicedClass.className });
       }
     });
 
@@ -184,5 +186,18 @@ export class SliceDetailComponent implements OnInit {
       this.isCodeLoadingOrPrecessing = true;
       this.updateDiff();
     }
+  }
+
+  downloadSlices(): void {
+    const zip: JSZip = new JSZip();
+    this.slice.slicedClasses.forEach(slicedClass => {
+      zip.file(slicedClass.className, slicedClass.code);
+    });
+    zip.generateAsync({ type: 'blob' }).then(blob => {
+      saveAs(
+        blob,
+        this.slice.androidClassName.replace(/\.[^/.]+$/, '') + '.zip' // remove .java extension
+      );
+    });
   }
 }

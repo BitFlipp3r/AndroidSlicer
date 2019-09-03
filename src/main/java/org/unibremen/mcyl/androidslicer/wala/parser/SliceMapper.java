@@ -27,7 +27,7 @@ public class SliceMapper {
 	private static final Pattern singeLineCommentPattern = Pattern.compile("^\\s*//.*");
 	private static final Pattern openingMultlineCommentPattern = Pattern.compile("^\\s*/\\*.*");
 	private static final Pattern closingMultlineCommentPattern = Pattern.compile(".*\\*+/$");
-	private static final Pattern closingBracketPattern = Pattern.compile(".*}+;?$");
+	private static final Pattern closingBracketPattern = Pattern.compile(".*}+;?\\s*$");
 
 	public String getLinesOfCode(final String sourceCodeFileName, final Set<Integer> sliceLineNumbers,
 			SliceLogger logger) {
@@ -54,22 +54,27 @@ public class SliceMapper {
 			listOfLineNumbers.addAll(sliceLineNumbers);
 			Collections.sort(listOfLineNumbers);
 
+			String lastSourceCodeLine = "";
 			for (int sliceLineNumber : listOfLineNumbers) {
-
-				addAllCommentLines(sliceLineNumber, builder, sourceCodeFileMap);
 
 				sourceCodeLine = sourceCodeFileMap.get(sliceLineNumber);
 				if (sourceCodeLine != null) {
-					builder.append(sourceCodeLine);
-					builder.append("\n");
 
-					// add extra line break after "}" (if the next line is not "}")
+					// mcyl: add extra line break after "}" (if the current line is not "}" or "};")
 					// this adds an empty line between methods and makes the code more readable
-					String nextSourceCodeLine = sourceCodeFileMap.get(sliceLineNumber + 1);
-					if (nextSourceCodeLine != null && closingBracketPattern.matcher(sourceCodeLine).matches()
-							&& !closingBracketPattern.matcher(nextSourceCodeLine).matches()) {
+					if (closingBracketPattern.matcher(lastSourceCodeLine).matches() && 
+						!sourceCodeLine.isEmpty() && 
+						!closingBracketPattern.matcher(sourceCodeLine).matches()) {
 						builder.append("\n");
 					}
+
+					// mcyl: add comments which are above the slice lines
+					addAllCommentLines(sliceLineNumber, builder, sourceCodeFileMap);
+
+					/* append the source code line to the slice */
+					builder.append(sourceCodeLine);
+					builder.append("\n");
+					lastSourceCodeLine = sourceCodeLine;
 				}
 			}
 

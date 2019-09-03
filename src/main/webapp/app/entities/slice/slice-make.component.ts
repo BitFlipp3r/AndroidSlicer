@@ -182,19 +182,28 @@ export class SliceMakeComponent implements OnInit {
   onVersionSelection() {
     this.createForm.get(['androidClassName']).disable();
 
-    this.androidOptionsService.getAndroidClasses((this.createForm.get(['androidVersion']).value as IAndroidVersion).path).subscribe(
-      (res: HttpResponse<IAndroidClass[]>) => {
-        this.classOptions = res.body;
+    this.androidOptionsService
+      .getAndroidClasses((this.createForm.get(['androidVersion']).value as IAndroidVersion).path)
+      .subscribe(
+        // ok
+        (res: HttpResponse<IAndroidClass[]>) => {
+          this.classOptions = res.body;
+        },
+        // error
+        (res: HttpErrorResponse) => this.onError(res.message)
+      )
+      .add(() => {
+        // finally
         this.createForm.get(['androidClassName']).enable();
-      },
-      (res: HttpErrorResponse) => this.onError(res.message)
-    );
+      });
   }
 
   onClassSelection() {
     const androidVersion: number = (this.createForm.get(['androidVersion']).value as IAndroidVersion).version;
     const serviceClassName: string = (this.createForm.get(['androidClassName']).value as IAndroidClass).name;
     const sourceFilePath: string = (this.createForm.get(['androidClassName']).value as IAndroidClass).path;
+
+    this.createForm.get(['entryMethods']).disable();
 
     this.androidOptionsService.getServiceSource(androidVersion, serviceClassName).subscribe(
       (res: any) => {
@@ -203,12 +212,20 @@ export class SliceMakeComponent implements OnInit {
       (res: HttpErrorResponse) => this.onError(res.message)
     );
 
-    this.androidOptionsService.getEntryMethods(serviceClassName, sourceFilePath).subscribe(
-      (res: HttpResponse<string[]>) => {
-        this.entryMethodOptions = res.body;
-      },
-      (res: HttpErrorResponse) => this.onError(res.message)
-    );
+    this.androidOptionsService
+      .getEntryMethods(serviceClassName, sourceFilePath)
+      .subscribe(
+        // ok
+        (res: HttpResponse<string[]>) => {
+          this.entryMethodOptions = res.body;
+        },
+        // error
+        (res: HttpErrorResponse) => this.onError(res.message)
+      )
+      .add(() => {
+        // finally
+        this.createForm.get(['entryMethods']).enable();
+      });
   }
 
   filterEntryMethodOptions(event) {

@@ -1,9 +1,9 @@
 package org.unibremen.mcyl.androidslicer;
 
-import org.unibremen.mcyl.androidslicer.config.ApplicationProperties;
-import org.unibremen.mcyl.androidslicer.config.DefaultProfileUtil;
-
-import io.github.jhipster.config.JHipsterConstants;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -12,13 +12,11 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
+import org.unibremen.mcyl.androidslicer.config.ApplicationProperties;
+import org.unibremen.mcyl.androidslicer.config.DefaultProfileUtil;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Collection;
+import io.github.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ApplicationProperties.class})

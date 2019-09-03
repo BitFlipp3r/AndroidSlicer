@@ -274,11 +274,27 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
         }
 
         Node parentNode = methodDeclaration.getParentNode().get();
+        int firstLine = parentNode.getBegin().get().line;
+        sourceLineNumbers.add(parentNode.getBegin().get().line);
 
-        // mcyl: fix for pngyens of set the class body  
-        if(parentNode instanceof ClassOrInterfaceDeclaration){          
-           setClassBody((ClassOrInterfaceDeclaration)parentNode);
-        }        
+        // pnguyen: add all lines between class and first node (fix for brackets in next line)
+        List<Node> classNodes = parentNode.getChildNodes();
+        if (!classNodes.isEmpty()) {
+            int firstBodyIndex = 0;
+            for (Node classNode : classNodes) {
+                if (classNode instanceof ClassOrInterfaceType) {
+                    firstBodyIndex++;
+                } else
+                    break;
+            }
+
+            addAllLinesFromBeginToEnd(
+                firstLine,
+                classNodes.get(firstBodyIndex).getBegin().get().line - 1,
+                sourceLineNumbers);
+        }
+
+        sourceLineNumbers.add(parentNode.getEnd().get().line);
 
         List<Node> methodNodes = methodDeclaration.getBody().get().getChildNodes();
 
