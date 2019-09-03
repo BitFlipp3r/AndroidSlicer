@@ -220,7 +220,10 @@ export class SliceMakeComponent implements OnInit {
           this.entryMethodOptions = res.body;
         },
         // error
-        (res: HttpErrorResponse) => this.onError(res.message)
+        (res: HttpErrorResponse) => {
+          this.entryMethodOptions = [];
+          this.onError(res.message);
+        }
       )
       .add(() => {
         // finally
