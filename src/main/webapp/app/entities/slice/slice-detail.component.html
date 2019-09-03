@@ -27,10 +27,10 @@
                 </dd>
                 <div *ngIf="slicingFinished && activeItem">
                     <div class="row justify-content-between">
-                        <div class="col-1">
+                        <div class="col-2 pt-2">
                             <dt><span>Slice</span></dt>
                         </div>
-                        <div class="col-1 m-1">
+                        <div class="col-2 m-1">
                             <button type="button" class="btn btn-light btn-sm float-right" (click)="downloadSlices()">Download</button>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                 </div>
-                <dt><span>CFA Option</span></dt>
+                <dt class="mt-2"><span>CFA Option</span></dt>
                 <dd>
                     <span>{{slice.cfaType}} <span *ngIf="slice.cfaLevel">, n={{slice.cfaLevel}}</span></span>
                 </dd>
