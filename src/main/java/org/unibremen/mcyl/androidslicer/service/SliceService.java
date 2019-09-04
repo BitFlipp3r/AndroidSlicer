@@ -18,8 +18,6 @@ import com.ibm.wala.util.CancelException;
 import com.ibm.wala.util.WalaException;
 
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.unibremen.mcyl.androidslicer.config.Constants;
@@ -37,8 +35,6 @@ import org.unibremen.mcyl.androidslicer.wala.parser.SliceMapper;
  */
 @Service
 public class SliceService {
-
-    private final Logger log = LoggerFactory.getLogger(SliceService.class);
 
     private final SliceRepository sliceRepository;
     private final SlicerSettingRepository slicerSettingRepository;

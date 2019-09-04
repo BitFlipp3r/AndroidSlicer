@@ -118,7 +118,7 @@ public class InitialSetupMigration {
         reflectionOption_FULL.setType(SlicerOptionType.REFLECTION_OPTION);
         reflectionOption_FULL.setKey("FULL");
         reflectionOption_FULL.setDescription(
-                "Analyzes all reflections, including 1: Flows from calls of newInstance() to casts, where a new instance is cast to a specific objet type. 2: Calls to Method.invoke(), where the underlying method represented by a method object is invoked. 3: Calls to Class.getMethod(), where a method object that reflects member method of the class is returned.");
+                "Analyzes all reflections, including 1: Flows from calls of newInstance() to type casts, where a new instance is cast to a specific objet type. 2: Calls to Method.invoke(), where the underlying method represented by a method object is invoked. 3: Calls to Class.getMethod(), where a method object that reflects a member method of the class is returned.");
         reflectionOption_FULL.setIsDefault(false);
         mongoTemplate.save(reflectionOption_FULL);
 
@@ -308,6 +308,22 @@ public class InitialSetupMigration {
                 .setDescription("Control dependencies transmitted via exception objects will be ignored. This is useful to reduce analysis costs but it does not to track SecurityExceptions.");
         controlDependenceOptions_NO_EXCEPTIONAL_EDGES.setIsDefault(true);
         mongoTemplate.save(controlDependenceOptions_NO_EXCEPTIONAL_EDGES);
+
+        SlicerOption controlDependenceOptions_NO_INTERPROC_EDGES = new SlicerOption();
+        controlDependenceOptions_NO_INTERPROC_EDGES.setType(SlicerOptionType.CONTROL_DEPENDENCE_OPTION);
+        controlDependenceOptions_NO_INTERPROC_EDGES.setKey("NO_INTERPROC_EDGES");
+        controlDependenceOptions_NO_INTERPROC_EDGES
+                .setDescription("Does not track interprocedural control dependencies from callers to callees.");
+                controlDependenceOptions_NO_INTERPROC_EDGES.setIsDefault(true);
+        mongoTemplate.save(controlDependenceOptions_NO_INTERPROC_EDGES);
+
+        SlicerOption controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION = new SlicerOption();
+        controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION.setType(SlicerOptionType.CONTROL_DEPENDENCE_OPTION);
+        controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION.setKey("NO_INTERPROC_NO_EXCEPTION");
+        controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION
+                .setDescription("Interprocedural and exception control dependencies will be ignored.");
+                controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION.setIsDefault(true);
+        mongoTemplate.save(controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION);
 
         SlicerOption controlDependenceOptions_NONE = new SlicerOption();
         controlDependenceOptions_NONE.setType(SlicerOptionType.CONTROL_DEPENDENCE_OPTION);
