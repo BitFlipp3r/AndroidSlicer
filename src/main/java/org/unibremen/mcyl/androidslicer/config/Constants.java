@@ -14,6 +14,8 @@ public final class Constants {
     public static final String EXCLUSION_LIST_KEY = "Exclusion_List";
     public static final String SAVE_TO_FILE_KEY = "Save_To_File";
     public static final String OUTPUT_DIR_KEY = "Output_Directory";
+    public static final String CODE_SERVER_DIR_KEY = "Code_Server_Directory";
+    public static final String CODE_SERVER_PORT_KEY = "Code_Server_Port";
 
     private Constants() {
     }

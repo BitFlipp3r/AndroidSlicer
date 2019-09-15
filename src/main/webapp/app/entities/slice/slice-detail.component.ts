@@ -28,7 +28,7 @@ export class SliceDetailComponent implements OnInit {
 
   private diffEditor: any;
   sideBySide = false;
-  diffEditorOptions;
+  diffEditorOptions = { theme: 'vs', language: 'java', renderSideBySide: this.sideBySide, followsCaret: true, ignoreCharChanges: true };
 
   sliceCodes: string[] = [];
   sourceCodes: string[] = [];
@@ -199,5 +199,23 @@ export class SliceDetailComponent implements OnInit {
         this.slice.androidClassName.replace(/\.[^/.]+$/, '') + '.zip' // remove .java extension
       );
     });
+  }
+
+  openIDE(): void {
+    document.body.style.cursor = 'wait';
+    this.sliceService
+      .openIDE(this.slice.id)
+      .subscribe(
+        (res: any) => {
+          console.log(res.body);
+          const win = window.open(res.body, '_blank');
+          win.focus();
+        },
+        (res: HttpErrorResponse) => this.onError(res.message)
+      )
+      .add(() => {
+        // finally
+        document.body.style.removeProperty('cursor');
+      });
   }
 }

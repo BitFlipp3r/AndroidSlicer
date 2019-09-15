@@ -64,6 +64,18 @@ public class InitialSetupMigration {
         outputDir.setDescription("If saving of slices to java-files is enabled, this specifies the output location. The folder will be created in case it does not exist.");
         mongoTemplate.save(outputDir);
 
+        SlicerSetting codeServerDir = new SlicerSetting();
+        codeServerDir.setKey(Constants.CODE_SERVER_DIR_KEY);
+        codeServerDir.setValue("code-server");
+        codeServerDir.setDescription("");
+        mongoTemplate.save(codeServerDir);
+
+        SlicerSetting codeServerPort = new SlicerSetting();
+        codeServerPort.setKey(Constants.CODE_SERVER_PORT_KEY);
+        codeServerPort.setValue("8081");
+        codeServerPort.setDescription("");
+        mongoTemplate.save(codeServerPort);
+
         SlicerSetting exclusionList = new SlicerSetting();
         exclusionList.setKey(Constants.EXCLUSION_LIST_KEY);
         StringBuilder result = new StringBuilder("");
@@ -314,7 +326,7 @@ public class InitialSetupMigration {
         controlDependenceOptions_NO_INTERPROC_EDGES.setKey("NO_INTERPROC_EDGES");
         controlDependenceOptions_NO_INTERPROC_EDGES
                 .setDescription("Does not track interprocedural control dependencies from callers to callees.");
-                controlDependenceOptions_NO_INTERPROC_EDGES.setIsDefault(true);
+                controlDependenceOptions_NO_INTERPROC_EDGES.setIsDefault(false);
         mongoTemplate.save(controlDependenceOptions_NO_INTERPROC_EDGES);
 
         SlicerOption controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION = new SlicerOption();
@@ -322,7 +334,7 @@ public class InitialSetupMigration {
         controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION.setKey("NO_INTERPROC_NO_EXCEPTION");
         controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION
                 .setDescription("Interprocedural and exception control dependencies will be ignored.");
-                controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION.setIsDefault(true);
+                controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION.setIsDefault(false);
         mongoTemplate.save(controlDependenceOptions_NO_INTERPROC_NO_EXCEPTION);
 
         SlicerOption controlDependenceOptions_NONE = new SlicerOption();

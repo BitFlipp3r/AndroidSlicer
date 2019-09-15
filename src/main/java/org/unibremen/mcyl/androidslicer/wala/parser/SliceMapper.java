@@ -29,7 +29,7 @@ public class SliceMapper {
 	private static final Pattern closingMultlineCommentPattern = Pattern.compile(".*\\*+/$");
 	private static final Pattern closingBracketPattern = Pattern.compile(".*}+;?\\s*$");
 
-	public String getLinesOfCode(final String sourceCodeFileName, final Set<Integer> sliceLineNumbers,
+	public static String getLinesOfCode(final String sourceCodeFileName, final Set<Integer> sliceLineNumbers,
 			SliceLogger logger) {
 		try {
 
@@ -94,7 +94,7 @@ public class SliceMapper {
 	 * @param builder
 	 * @param sourceCodeFileMap
 	 */
-	private void addAllCommentLines(int instructionStartLineNumber, StringBuilder builder,
+	private static void addAllCommentLines(int instructionStartLineNumber, StringBuilder builder,
 			Map<Integer, String> sourceCodeFileMap) {
 
 		// use stating line number of instruction to search upwards for comments

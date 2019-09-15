@@ -28,6 +28,10 @@ export class SliceService {
     return this.http.get<ISlice[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  openIDE(id: string): Observable<any> {
+    return this.http.get(`${this.resourceUrl}/open-ide/${id}`, { responseType: 'text', observe: 'response' });
+  }
+
   delete(id: string): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

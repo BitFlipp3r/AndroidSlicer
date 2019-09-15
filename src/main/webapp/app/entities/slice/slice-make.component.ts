@@ -232,13 +232,17 @@ export class SliceMakeComponent implements OnInit {
   }
 
   filterEntryMethodOptions(event) {
-    this.filteredEntryMethodOptions = [];
-    this.filterMultiSelectOptions(event, this.entryMethodOptions, this.filteredEntryMethodOptions);
+    if (event) {
+      this.filteredEntryMethodOptions = [];
+      this.filterMultiSelectOptions(event, this.entryMethodOptions, this.filteredEntryMethodOptions);
+    }
   }
 
   filterSeedStatementOptions(event) {
-    this.filteredSeedStatementOptions = [];
-    this.filterMultiSelectOptions(event, this.seedStatementOptions, this.filteredSeedStatementOptions);
+    if (event) {
+      this.filteredSeedStatementOptions = [];
+      this.filterMultiSelectOptions(event, this.seedStatementOptions, this.filteredSeedStatementOptions);
+    }
   }
 
   private filterMultiSelectOptions(event, options, filterdOptions) {
@@ -256,7 +260,7 @@ export class SliceMakeComponent implements OnInit {
   }
 
   addEntryMethodOption(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
+    if (event && event.key === 'Enter') {
       const selectedEntryMethodOptions = this.createForm.get(['entryMethods']).value || [];
       this.addMultiSelectOption(event, this.entryMethodOptions, selectedEntryMethodOptions);
       this.createForm.get(['entryMethods']).patchValue(selectedEntryMethodOptions);
@@ -264,7 +268,7 @@ export class SliceMakeComponent implements OnInit {
   }
 
   addSeedStatementOption(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
+    if (event && event.key === 'Enter') {
       const selectedSeedStatementOptions = this.createForm.get(['seedStatements']).value || [];
       this.addMultiSelectOption(event, this.seedStatementOptions, selectedSeedStatementOptions);
       this.createForm.get(['seedStatements']).patchValue(selectedSeedStatementOptions);

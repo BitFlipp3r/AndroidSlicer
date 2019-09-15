@@ -39,7 +39,7 @@ public class Parser {
 		try {
 			CompilationUnit compilationUnit = getCu(javaPath, logger);
 			if (compilationUnit != null) {
-				visitor.visit(compilationUnit, "");
+				visitor.visit(compilationUnit, null);
 				return visitor.getSlice();
 			} else {
 				logger.log(javaPath + " file not found! Skipping!\n");

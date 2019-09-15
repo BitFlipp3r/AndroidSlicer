@@ -31,6 +31,8 @@ export const enum DataDependenceOptions {
 export const enum ControlDependenceOptions {
   FULL = 'FULL',
   NO_EXCEPTIONAL_EDGES = 'NO_EXCEPTIONAL_EDGES',
+  NO_INTERPROC_EDGES = 'NO_INTERPROC_EDGES',
+  NO_INTERPROC_NO_EXCEPTION = 'NO_INTERPROC_NO_EXCEPTION',
   NONE = 'NONE'
 }
 

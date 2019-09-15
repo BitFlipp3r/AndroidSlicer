@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -29,6 +30,7 @@ import org.unibremen.mcyl.androidslicer.repository.SlicerSettingRepository;
 import org.unibremen.mcyl.androidslicer.wala.WalaSlicer;
 import org.unibremen.mcyl.androidslicer.wala.parser.Parser;
 import org.unibremen.mcyl.androidslicer.wala.parser.SliceMapper;
+import org.unibremen.mcyl.androidslicer.web.rest.errors.BadRequestAlertException;
 
 /**
  * Service Implementation for managing Slice.
@@ -38,6 +40,11 @@ public class SliceService {
 
     private final SliceRepository sliceRepository;
     private final SlicerSettingRepository slicerSettingRepository;
+
+    // get system OS type to start vs code server accordingly
+    private static String OS = System.getProperty("os.name").toLowerCase();
+    // keep track of the vs code server process
+    private static Process vsCodeServerProcess;
 
     public SliceService(SliceRepository sliceRepository, SlicerSettingRepository slicerSettingRepository) {
         this.sliceRepository = sliceRepository;
@@ -123,7 +130,6 @@ public class SliceService {
 
         if (sliceLineNumbers != null) {
 
-            SliceMapper sliceMapper = new SliceMapper();
             logger.log("\n== RECONSTRUCTING CODE ==");
 
             // save to file if the setting is enabled
@@ -181,7 +187,7 @@ public class SliceService {
                         /**
                          * Gets the actual source code lines based on the line numbers.
                          */
-                        builder.append(sliceMapper.getLinesOfCode(sourceLocation, sourceCodeLines, logger));
+                        builder.append(SliceMapper.getLinesOfCode(sourceLocation, sourceCodeLines, logger));
 
                         // add the slice code to the slice entity
                         String javaClassFileName = packageAndJavaClass.substring(packageAndJavaClass.lastIndexOf("/") + 1, packageAndJavaClass.length());
@@ -218,5 +224,100 @@ public class SliceService {
         logger.log("Slicing took " + (end - start) + "ms.");
 
         return CompletableFuture.completedFuture(result);
+    }
+
+
+    /**
+     * Start a vs code server with the slices as default directory. See
+     * https://github.com/cdr/code-server/blob/master/doc/self-hosted/index.md for
+     * documentation.
+     * 
+     * @param slice Slice entity to find slice output directory.
+     * @param hostname Hostname of this server which the client used. Needed for vs code server link.
+     * @return serverLink
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public String openVsCodeServer(Slice slice, String hostname) throws IOException, InterruptedException {
+        // find vscode server settings
+        SlicerSetting vsCodeBinaryPathSetting = 
+        slicerSettingRepository.findOneByKey(Constants.CODE_SERVER_DIR_KEY).get();
+        SlicerSetting vsCodePortSetting = 
+        slicerSettingRepository.findOneByKey(Constants.CODE_SERVER_PORT_KEY).get();
+
+        if(vsCodeBinaryPathSetting != null && vsCodePortSetting != null){
+            // check operating system
+            String osPath = "";
+            String binaryFileExtension = "";
+            if (OS.indexOf("win") >= 0) {
+                osPath = "win";
+                binaryFileExtension = ".exe";
+            } else if (OS.indexOf("mac") >= 0) {
+                osPath = "mac";
+            } else if (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0) {
+                osPath = "lin";
+            }
+
+            if (osPath == ""){
+                throw new BadRequestAlertException("Operation system is not supported.", null, null);
+            }
+
+            // find vscode server settings binary
+            File vsCodeBinary = new File(vsCodeBinaryPathSetting.getValue()
+             + File.separator 
+             + osPath
+             + File.separator 
+             + "code-server" 
+             + binaryFileExtension);
+
+            if(vsCodeBinary.exists()){
+                // Runtime.getRuntime().exec  waitForProcessOutput()
+
+                /* get output directory for this slice */
+                File outputDirectory = null;
+                SlicerSetting outputDirSetting = 
+                slicerSettingRepository.findOneByKey(Constants.OUTPUT_DIR_KEY).get();
+                String androidClassName = slice.getAndroidClassName()
+                    .substring(slice.getAndroidClassName().lastIndexOf("/") + 1, slice.getAndroidClassName().length());
+                // remove .java
+                androidClassName = androidClassName.substring(0, androidClassName.lastIndexOf("."));
+
+                if(outputDirSetting != null && !outputDirSetting.getValue().isEmpty()){                     
+                        // check dir or create it
+                        outputDirectory = new File(outputDirSetting.getValue() +
+                        File.separator +
+                        androidClassName +
+                        "-" +
+                        slice.getId());
+
+                        if (!outputDirectory.exists()){
+                            throw new BadRequestAlertException("Slice output directory not found.", null, null);
+                        }                           
+                }
+              
+                if(vsCodeServerProcess == null){
+                    String dataDir = vsCodeBinaryPathSetting.getValue() + File.separator + osPath + File.separator;
+                    String installCommand = vsCodeBinary.getAbsolutePath() + " --install-extension=redhat.java --user-data-dir=" + dataDir;
+                    String startCommand = vsCodeBinary.getAbsolutePath() + " --port=" + vsCodePortSetting.getValue() + " --no-auth --allow-http --disable-telemetry --user-data-dir=" + dataDir;
+
+                    // install java extension for vs code (see https://marketplace.visualstudio.com/items?itemName=redhat.java)
+                    System.out.println("Running: " + installCommand);
+                    Runtime.getRuntime().exec(installCommand).waitFor(30, TimeUnit.SECONDS);
+
+                    // start server
+                    System.out.println("Running: " + startCommand);
+                    vsCodeServerProcess = Runtime.getRuntime().exec(startCommand);
+                }
+
+                return "http://" + hostname + ":" + vsCodePortSetting.getValue().toString() +"/?folder=" + outputDirectory.getAbsolutePath();
+            }
+            else{
+                throw new BadRequestAlertException("VS code server binary not found.", null, null);
+            }
+
+        }
+        else{
+            throw new BadRequestAlertException("VS code server path or port is not set.", null, null);
+        }
     }
 }

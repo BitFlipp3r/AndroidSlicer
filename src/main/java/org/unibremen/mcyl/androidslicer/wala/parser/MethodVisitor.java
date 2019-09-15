@@ -12,7 +12,9 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.BreakStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.ContinueStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
@@ -256,14 +258,17 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
             }
         }
 
-        // mcyl: add all return statements from control dependencies, regardless if sliced line is inside this return statement node
+        // mcyl: add all return-statements, regardless if sliced line is inside this return-statement node
         if (node instanceof ReturnStmt) {
-            ReturnStmt returnStmt = (ReturnStmt) node;
-
             addAllLinesFromBeginToEnd(
-                returnStmt.getBegin().get().line,
-                returnStmt.getEnd().get().line,
+                node.getBegin().get().line,
+                node.getEnd().get().line,
                 sourceLineNumbers);
+        }
+
+        // mcyl: add all continue- and break-statements
+        if (node instanceof ContinueStmt | node instanceof BreakStmt) {
+            sourceLineNumbers.add(node.getBegin().get().line);
         }
     }
 
