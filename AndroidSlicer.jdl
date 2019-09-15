@@ -3,7 +3,7 @@ application {
     baseName AndroidSlicer,
     applicationType monolith,
     packageName org.unibremen.mcyl.androidslicer,
- 	  cacheProvider ehcache,
+    cacheProvider ehcache,
     enableHibernateCache false,
     websocket false,
     databaseType mongodb,
@@ -54,12 +54,10 @@ entity Slice {
    */
   controlDependenceOptions ControlDependenceOptions required
 }
-
 entity SlicerSetting {
   key String required,
   value String required
 }
-
 entity CFAOption {
   type CFAType required,
   description TextBlob,
@@ -68,68 +66,30 @@ entity CFAOption {
    */
   isDefault Boolean
 }
-
 enum CFAType {
-  ZERO_CFA,
-  ZERO_ONE_CFA,
-  VANILLA_ZERO_ONE_CFA,
-  N_CFA,
-  VANILLA_N_CFA,
-  ZERO_CONTAINER_CFA,
-  ZERO_ONE_CONTAINER_CFA,
-  VANILLA_ZERO_ONE_CONTAINER_CFA
+  ZERO_CFA, ZERO_ONE_CFA, VANILLA_ZERO_ONE_CFA, N_CFA, VANILLA_N_CFA, ZERO_CONTAINER_CFA, ZERO_ONE_CONTAINER_CFA, VANILLA_ZERO_ONE_CONTAINER_CFA
 }
-
 entity SlicerOption {
   type SlicerOptionType required,
   key String required,
   description TextBlob,
    /** There can only be one default per SlicerOptionType. This handled during create/save process. */
-  isDefault Boolean 
+  isDefault Boolean
 }
-
 enum SlicerOptionType {
-	REFLECTION_OPTION,
-  DATA_DEPENDENCE_OPTION,
-  CONTROL_DEPENDENCE_OPTION
+  REFLECTION_OPTION, DATA_DEPENDENCE_OPTION, CONTROL_DEPENDENCE_OPTION
 }
-
 /** Placeholder for com.ibm.wala.ipa.callgraph.AnalysisOptions.ReflectionOptions. Delete on server side after code generation. */
 enum ReflectionOptions {
-  FULL,
-  APPLICATION_GET_METHOD,
-  NO_FLOW_TO_CASTS,
-  NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD,
-  NO_METHOD_INVOKE,
-  NO_FLOW_TO_CASTS_NO_METHOD_INVOKE,
-  ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE,
-  ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD,
-  MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD,
-  NO_STRING_CONSTANTS,
-  STRING_ONLY,
-  NONE
+  FULL, APPLICATION_GET_METHOD, NO_FLOW_TO_CASTS, NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD, NO_METHOD_INVOKE, NO_FLOW_TO_CASTS_NO_METHOD_INVOKE, ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE, ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD, MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD, NO_STRING_CONSTANTS, STRING_ONLY, NONE
 }
-
 /** Placeholder for  com.ibm.wala.ipa.slicer.Slicer.DataDependenceOptions. Delete on server side after code generation. */
 enum DataDependenceOptions {
-  FULL,
-  NO_BASE_NO_EXCEPTIONS,
-  NO_BASE_NO_HEAP,
-  NO_BASE_NO_HEAP_NO_EXCEPTIONS,
-  NO_BASE_PTRS,
-  NO_EXCEPTIONS,
-  NO_HEAP,
-  NO_HEAP_NO_EXCEPTIONS,
-  NONE,
-  REFLECTION
+  FULL, NO_BASE_NO_EXCEPTIONS, NO_BASE_NO_HEAP, NO_BASE_NO_HEAP_NO_EXCEPTIONS, NO_BASE_PTRS, NO_EXCEPTIONS, NO_HEAP, NO_HEAP_NO_EXCEPTIONS, NONE, REFLECTION
 }
-
 /** Placeholder for  com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions. Delete on server side after code generation. */
 enum ControlDependenceOptions {
-  FULL,
-  NO_EXCEPTIONAL_EDGES,
-  NONE
+  FULL, NO_EXCEPTIONAL_EDGES, NO_INTERPROC_EDGES, NO_INTERPROC_NO_EXCEPTION, NONE
 }
-
 paginate Slice, SlicerSetting, SlicerOption with pagination
 service Slice with serviceClass

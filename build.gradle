@@ -172,8 +172,6 @@ dependencies {
     compile group: 'com.ibm.wala', name: 'com.ibm.wala.util', version: '1.5.3'
     compile group: 'com.ibm.wala', name: 'com.ibm.wala.core', version: '1.5.3'
     compile group: 'com.ibm.wala', name: 'com.ibm.wala.cast', version: '1.5.3'
-    compile group: 'com.ibm.wala', name: 'com.ibm.wala.cast.js', version: '1.5.3'
-    compile group: 'com.ibm.wala', name: 'com.ibm.wala.cast.js.rhino', version: '1.5.3'
     compile group: 'com.ibm.wala', name: 'com.ibm.wala.cast.java', version: '1.5.3'
     compile group: 'com.ibm.wala', name: 'com.ibm.wala.cast.java.ecj', version: '1.5.3'
     // uncomment to use wala.dalvik or wala.scandroid
@@ -181,7 +179,7 @@ dependencies {
     //compile group: 'com.ibm.wala', name: 'com.ibm.wala.scandroid', version: '1.5.3'
 
     // add https://github.com/javaparser/javaparser
-    compile 'com.github.javaparser:javaparser-symbol-solver-core:3.14.9'
+    compile 'com.github.javaparser:javaparser-symbol-solver-core:3.14.13'
 
     // import JHipster dependencies BOM
     implementation platform("io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}" )

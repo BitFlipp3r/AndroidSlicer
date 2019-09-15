@@ -86,7 +86,7 @@
             "fieldName": "controlDependenceOptions",
             "javadoc": "com.ibm.wala.ipa.slicer.Slicer.ControlDependenceOptions",
             "fieldType": "ControlDependenceOptions",
-            "fieldValues": "FULL,NO_EXCEPTIONAL_EDGES,NONE",
+            "fieldValues": "FULL,NO_EXCEPTIONAL_EDGES,NO_INTERPROC_EDGES,NO_INTERPROC_NO_EXCEPTION,NONE",
             "fieldValidateRules": [
                 "required"
             ]
