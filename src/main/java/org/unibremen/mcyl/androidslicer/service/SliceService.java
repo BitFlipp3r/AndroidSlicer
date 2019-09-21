@@ -181,13 +181,13 @@ public class SliceService {
                 logger.log("Slice line numbers for file " + packageAndJavaClass + ": " + new TreeSet<>(sliceLineNumbersEntry.getValue()));
 
                 try {
-                    Set<Integer> sourceCodeLines = Parser.getModifiedSlice(sourceLocation, sliceLineNumbersEntry.getValue(), androidClassName, logger);
-                    if (sourceCodeLines != null) {
-                        logger.log("Lines of source code: " + new TreeSet<>(sourceCodeLines));
+                    Set<Integer> sourceCodeLineNumbers = Parser.getModifiedSlice(sourceLocation, sliceLineNumbersEntry.getValue(), androidClassName, logger);
+                    if (sourceCodeLineNumbers != null) {
+                        logger.log("Lines of source code: " + new TreeSet<>(sourceCodeLineNumbers));
                         /**
                          * Gets the actual source code lines based on the line numbers.
                          */
-                        builder.append(SliceMapper.getLinesOfCode(sourceLocation, sourceCodeLines, logger));
+                        builder.append(SliceMapper.getLinesOfCode(sourceLocation, sourceCodeLineNumbers, logger));
 
                         // add the slice code to the slice entity
                         String javaClassFileName = packageAndJavaClass.substring(packageAndJavaClass.lastIndexOf("/") + 1, packageAndJavaClass.length());

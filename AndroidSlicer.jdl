@@ -56,7 +56,8 @@ entity Slice {
 }
 entity SlicerSetting {
   key String required,
-  value String required
+  value String required,
+  description String
 }
 entity CFAOption {
   type CFAType required,
