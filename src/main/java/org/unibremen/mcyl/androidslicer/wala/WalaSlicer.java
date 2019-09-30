@@ -74,11 +74,11 @@ public class WalaSlicer {
 
         /* create an analysis scope representing the appJar as a J2SE application */
         AnalysisScope scope = AnalysisScopeReader.makeJavaBinaryAnalysisScope(appJar.getAbsolutePath(), exclusionFile);
-        IClassHierarchy cha = ClassHierarchyFactory.make(scope);
+        IClassHierarchy classHierarchy = ClassHierarchyFactory.make(scope);
 
         /* make entry points */
         logger.log("\n== GET ENTRY POINTS =="); 
-        Iterable<Entrypoint> entrypoints = WalaSlicer.getEntrypoints(scope, cha, androidClassName, entryMethods, logger);
+        Iterable<Entrypoint> entrypoints = WalaSlicer.getEntrypoints(scope, classHierarchy, androidClassName, entryMethods, logger);
 
         if (!entrypoints.iterator().hasNext()) {
             throw new WalaException("Failed to find any entry points from " + entryMethods + "!");
@@ -105,30 +105,30 @@ public class WalaSlicer {
         
         switch(cfaType){
             case ZERO_CFA:
-                cgBuilder = Util.makeZeroCFABuilder(Language.JAVA, options, cache, cha, scope);
+                cgBuilder = Util.makeZeroCFABuilder(Language.JAVA, options, cache, classHierarchy, scope);
                 break; 
             case ZERO_ONE_CFA:
-                cgBuilder = Util.makeZeroOneCFABuilder(Language.JAVA, options, cache, cha, scope);
+                cgBuilder = Util.makeZeroOneCFABuilder(Language.JAVA, options, cache, classHierarchy, scope);
                 break; 
             case VANILLA_ZERO_ONE_CFA:
-                cgBuilder = Util.makeVanillaZeroOneCFABuilder(Language.JAVA, options, cache, cha, scope);
+                cgBuilder = Util.makeVanillaZeroOneCFABuilder(Language.JAVA, options, cache, classHierarchy, scope);
                 break; 
             case N_CFA:
                 if(cfaLevel != null && cfaLevel >= 0)
-                cgBuilder = Util.makeNCFABuilder(cfaLevel, options, cache, cha, scope);
+                cgBuilder = Util.makeNCFABuilder(cfaLevel, options, cache, classHierarchy, scope);
                 break; 
             case VANILLA_N_CFA:
                 if(cfaLevel != null && cfaLevel >= 0)
-                cgBuilder = Util.makeVanillaNCFABuilder(cfaLevel, options, cache, cha, scope);
+                cgBuilder = Util.makeVanillaNCFABuilder(cfaLevel, options, cache, classHierarchy, scope);
                 break; 
             case ZERO_CONTAINER_CFA:
-                cgBuilder = Util.makeZeroContainerCFABuilder(options, cache, cha, scope);
+                cgBuilder = Util.makeZeroContainerCFABuilder(options, cache, classHierarchy, scope);
                 break; 
             case ZERO_ONE_CONTAINER_CFA:
-                cgBuilder = Util.makeZeroOneContainerCFABuilder(options, cache, cha, scope);
+                cgBuilder = Util.makeZeroOneContainerCFABuilder(options, cache, classHierarchy, scope);
                 break; 
             case VANILLA_ZERO_ONE_CONTAINER_CFA:
-                cgBuilder = Util.makeVanillaZeroOneContainerCFABuilder(options, cache, cha, scope);
+                cgBuilder = Util.makeVanillaZeroOneContainerCFABuilder(options, cache, classHierarchy, scope);
                 break; 
             default:
                 throw new WalaException("No CAF Option Type found to build Call Graph.");
@@ -196,7 +196,7 @@ public class WalaSlicer {
                     statement.getKind() == Statement.Kind.NORMAL_RET_CALLEE |
                     statement.getKind() == Statement.Kind.NORMAL_RET_CALLER)) {
 
-                int bcIndex, instructionIndex = ((StatementWithInstructionIndex) statement).getInstructionIndex();
+                int instructionIndex = ((StatementWithInstructionIndex) statement).getInstructionIndex();
                 IMethod method = statement.getNode().getMethod();
 
                 // the source line number corresponding to a particular bytecode index, or -1 if
@@ -205,7 +205,7 @@ public class WalaSlicer {
 
                 try {
                     if (method != null && method instanceof ShrikeBTMethod) {
-                        bcIndex = ((ShrikeBTMethod) method).getBytecodeIndex(instructionIndex);
+                        int bcIndex = ((ShrikeBTMethod) method).getBytecodeIndex(instructionIndex);
                         srcLineNumber = ((ShrikeBTMethod) method).getLineNumber(bcIndex);
                     } else {
                         continue; // skip everything that is not a shrike method wrapper, like FakeRootMethod
@@ -219,11 +219,11 @@ public class WalaSlicer {
                         logger.log("+ Statement: " + statement.toString());                       
                         logger.log("~ Source line number: " + srcLineNumber);
                         // construct java file path
-                        // (e.g. Lcom/android/.../AlarmMangerService$2 ->
-                        // com/android/.../AlarmManagerService.java)
+                        // (e.g. Lcom/android/server/AlarmManagerService$2 ->
+                        // com/android/server/AlarmManagerService.java)
                         String declaringClass = method.getDeclaringClass().getName().toString();
                         if (declaringClass.indexOf("$") > -1) {
-                            // remove inner class name (e.g. AlarmMangerService$2 -> AlarmManagerService)
+                            // remove inner class name (e.g. AlarmManagerService$2 -> AlarmManagerService)
                             declaringClass = declaringClass.substring(0, declaringClass.indexOf("$"));
                         }
                         String declaringClassFile = declaringClass.substring(1, declaringClass.length()) + ".java";

@@ -179,7 +179,7 @@ dependencies {
     //compile group: 'com.ibm.wala', name: 'com.ibm.wala.scandroid', version: '1.5.3'
 
     // add https://github.com/javaparser/javaparser
-    compile 'com.github.javaparser:javaparser-symbol-solver-core:3.14.13'
+    compile 'com.github.javaparser:javaparser-symbol-solver-core:3.14.14'
 
     // import JHipster dependencies BOM
     implementation platform("io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}" )

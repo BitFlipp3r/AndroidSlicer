@@ -30,7 +30,7 @@ public class InitialSetupMigration {
         SlicerSetting androidSourcePath = new SlicerSetting();
         androidSourcePath.setKey(Constants.ANDROID_SOURCE_PATH_KEY);
         androidSourcePath.setValue("android-resources");
-        androidSourcePath.setDescription("This is the file path to the android source code files (system services andP AIDL-files). The files should be inside a subfolder named android-xx, where xx represents the API-Level. Can be relative to the execution directory of the Android-Slicer or an absolute Path.");
+        androidSourcePath.setDescription("This is the file path to the android source code files (system services and AIDL-files). The files should be inside a subfolder named android-xx, where xx represents the API-Level. Can be relative to the execution directory of the Android-Slicer or an absolute Path.");
         mongoTemplate.save(androidSourcePath);
 
         SlicerSetting androidPlatformPath = new SlicerSetting();

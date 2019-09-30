@@ -52,6 +52,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
     public MethodVisitor(final Set<Integer> slicedLineNumbers, String mainClassName) {
         super();
         this.slicedLineNumbers = slicedLineNumbers;
+        // base the out-list on the in-list so all wala lines are added by default
         this.sourceLineNumbers = new HashSet<Integer>(slicedLineNumbers);
         this.mainClassName = mainClassName;
     }
@@ -80,8 +81,10 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                 addAllLinesFromBeginToEnd(forStmt.getBegin().get().line, 
                         forStmt.getBody().getBegin().get().line,
                         sourceLineNumbers);
+                // add closing line
                 sourceLineNumbers.add(forStmt.getBody().getEnd().get().line);
 
+                // search inner statements
                 if (forStmt.getBody() instanceof BlockStmt){
                     addStatementBody(forStmt.getBody(), line);
                 }
@@ -216,16 +219,6 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                     sourceLineNumbers);
             }
 
-            // mcyl: fix for multiline throw statements
-            if (node instanceof ThrowStmt) {
-                ThrowStmt throwStmt = (ThrowStmt) node;
-
-                addAllLinesFromBeginToEnd(
-                    throwStmt.getBegin().get().line,
-                    throwStmt.getEnd().get().line,
-                    sourceLineNumbers);
-            }
-
             // mcyl: added switch statements
             if (node instanceof SwitchStmt) {
                 SwitchStmt switchStmt = (SwitchStmt) node;
@@ -243,6 +236,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                     }
                 }
             }
+
             // mcyl: added switch entry statements
             if (node instanceof SwitchEntry) {
                 SwitchEntry switchEntry = (SwitchEntry) node;
@@ -269,6 +263,16 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
         // mcyl: add all continue- and break-statements
         if (node instanceof ContinueStmt | node instanceof BreakStmt) {
             sourceLineNumbers.add(node.getBegin().get().line);
+        }
+
+        // mcyl: fix for multiline throw statements + always add throw statements
+        if (node instanceof ThrowStmt) {
+            ThrowStmt throwStmt = (ThrowStmt) node;
+
+            addAllLinesFromBeginToEnd(
+                throwStmt.getBegin().get().line,
+                throwStmt.getEnd().get().line,
+                sourceLineNumbers);
         }
     }
 
@@ -328,7 +332,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
     // pnguyen: ConstructorDeclaration was ignored and led to wrong reconstructed code
     @Override
     public void visit(ConstructorDeclaration constructorDeclaration, Object arg) {
-        // mcyl: set class body if slice line is inside note or if its the main class (i.e. entry class)
+        // mcyl: set class body if slice line is inside note or if its the main class
         if(areSlicedLineNumbersInNode(constructorDeclaration) | 
             constructorDeclaration.getNameAsString().equals(this.mainClassName)) {
               
@@ -386,17 +390,21 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
         return false;
     }
 
+    /**
+     * This method adds the class declartion and any extended ore implemented types.
+     * @param classNode
+     */
     private void setClassBody(ClassOrInterfaceDeclaration classNode){
         sourceLineNumbers.add(classNode.getBegin().get().line);
 
         // mcyl: check if any implements or extends reach to another line
-        Set<Node> extendsAndImplementsNodes = new HashSet<Node>();
+        Set<ClassOrInterfaceType> extendsAndImplementsNodes = new HashSet<ClassOrInterfaceType>();
         extendsAndImplementsNodes.addAll(classNode.getExtendedTypes());
         extendsAndImplementsNodes.addAll(classNode.getImplementedTypes());
-        for(Node extendsAndImplementsNode : extendsAndImplementsNodes){
+        for(ClassOrInterfaceType extendsAndImplementsNode : extendsAndImplementsNodes){
             addAllLinesFromBeginToEnd(
                 classNode.getBegin().get().line,
-                extendsAndImplementsNode.getEnd().get().line ,
+                extendsAndImplementsNode.getEnd().get().line,
                 sourceLineNumbers);
         }
 
