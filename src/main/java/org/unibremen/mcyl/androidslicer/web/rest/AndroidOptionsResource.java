@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -186,7 +188,7 @@ public class AndroidOptionsResource {
      *         file, or with status 404 (Not Found)
      */
     @GetMapping("/android-options/entry-methods")
-    public ResponseEntity<List<String>> getServiceEntryMethods(@RequestParam("name") String serviceClassName,
+    public ResponseEntity<Set<String>> getServiceEntryMethods(@RequestParam("name") String serviceClassName,
             @RequestParam("path") String sourceFilePath) {
         log.debug("REST request to get get service's public methods based on the AIDL specification");
 
@@ -219,7 +221,7 @@ public class AndroidOptionsResource {
 
                 // get method names
                 if (aidlFile != null && aidlFile.exists()) {
-                    List<String> methodNames = new ArrayList<String>();
+                    Set<String> methodNames = new HashSet<String>();
                     try (Scanner scanner = new Scanner(aidlFile)) {
                         while (scanner.hasNextLine()) {
                             String line = scanner.nextLine();
