@@ -19,6 +19,7 @@ import com.ibm.wala.util.CancelException;
 import com.ibm.wala.util.WalaException;
 
 import org.apache.commons.io.FilenameUtils;
+import org.bson.BsonMaximumSizeExceededException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.unibremen.mcyl.androidslicer.config.Constants;
@@ -124,8 +125,8 @@ public class SliceService {
                     slice.getDataDependenceOptions(),
                     slice.getControlDependenceOptions(), 
                     logger);
-        } catch (IllegalArgumentException | WalaException | IOException | CancelException e) {
-            logger.log(e.getMessage());
+        } catch (Exception ex) {
+            logger.log(ex.getMessage());
         }
 
         if (sliceLineNumbers != null) {

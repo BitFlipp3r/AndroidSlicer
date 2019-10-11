@@ -29,8 +29,6 @@ import com.ibm.wala.ipa.callgraph.CallGraphStats;
 import com.ibm.wala.ipa.callgraph.Entrypoint;
 import com.ibm.wala.ipa.callgraph.impl.ArgumentTypeEntrypoint;
 import com.ibm.wala.ipa.callgraph.impl.Util;
-import com.ibm.wala.ipa.callgraph.propagation.InstanceKey;
-import com.ibm.wala.ipa.callgraph.propagation.PointerAnalysis;
 import com.ibm.wala.ipa.cha.ClassHierarchyException;
 import com.ibm.wala.ipa.cha.ClassHierarchyFactory;
 import com.ibm.wala.ipa.cha.IClassHierarchy;
@@ -52,6 +50,7 @@ import com.ibm.wala.util.debug.UnimplementedError;
 import com.ibm.wala.util.intset.IntSet;
 import com.ibm.wala.util.strings.Atom;
 
+import org.bson.BSONException;
 import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAType;
 import org.unibremen.mcyl.androidslicer.service.SliceLogger;
 
@@ -63,6 +62,9 @@ import org.unibremen.mcyl.androidslicer.service.SliceLogger;
  * deep search for seed statements.
  */
 public class WalaSlicer {
+
+    // maximum number of wala slice statements that will be logged to not blow up the db (maximum BSON document size for a MongoDB entity is 16MB)
+    private static final int MAX_DETAILED_LOG = 1000;
 
     public static Map<String, Set<Integer>> doSlicing(File appJar, File exclusionFile, String androidClassName,
             Set<String> entryMethods, Set<String> seedStatementNames, CFAType cfaType, Integer cfaLevel, ReflectionOptions reflectionOptions,
@@ -174,7 +176,7 @@ public class WalaSlicer {
         //    logger.log("~ " + seedStatement.toString());
         //}
 
-        logger.log("\n== GETTING SOURCE FILES ==");
+        logger.log("\n== GETTING SOURCE FILE LINE NUMBERS ==");
         return WalaSlicer.getLineNumbersGroupedBySourceFiles(sliceList, logger);
     }
 
@@ -187,6 +189,12 @@ public class WalaSlicer {
      */
     private static Map<String, Set<Integer>> getLineNumbersGroupedBySourceFiles(final Collection<Statement> sliceStatements, SliceLogger logger) {
         Map<String, Set<Integer>> sourceFileLineNumbers = new HashMap<>(); // map to group slice line numbers by class
+
+        boolean doLogging = true;
+        if(sliceStatements.size() > MAX_DETAILED_LOG){
+            logger.log("Number of Slice Statements exceeded maximum Statements to log(" + MAX_DETAILED_LOG +"). Therefore Slice Statements will not be logged in detail.");
+            doLogging = false;
+        }
 
         for (Statement statement : sliceStatements) {
             // ignore special kinds of statements
@@ -216,8 +224,10 @@ public class WalaSlicer {
                     }
 
                     try {
-                        logger.log("+ Statement: " + statement.toString());                       
-                        logger.log("~ Source line number: " + srcLineNumber);
+                        if(doLogging){
+                            logger.logWithBuffer("+ Statement: " + statement.toString());                       
+                            logger.logWithBuffer("~ Source line number: " + srcLineNumber);
+                        }
                         // construct java file path
                         // (e.g. Lcom/android/server/AlarmManagerService$2 ->
                         // com/android/server/AlarmManagerService.java)
@@ -227,8 +237,9 @@ public class WalaSlicer {
                             declaringClass = declaringClass.substring(0, declaringClass.indexOf("$"));
                         }
                         String declaringClassFile = declaringClass.substring(1, declaringClass.length()) + ".java";
-                        logger.log("~ Java source file: " + declaringClassFile + "\n");
-
+                        if(doLogging){
+                            logger.logWithBuffer("~ Java source file: " + declaringClassFile + "\n");
+                        }
                         Set<Integer> currentLineNumbers = sourceFileLineNumbers.get(declaringClassFile);
                         if (currentLineNumbers == null) {
                             currentLineNumbers = new HashSet<Integer>();
@@ -236,10 +247,14 @@ public class WalaSlicer {
                         currentLineNumbers.add(srcLineNumber);
                         sourceFileLineNumbers.put(declaringClassFile, currentLineNumbers);
                     } catch (Exception e) {
-                        logger.log("- Error getting line sourceFileLineNumbers: " + e);
+                        if(doLogging){
+                            logger.logWithBuffer("- Error getting line sourceFileLineNumbers: " + e);
+                        }                      
                     }
                 } catch (Exception e) {
-                    logger.log("- getBytecodeIndex handling failed: " + e);
+                    if(doLogging){
+                        logger.logWithBuffer("- getBytecodeIndex handling failed: " + e);
+                    }
                 }
             }
         }

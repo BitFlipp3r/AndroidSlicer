@@ -145,7 +145,8 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                         thenStmt.getBegin().get().line,
                         sourceLineNumbers);
 
-                    // if no brackets, no inner blocks and probably statement without brackets
+                    // check for brackets
+                    // no brackets means no inner blocks and probably statement without brackets
                     if (thenStmt.toString().contains("{")) {
                         thenLastLine = thenStmt.getEnd().get().line;
                     }
@@ -155,8 +156,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                 if(ifStmt.getElseStmt() != null && ifStmt.getElseStmt().isPresent()){
                     Statement elseStmt = ifStmt.getElseStmt().get();
                     if (elseStmt != null) {
-                        // if no brackets, no inner blocks and probably statement without brackets
-                        if (thenLastLine > 0) {
+                        if (thenLastLine > 0) {                         
                             sourceLineNumbers.add(elseStmt.getBegin().get().line);
                             sourceLineNumbers.add(elseStmt.getEnd().get().line);
 
@@ -165,12 +165,10 @@ public class MethodVisitor extends VoidVisitorAdapter<Object> {
                                     elseStmt.getBegin().get().line,
                                     sourceLineNumbers);
                         }
-                        if (isLineInNode(elseStmt, line)) {
-                            if (!elseStmt.toString().contains("else")) {
-                                sourceLineNumbers.add(elseStmt.getBegin().get().line - 1);
-                            }
-                            addStatementBody(elseStmt, line);
+                        if (!elseStmt.toString().contains("else")) {
+                            sourceLineNumbers.add(elseStmt.getBegin().get().line - 1);
                         }
+                        addStatementBody(elseStmt, line);                     
                     }
                 }
             }
