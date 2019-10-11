@@ -1,16 +1,12 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AndroidSlicerSharedModule } from 'app/shared';
-import {
-  SlicerOptionComponent,
-  SlicerOptionDetailComponent,
-  SlicerOptionUpdateComponent,
-  SlicerOptionDeletePopupComponent,
-  SlicerOptionDeleteDialogComponent,
-  slicerOptionRoute,
-  slicerOptionPopupRoute
-} from './';
+import { AndroidSlicerSharedModule } from 'app/shared/shared.module';
+import { SlicerOptionComponent } from './slicer-option.component';
+import { SlicerOptionDetailComponent } from './slicer-option-detail.component';
+import { SlicerOptionUpdateComponent } from './slicer-option-update.component';
+import { SlicerOptionDeletePopupComponent, SlicerOptionDeleteDialogComponent } from './slicer-option-delete-dialog.component';
+import { slicerOptionRoute, slicerOptionPopupRoute } from './slicer-option.route';
 
 const ENTITY_STATES = [...slicerOptionRoute, ...slicerOptionPopupRoute];
 
@@ -23,12 +19,6 @@ const ENTITY_STATES = [...slicerOptionRoute, ...slicerOptionPopupRoute];
     SlicerOptionDeleteDialogComponent,
     SlicerOptionDeletePopupComponent
   ],
-  entryComponents: [
-    SlicerOptionComponent,
-    SlicerOptionUpdateComponent,
-    SlicerOptionDeleteDialogComponent,
-    SlicerOptionDeletePopupComponent
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  entryComponents: [SlicerOptionDeleteDialogComponent]
 })
 export class AndroidSlicerSlicerOptionModule {}

@@ -1,7 +1,8 @@
-/* tslint:disable no-unused-expression */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { SliceComponentsPage, SliceDeleteDialog, SliceUpdatePage } from './slice.page-object';
 
 const expect = chai.expect;
@@ -9,8 +10,8 @@ const expect = chai.expect;
 describe('Slice e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let sliceUpdatePage: SliceUpdatePage;
   let sliceComponentsPage: SliceComponentsPage;
+  let sliceUpdatePage: SliceUpdatePage;
   let sliceDeleteDialog: SliceDeleteDialog;
 
   before(async () => {

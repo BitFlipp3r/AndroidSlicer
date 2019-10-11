@@ -1,31 +1,6 @@
-export const enum ReflectionOptions {
-  FULL = 'FULL',
-  NO_FLOW_TO_CASTS = 'NO_FLOW_TO_CASTS',
-  NO_FLOW_TO_CASTS_NO_METHOD_INVOKE = 'NO_FLOW_TO_CASTS_NO_METHOD_INVOKE',
-  NO_METHOD_INVOKE = 'NO_METHOD_INVOKE',
-  NO_STRING_CONSTANTS = 'NO_STRING_CONSTANTS',
-  NONE = 'NONE',
-  ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE = 'ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE'
-}
-
-export const enum DataDependenceOptions {
-  FULL = 'FULL',
-  NO_BASE_NO_EXCEPTIONS = 'NO_BASE_NO_EXCEPTIONS',
-  NO_BASE_NO_HEAP = 'NO_BASE_NO_HEAP',
-  NO_BASE_NO_HEAP_NO_EXCEPTIONS = 'NO_BASE_NO_HEAP_NO_EXCEPTIONS',
-  NO_BASE_PTRS = 'NO_BASE_PTRS',
-  NO_EXCEPTIONS = 'NO_EXCEPTIONS',
-  NO_HEAP = 'NO_HEAP',
-  NO_HEAP_NO_EXCEPTIONS = 'NO_HEAP_NO_EXCEPTIONS',
-  NONE = 'NONE',
-  REFLECTION = 'REFLECTION'
-}
-
-export const enum ControlDependenceOptions {
-  FULL = 'FULL',
-  NO_EXCEPTIONAL_EDGES = 'NO_EXCEPTIONAL_EDGES',
-  NONE = 'NONE'
-}
+import { ReflectionOptions } from 'app/shared/model/enumerations/reflection-options.model';
+import { DataDependenceOptions } from 'app/shared/model/enumerations/data-dependence-options.model';
+import { ControlDependenceOptions } from 'app/shared/model/enumerations/control-dependence-options.model';
 
 export interface ISlice {
   id?: string;

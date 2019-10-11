@@ -181,8 +181,8 @@ public class SlicerSettingResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(slicerSetting.getId())))
-            .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY.toString())))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())));
+            .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY)))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)));
     }
     
     @Test
@@ -195,8 +195,8 @@ public class SlicerSettingResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(slicerSetting.getId()))
-            .andExpect(jsonPath("$.key").value(DEFAULT_KEY.toString()))
-            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE.toString()));
+            .andExpect(jsonPath("$.key").value(DEFAULT_KEY))
+            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE));
     }
 
     @Test

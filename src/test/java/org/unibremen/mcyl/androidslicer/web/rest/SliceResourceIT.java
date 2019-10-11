@@ -39,7 +39,6 @@ public class SliceResourceIT {
 
     private static final Integer DEFAULT_ANDROID_VERSION = 1;
     private static final Integer UPDATED_ANDROID_VERSION = 2;
-    private static final Integer SMALLER_ANDROID_VERSION = 1 - 1;
 
     private static final String DEFAULT_ANDROID_CLASS_NAME = "AAAAAAAAAA";
     private static final String UPDATED_ANDROID_CLASS_NAME = "BBBBBBBBBB";
@@ -296,12 +295,12 @@ public class SliceResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(slice.getId())))
             .andExpect(jsonPath("$.[*].androidVersion").value(hasItem(DEFAULT_ANDROID_VERSION)))
-            .andExpect(jsonPath("$.[*].androidClassName").value(hasItem(DEFAULT_ANDROID_CLASS_NAME.toString())))
+            .andExpect(jsonPath("$.[*].androidClassName").value(hasItem(DEFAULT_ANDROID_CLASS_NAME)))
             .andExpect(jsonPath("$.[*].entryMethods").value(hasItem(DEFAULT_ENTRY_METHODS.toString())))
             .andExpect(jsonPath("$.[*].seedStatements").value(hasItem(DEFAULT_SEED_STATEMENTS.toString())))
             .andExpect(jsonPath("$.[*].slice").value(hasItem(DEFAULT_SLICE.toString())))
             .andExpect(jsonPath("$.[*].log").value(hasItem(DEFAULT_LOG.toString())))
-            .andExpect(jsonPath("$.[*].threadId").value(hasItem(DEFAULT_THREAD_ID.toString())))
+            .andExpect(jsonPath("$.[*].threadId").value(hasItem(DEFAULT_THREAD_ID)))
             .andExpect(jsonPath("$.[*].running").value(hasItem(DEFAULT_RUNNING.booleanValue())))
             .andExpect(jsonPath("$.[*].reflectionOptions").value(hasItem(DEFAULT_REFLECTION_OPTIONS.toString())))
             .andExpect(jsonPath("$.[*].dataDependenceOptions").value(hasItem(DEFAULT_DATA_DEPENDENCE_OPTIONS.toString())))
@@ -319,12 +318,12 @@ public class SliceResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(slice.getId()))
             .andExpect(jsonPath("$.androidVersion").value(DEFAULT_ANDROID_VERSION))
-            .andExpect(jsonPath("$.androidClassName").value(DEFAULT_ANDROID_CLASS_NAME.toString()))
+            .andExpect(jsonPath("$.androidClassName").value(DEFAULT_ANDROID_CLASS_NAME))
             .andExpect(jsonPath("$.entryMethods").value(DEFAULT_ENTRY_METHODS.toString()))
             .andExpect(jsonPath("$.seedStatements").value(DEFAULT_SEED_STATEMENTS.toString()))
             .andExpect(jsonPath("$.slice").value(DEFAULT_SLICE.toString()))
             .andExpect(jsonPath("$.log").value(DEFAULT_LOG.toString()))
-            .andExpect(jsonPath("$.threadId").value(DEFAULT_THREAD_ID.toString()))
+            .andExpect(jsonPath("$.threadId").value(DEFAULT_THREAD_ID))
             .andExpect(jsonPath("$.running").value(DEFAULT_RUNNING.booleanValue()))
             .andExpect(jsonPath("$.reflectionOptions").value(DEFAULT_REFLECTION_OPTIONS.toString()))
             .andExpect(jsonPath("$.dataDependenceOptions").value(DEFAULT_DATA_DEPENDENCE_OPTIONS.toString()))
