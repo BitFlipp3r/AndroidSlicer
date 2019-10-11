@@ -1,15 +1,16 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AndroidSlicerSharedModule } from 'app/shared';
-import { SlicerSettingComponent, SlicerSettingDetailComponent, SlicerSettingUpdateComponent, slicerSettingRoute } from './';
+import { AndroidSlicerSharedModule } from 'app/shared/shared.module';
+import { SlicerSettingComponent } from './slicer-setting.component';
+import { SlicerSettingDetailComponent } from './slicer-setting-detail.component';
+import { SlicerSettingUpdateComponent } from './slicer-setting-update.component';
+import { slicerSettingRoute } from './slicer-setting.route';
 
 const ENTITY_STATES = [...slicerSettingRoute];
 
 @NgModule({
   imports: [AndroidSlicerSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [SlicerSettingComponent, SlicerSettingDetailComponent, SlicerSettingUpdateComponent],
-  entryComponents: [SlicerSettingComponent, SlicerSettingUpdateComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  declarations: [SlicerSettingComponent, SlicerSettingDetailComponent, SlicerSettingUpdateComponent]
 })
 export class AndroidSlicerSlicerSettingModule {}

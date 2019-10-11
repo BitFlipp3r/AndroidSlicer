@@ -1,16 +1,12 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AndroidSlicerSharedModule } from 'app/shared';
-import {
-  SliceComponent,
-  SliceDetailComponent,
-  SliceMakeComponent,
-  SliceDeletePopupComponent,
-  SliceDeleteDialogComponent,
-  sliceRoute,
-  slicePopupRoute
-} from './';
+import { AndroidSlicerSharedModule } from 'app/shared/shared.module';
+import { SliceComponent } from './slice.component';
+import { SliceDetailComponent } from './slice-detail.component';
+import { SliceMakeComponent } from './slice-make.component';
+import { SliceDeletePopupComponent, SliceDeleteDialogComponent } from './slice-delete-dialog.component';
+import { sliceRoute, slicePopupRoute } from './slice.route';
 
 const ENTITY_STATES = [...sliceRoute, ...slicePopupRoute];
 
@@ -35,7 +31,6 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     MonacoEditorModule
   ],
   declarations: [SliceComponent, SliceDetailComponent, SliceMakeComponent, SliceDeleteDialogComponent, SliceDeletePopupComponent],
-  entryComponents: [SliceComponent, SliceMakeComponent, SliceDeleteDialogComponent, SliceDeletePopupComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  entryComponents: [SliceComponent, SliceMakeComponent, SliceDeleteDialogComponent, SliceDeletePopupComponent]
 })
 export class AndroidSlicerSliceModule {}

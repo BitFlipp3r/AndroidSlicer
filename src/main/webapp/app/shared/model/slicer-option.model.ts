@@ -1,8 +1,4 @@
-export const enum SlicerOptionType {
-  REFLECTION_OPTION = 'REFLECTION_OPTION',
-  DATA_DEPENDENCE_OPTION = 'DATA_DEPENDENCE_OPTION',
-  CONTROL_DEPENDENCE_OPTION = 'CONTROL_DEPENDENCE_OPTION'
-}
+import { SlicerOptionType } from 'app/shared/model/enumerations/slicer-option-type.model';
 
 export interface ISlicerOption {
   id?: string;

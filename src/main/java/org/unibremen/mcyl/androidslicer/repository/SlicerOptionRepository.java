@@ -1,5 +1,4 @@
 package org.unibremen.mcyl.androidslicer.repository;
-
 import org.unibremen.mcyl.androidslicer.domain.SlicerOption;
 import org.unibremen.mcyl.androidslicer.domain.enumeration.SlicerOptionType;
 import org.springframework.data.mongodb.repository.Query;

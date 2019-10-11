@@ -1,7 +1,6 @@
-/* tslint:disable no-unused-expression */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
-
 import { SliceComponentsPage, SliceDeleteDialog, SliceMakePage } from './slice.page-object';
 
 const expect = chai.expect;

@@ -1,26 +1,22 @@
-import './vendor.ts';
-
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { NgxWebstorageModule } from 'ngx-webstorage';
-import { NgJhipsterModule } from 'ng-jhipster';
+import { BrowserModule } from '@angular/platform-browser';
 
-import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
-import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
-import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
-import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
-import { AndroidSlicerSharedModule } from 'app/shared';
-import { AndroidSlicerCoreModule } from 'app/core';
+import './vendor';
+import { AndroidSlicerSharedModule } from 'app/shared/shared.module';
+import { AndroidSlicerCoreModule } from 'app/core/core.module';
 import { AndroidSlicerAppRoutingModule } from './app-routing.module';
 import { AndroidSlicerHomeModule } from './home/home.module';
 import { AndroidSlicerEntityModule } from './entities/entity.module';
-import * as moment from 'moment';
+
 import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
+
 // jhipster-needle-angular-add-module-import JHipster will add new module here
-import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent } from './layouts';
+import { JhiMainComponent } from './layouts/main/main.component';
+import { NavbarComponent } from './layouts/navbar/navbar.component';
+import { FooterComponent } from './layouts/footer/footer.component';
+import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
+import { ErrorComponent } from './layouts/error/error.component';
 
 const monacoConfig: NgxMonacoEditorConfig = {
   defaultOptions: { quickSuggestions: true, scrollBeyondLastLine: false, readOnly: true } // pass default options to be used
@@ -30,13 +26,7 @@ const monacoConfig: NgxMonacoEditorConfig = {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-' }),
-    NgJhipsterModule.forRoot({
-      // set below to true to make alerts look like toast
-      alertAsToast: false,
-      alertTimeout: 5000
-    }),
-    AndroidSlicerSharedModule.forRoot(),
+    AndroidSlicerSharedModule,
     AndroidSlicerCoreModule,
     AndroidSlicerHomeModule,
     MonacoEditorModule.forRoot(monacoConfig),
@@ -45,32 +35,6 @@ const monacoConfig: NgxMonacoEditorConfig = {
     AndroidSlicerAppRoutingModule
   ],
   declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthExpiredInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorHandlerInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: NotificationInterceptor,
-      multi: true
-    }
-  ],
   bootstrap: [JhiMainComponent]
 })
-export class AndroidSlicerAppModule {
-  constructor(private dpConfig: NgbDatepickerConfig) {
-    this.dpConfig.minDate = { year: moment().year() - 100, month: 1, day: 1 };
-  }
-}
+export class AndroidSlicerAppModule {}

@@ -1,4 +1,4 @@
-import { browser, ExpectedConditions, element, by, ElementFinder } from 'protractor';
+import { element, by, ElementFinder } from 'protractor';
 
 export class SlicerOptionComponentsPage {
   title = element.all(by.css('jhi-slicer-option div h2#page-heading span')).first();

@@ -1,40 +1,8 @@
 import { CFAType } from './cfa-option.model';
 
-export const enum ReflectionOptions {
-  FULL = 'FULL',
-  APPLICATION_GET_METHOD = 'APPLICATION_GET_METHOD',
-  NO_FLOW_TO_CASTS = 'NO_FLOW_TO_CASTS',
-  NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD = 'NO_FLOW_TO_CASTS_APPLICATION_GET_METHOD',
-  NO_METHOD_INVOKE = 'NO_METHOD_INVOKE',
-  NO_FLOW_TO_CASTS_NO_METHOD_INVOKE = 'NO_FLOW_TO_CASTS_NO_METHOD_INVOKE',
-  ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE = 'ONE_FLOW_TO_CASTS_NO_METHOD_INVOKE',
-  ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD = 'ONE_FLOW_TO_CASTS_APPLICATION_GET_METHOD',
-  MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD = 'MULTI_FLOW_TO_CASTS_APPLICATION_GET_METHOD',
-  NO_STRING_CONSTANTS = 'NO_STRING_CONSTANTS',
-  STRING_ONLY = 'STRING_ONLY',
-  NONE = 'NONE'
-}
-
-export const enum DataDependenceOptions {
-  FULL = 'FULL',
-  NO_BASE_NO_EXCEPTIONS = 'NO_BASE_NO_EXCEPTIONS',
-  NO_BASE_NO_HEAP = 'NO_BASE_NO_HEAP',
-  NO_BASE_NO_HEAP_NO_EXCEPTIONS = 'NO_BASE_NO_HEAP_NO_EXCEPTIONS',
-  NO_BASE_PTRS = 'NO_BASE_PTRS',
-  NO_EXCEPTIONS = 'NO_EXCEPTIONS',
-  NO_HEAP = 'NO_HEAP',
-  NO_HEAP_NO_EXCEPTIONS = 'NO_HEAP_NO_EXCEPTIONS',
-  NONE = 'NONE',
-  REFLECTION = 'REFLECTION'
-}
-
-export const enum ControlDependenceOptions {
-  FULL = 'FULL',
-  NO_EXCEPTIONAL_EDGES = 'NO_EXCEPTIONAL_EDGES',
-  NO_INTERPROC_EDGES = 'NO_INTERPROC_EDGES',
-  NO_INTERPROC_NO_EXCEPTION = 'NO_INTERPROC_NO_EXCEPTION',
-  NONE = 'NONE'
-}
+import { ReflectionOptions } from 'app/shared/model/enumerations/reflection-options.model';
+import { DataDependenceOptions } from 'app/shared/model/enumerations/data-dependence-options.model';
+import { ControlDependenceOptions } from 'app/shared/model/enumerations/control-dependence-options.model';
 
 export interface ISlicedClass {
   className?: string;

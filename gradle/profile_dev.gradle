@@ -35,7 +35,7 @@ bootRun {
     args = []
 }
 
-task webpackBuildDev(type: NpmTask) {
+task webpack(type: NpmTask) {
     inputs.files("package-lock.json")
     inputs.files("build.gradle")
     inputs.dir("src/main/webapp/")
@@ -64,5 +64,5 @@ processResources {
     }
 }
 
-processResources.dependsOn webpackBuildDev
+processResources.dependsOn webpack
 bootJar.dependsOn processResources

@@ -93,6 +93,9 @@ spring:
         size: 4
   thymeleaf:
     mode: HTML
+  output:
+    ansi:
+      console-available: true
 
 server:
   servlet:

@@ -1,8 +1,5 @@
-/* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { SliceService } from 'app/entities/slice/slice.service';
 import { ISlice, Slice, ReflectionOptions, DataDependenceOptions, ControlDependenceOptions } from 'app/shared/model/slice.model';
@@ -43,7 +40,7 @@ describe('Service Tests', () => {
     });
 
     describe('Service methods', () => {
-      it('should find an element', async () => {
+      it('should find an element', () => {
         const returnedFromService = Object.assign({}, elemDefault);
         service
           .find('123')
@@ -55,7 +52,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: elemDefault });
       });
 
-      it('should create a Slice', async () => {
+      it('should create a Slice', () => {
         const returnedFromService = Object.assign(
           {
             id: 'ID'
@@ -72,7 +69,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: expected });
       });
 
-      it('should return a list of Slice', async () => {
+      it('should return a list of Slice', () => {
         const returnedFromService = Object.assign(
           {
             androidVersion: 1,
@@ -105,8 +102,8 @@ describe('Service Tests', () => {
         expect(expectedResult).toContainEqual(expected);
       });
 
-      it('should delete a Slice', async () => {
-        const rxPromise = service.delete('123').subscribe(resp => (expectedResult = resp.ok));
+      it('should delete a Slice', () => {
+        service.delete('123').subscribe(resp => (expectedResult = resp.ok));
 
         const req = httpMock.expectOne({ method: 'DELETE' });
         req.flush({ status: 200 });
