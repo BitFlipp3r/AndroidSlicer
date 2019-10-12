@@ -7,6 +7,10 @@ import { AndroidSlicerTestModule } from '../../../test.module';
 import { SliceMakeComponent } from 'app/entities/slice/slice-make.component';
 import { SliceService } from 'app/entities/slice/slice.service';
 import { Slice } from 'app/shared/model/slice.model';
+import { CFAType } from 'app/shared/model/enumerations/cfa-type.model';
+import { ReflectionOptions } from 'app/shared/model/enumerations/reflection-options.model';
+import { DataDependenceOptions } from 'app/shared/model/enumerations/data-dependence-options.model';
+import { ControlDependenceOptions } from 'app/shared/model/enumerations/control-dependence-options.model';
 
 describe('Component Tests', () => {
   describe('Slice Management Make Component', () => {
@@ -34,8 +38,16 @@ describe('Component Tests', () => {
         const entity = new Slice();
         spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
         // WHEN
-        // TODO: set needed fields
-        // createForm.get(['androidVersion']).patchValue ...
+
+        comp.createForm.get(['androidVersion']).patchValue('8');
+        comp.createForm.get(['androidClassName']).patchValue('Lcom/android/server/AlarmManagerService');
+        comp.createForm.get(['entryMethods']).patchValue(['set', 'setTime']);
+        comp.createForm.get(['seedStatements']).patchValue(['checkPermission', 'enforcePermisson']);
+        comp.createForm.get(['cfaOptions']).patchValue(CFAType.ZERO_CONTAINER_CFA);
+        comp.createForm.get(['cfaLevel']).patchValue(null);
+        comp.createForm.get(['reflectionOptions']).patchValue(ReflectionOptions.FULL);
+        comp.createForm.get(['dataDependenceOptions']).patchValue(DataDependenceOptions.FULL);
+        comp.createForm.get(['controlDependenceOptions']).patchValue(ControlDependenceOptions.FULL);
         comp.save();
         tick(); // simulate async
 

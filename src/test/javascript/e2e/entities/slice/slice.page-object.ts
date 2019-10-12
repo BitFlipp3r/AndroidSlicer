@@ -30,10 +30,6 @@ export class SliceMakePage {
   androidClassNameInput = element(by.id('field_androidClassName'));
   entryMethodsInput = element(by.id('field_entryMethods'));
   seedStatementsInput = element(by.id('field_seedStatements'));
-  sliceInput = element(by.id('field_slice'));
-  logInput = element(by.id('field_log'));
-  threadIdInput = element(by.id('field_threadId'));
-  runningInput = element(by.id('field_running'));
   cfaTypeSelect = element(by.id('field_cfaType'));
   cfaLevelInput = element(by.id('field_cfaLevel'));
   reflectionOptionsSelect = element(by.id('field_reflectionOptions'));
@@ -76,34 +72,6 @@ export class SliceMakePage {
     return await this.seedStatementsInput.getAttribute('value');
   }
 
-  async setSliceInput(slice) {
-    await this.sliceInput.sendKeys(slice);
-  }
-
-  async getSliceInput() {
-    return await this.sliceInput.getAttribute('value');
-  }
-
-  async setLogInput(log) {
-    await this.logInput.sendKeys(log);
-  }
-
-  async getLogInput() {
-    return await this.logInput.getAttribute('value');
-  }
-
-  async setThreadIdInput(threadId) {
-    await this.threadIdInput.sendKeys(threadId);
-  }
-
-  async getThreadIdInput() {
-    return await this.threadIdInput.getAttribute('value');
-  }
-
-  getRunningInput(timeout?: number) {
-    return this.runningInput;
-  }
-
   async setCfaTypeSelect(cfaType) {
     await this.cfaTypeSelect.sendKeys(cfaType);
   }
@@ -119,11 +87,11 @@ export class SliceMakePage {
       .click();
   }
 
-  async setcfaLevelInput(cfaLevel) {
+  async setCfaLevelInput(cfaLevel) {
     await this.cfaLevelInput.sendKeys(cfaLevel);
   }
 
-  async getcfaLevelInput() {
+  async getCfaLevelInput() {
     return await this.cfaLevelInput.getAttribute('value');
   }
 

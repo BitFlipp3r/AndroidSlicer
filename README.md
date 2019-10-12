@@ -140,7 +140,7 @@ To package your application as a war in order to deploy it to an application ser
 
 To launch your application's tests, run:
 
-    ./gradlew test integrationTest jacocoTestReport
+    ./gradlew test integrationTest
 
 ### Client tests
 
@@ -163,7 +163,7 @@ You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqu
 Then, run a Sonar analysis:
 
 ```
-./gradlew -Pprod clean check jacocoTestReport sonarqube
+./gradlew -Pprod clean check  sonarqube
 ```
 
 For more information, refer to the [Code quality page][].

@@ -76,11 +76,11 @@ class SliceGatlingTest extends Simulation {
                 , "androidClassName":"SAMPLE_TEXT"
                 , "entryMethods":null
                 , "seedStatements":null
-                , "slice":null
+                , "slicedClasses":null
                 , "log":null
                 , "threadId":"SAMPLE_TEXT"
                 , "running":null
-                , "cfaType":"ZeroCFA"
+                , "cfaType":"ZERO_CFA"
                 , "cfaLevel":"0"
                 , "reflectionOptions":"FULL"
                 , "dataDependenceOptions":"FULL"

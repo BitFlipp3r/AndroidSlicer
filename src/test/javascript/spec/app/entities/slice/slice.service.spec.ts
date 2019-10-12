@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { take, map } from 'rxjs/operators';
 import { SliceService } from 'app/entities/slice/slice.service';
 import { ISlice, Slice } from 'app/shared/model/slice.model';
-import { CFAType } from 'app/shared/model/cfa-option.model';
+import { CFAType } from 'app/shared/model/enumerations/cfa-type.model';
 import { ReflectionOptions } from 'app/shared/model/enumerations/reflection-options.model';
 import { DataDependenceOptions } from 'app/shared/model/enumerations/data-dependence-options.model';
 import { ControlDependenceOptions } from 'app/shared/model/enumerations/control-dependence-options.model';
@@ -30,7 +30,7 @@ describe('Service Tests', () => {
         'AAAAAAA',
         ['AAAAAAA', 'AAAAAAA'],
         ['AAAAAAA', 'AAAAAAA'],
-        'AAAAAAA',
+        null,
         'AAAAAAA',
         'AAAAAAA',
         false,
@@ -79,7 +79,7 @@ describe('Service Tests', () => {
             androidClassName: 'BBBBBB',
             entryMethods: ['BBBBBB', 'BBBBBB'],
             seedStatements: ['BBBBBB', 'BBBBBB'],
-            slice: 'BBBBBB',
+            slicedClasses: null,
             log: 'BBBBBB',
             threadId: 'BBBBBB',
             running: true,

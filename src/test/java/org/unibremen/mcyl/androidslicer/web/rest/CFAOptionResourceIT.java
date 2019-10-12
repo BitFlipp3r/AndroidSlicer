@@ -36,6 +36,7 @@ import org.unibremen.mcyl.androidslicer.web.rest.errors.ExceptionTranslator;
 public class CFAOptionResourceIT {
 
     private static final CFAType DEFAULT_TYPE = CFAType.ZERO_CFA;
+    private static final CFAType UPDATED_TYPE = CFAType.ZERO_ONE_CFA;
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -95,7 +96,7 @@ public class CFAOptionResourceIT {
      */
     public static CFAOption createUpdatedEntity() {
         CFAOption cFAOption = new CFAOption()
-
+            .type(UPDATED_TYPE)
             .description(UPDATED_DESCRIPTION)
             .isDefault(UPDATED_IS_DEFAULT);
         return cFAOption;
@@ -154,6 +155,7 @@ public class CFAOptionResourceIT {
         // Update the cFAOption
         CFAOption updatedCFAOption = cFAOptionRepository.findById(cFAOption.getId()).get();
         updatedCFAOption
+            .type(UPDATED_TYPE)
             .description(UPDATED_DESCRIPTION)
             .isDefault(UPDATED_IS_DEFAULT);
 
@@ -166,6 +168,7 @@ public class CFAOptionResourceIT {
         List<CFAOption> cFAOptionList = cFAOptionRepository.findAll();
         assertThat(cFAOptionList).hasSize(databaseSizeBeforeUpdate);
         CFAOption testCFAOption = cFAOptionList.get(cFAOptionList.size() - 1);
+        //assertThat(testCFAOption.getType()).isEqualTo(UPDATED_TYPE); Type cannot be updated
         assertThat(testCFAOption.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCFAOption.getIsDefault()).isEqualTo(UPDATED_IS_DEFAULT);
     }
@@ -187,7 +190,6 @@ public class CFAOptionResourceIT {
         assertThat(cFAOptionList).hasSize(databaseSizeBeforeUpdate);
     }
 
-   
     @Test
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(CFAOption.class);

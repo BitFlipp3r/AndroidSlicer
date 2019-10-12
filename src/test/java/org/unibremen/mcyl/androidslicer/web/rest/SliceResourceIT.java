@@ -2,6 +2,7 @@ package org.unibremen.mcyl.androidslicer.web.rest;
 
 import org.unibremen.mcyl.androidslicer.AndroidSlicerApp;
 import org.unibremen.mcyl.androidslicer.domain.Slice;
+import org.unibremen.mcyl.androidslicer.domain.SlicedClass;
 import org.unibremen.mcyl.androidslicer.repository.SliceRepository;
 import org.unibremen.mcyl.androidslicer.service.SliceService;
 import org.unibremen.mcyl.androidslicer.web.rest.errors.ExceptionTranslator;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -33,27 +35,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import org.unibremen.mcyl.androidslicer.domain.enumeration.CFAType;
+
 /**
  * Integration tests for the {@link SliceResource} REST controller.
  */
 @SpringBootTest(classes = AndroidSlicerApp.class)
+@Import(TestMongoConfig.class)
 public class SliceResourceIT {
 
     private static final Integer DEFAULT_ANDROID_VERSION = 1;
 
     private static final String DEFAULT_ANDROID_CLASS_NAME = "AAAAAAAAAA";
 
-    private static final Set<String> DEFAULT_ENTRY_METHODS = new HashSet<>(Arrays.asList("AAAAAAAAAA","AAAAAAAAAA"));
+    private static final Set<String> DEFAULT_ENTRY_METHODS = new HashSet<>(Arrays.asList("AAAAAAAAAA", "BBBBBBBBB"));
 
-    private static final Set<String> DEFAULT_SEED_STATEMENTS = new HashSet<>(Arrays.asList("AAAAAAAAAA","AAAAAAAAAA"));
+    private static final Set<String> DEFAULT_SEED_STATEMENTS = new HashSet<>(Arrays.asList("AAAAAAAAAA", "BBBBBBBBBB"));
 
-    private static final String DEFAULT_SLICE = "AAAAAAAAAA";
+    private static final CFAType DEFAULT_CFA_TYPE = CFAType.ZERO_CFA;
 
-    private static final String DEFAULT_LOG = "AAAAAAAAAA";
-
-    private static final String DEFAULT_THREAD_ID = "AAAAAAAAAA";
-
-    private static final Boolean DEFAULT_RUNNING = false;
+    private static final Integer DEFAULT_CFA_LEVEL = 1;
 
     private static final ReflectionOptions DEFAULT_REFLECTION_OPTIONS = ReflectionOptions.FULL;
 
@@ -86,7 +88,7 @@ public class SliceResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SliceResource sliceResource = new SliceResource(sliceService);
+        final SliceResource sliceResource = new SliceResource(sliceService, sliceRepository);
         this.restSliceMockMvc = MockMvcBuilders.standaloneSetup(sliceResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -107,10 +109,8 @@ public class SliceResourceIT {
             .androidClassName(DEFAULT_ANDROID_CLASS_NAME)
             .entryMethods(DEFAULT_ENTRY_METHODS)
             .seedStatements(DEFAULT_SEED_STATEMENTS)
-            .slice(DEFAULT_SLICE)
-            .log(DEFAULT_LOG)
-            .threadId(DEFAULT_THREAD_ID)
-            .running(DEFAULT_RUNNING)
+            .cfaType(DEFAULT_CFA_TYPE)
+            .cfaLevel(DEFAULT_CFA_LEVEL)
             .reflectionOptions(DEFAULT_REFLECTION_OPTIONS)
             .dataDependenceOptions(DEFAULT_DATA_DEPENDENCE_OPTIONS)
             .controlDependenceOptions(DEFAULT_CONTROL_DEPENDENCE_OPTIONS);
@@ -128,7 +128,7 @@ public class SliceResourceIT {
         int databaseSizeBeforeCreate = sliceRepository.findAll().size();
 
         // Create the Slice
-        restSliceMockMvc.perform(post("/api/slice")
+        restSliceMockMvc.perform(post("/api/slices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slice)))
             .andExpect(status().isCreated());
@@ -141,10 +141,8 @@ public class SliceResourceIT {
         assertThat(testSlice.getAndroidClassName()).isEqualTo(DEFAULT_ANDROID_CLASS_NAME);
         assertThat(testSlice.getEntryMethods()).isEqualTo(DEFAULT_ENTRY_METHODS);
         assertThat(testSlice.getSeedStatements()).isEqualTo(DEFAULT_SEED_STATEMENTS);
-        assertThat(testSlice.getSlice()).isEqualTo(DEFAULT_SLICE);
-        assertThat(testSlice.getLog()).isEqualTo(DEFAULT_LOG);
-        assertThat(testSlice.getThreadId()).isEqualTo(DEFAULT_THREAD_ID);
-        assertThat(testSlice.isRunning()).isEqualTo(DEFAULT_RUNNING);
+        assertThat(testSlice.getCfaType()).isEqualTo(DEFAULT_CFA_TYPE);
+        assertThat(testSlice.getCfaLevel()).isEqualTo(DEFAULT_CFA_LEVEL);
         assertThat(testSlice.getReflectionOptions()).isEqualTo(DEFAULT_REFLECTION_OPTIONS);
         assertThat(testSlice.getDataDependenceOptions()).isEqualTo(DEFAULT_DATA_DEPENDENCE_OPTIONS);
         assertThat(testSlice.getControlDependenceOptions()).isEqualTo(DEFAULT_CONTROL_DEPENDENCE_OPTIONS);
@@ -158,7 +156,7 @@ public class SliceResourceIT {
         slice.setId("existing_id");
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restSliceMockMvc.perform(post("/api/slice")
+        restSliceMockMvc.perform(post("/api/slices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slice)))
             .andExpect(status().isBadRequest());
@@ -177,7 +175,7 @@ public class SliceResourceIT {
 
         // Create the Slice, which fails.
 
-        restSliceMockMvc.perform(post("/api/slice")
+        restSliceMockMvc.perform(post("/api/slices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slice)))
             .andExpect(status().isBadRequest());
@@ -194,7 +192,24 @@ public class SliceResourceIT {
 
         // Create the Slice, which fails.
 
-        restSliceMockMvc.perform(post("/api/slice")
+        restSliceMockMvc.perform(post("/api/slices")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(slice)))
+            .andExpect(status().isBadRequest());
+
+        List<Slice> sliceList = sliceRepository.findAll();
+        assertThat(sliceList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    public void checkCfaTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = sliceRepository.findAll().size();
+        // set the field null
+        slice.setCfaType(null);
+
+        // Create the Slice, which fails.
+
+        restSliceMockMvc.perform(post("/api/slices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slice)))
             .andExpect(status().isBadRequest());
@@ -211,7 +226,7 @@ public class SliceResourceIT {
 
         // Create the Slice, which fails.
 
-        restSliceMockMvc.perform(post("/api/slice")
+        restSliceMockMvc.perform(post("/api/slices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slice)))
             .andExpect(status().isBadRequest());
@@ -228,7 +243,7 @@ public class SliceResourceIT {
 
         // Create the Slice, which fails.
 
-        restSliceMockMvc.perform(post("/api/slice")
+        restSliceMockMvc.perform(post("/api/slices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slice)))
             .andExpect(status().isBadRequest());
@@ -245,7 +260,7 @@ public class SliceResourceIT {
 
         // Create the Slice, which fails.
 
-        restSliceMockMvc.perform(post("/api/slice")
+        restSliceMockMvc.perform(post("/api/slices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(slice)))
             .andExpect(status().isBadRequest());
@@ -260,18 +275,14 @@ public class SliceResourceIT {
         sliceRepository.save(slice);
 
         // Get all the sliceList
-        restSliceMockMvc.perform(get("/api/slice?sort=id,desc"))
+        restSliceMockMvc.perform(get("/api/slices?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(slice.getId())))
             .andExpect(jsonPath("$.[*].androidVersion").value(hasItem(DEFAULT_ANDROID_VERSION)))
             .andExpect(jsonPath("$.[*].androidClassName").value(hasItem(DEFAULT_ANDROID_CLASS_NAME)))
-            .andExpect(jsonPath("$.[*].entryMethods").value(hasItem(DEFAULT_ENTRY_METHODS.toString())))
-            .andExpect(jsonPath("$.[*].seedStatements").value(hasItem(DEFAULT_SEED_STATEMENTS.toString())))
-            .andExpect(jsonPath("$.[*].slice").value(hasItem(DEFAULT_SLICE.toString())))
-            .andExpect(jsonPath("$.[*].log").value(hasItem(DEFAULT_LOG.toString())))
-            .andExpect(jsonPath("$.[*].threadId").value(hasItem(DEFAULT_THREAD_ID)))
-            .andExpect(jsonPath("$.[*].running").value(hasItem(DEFAULT_RUNNING.booleanValue())))
+            .andExpect(jsonPath("$.[*].cfaType").value(hasItem(DEFAULT_CFA_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].cfaLevel").value(hasItem(DEFAULT_CFA_LEVEL)))
             .andExpect(jsonPath("$.[*].reflectionOptions").value(hasItem(DEFAULT_REFLECTION_OPTIONS.toString())))
             .andExpect(jsonPath("$.[*].dataDependenceOptions").value(hasItem(DEFAULT_DATA_DEPENDENCE_OPTIONS.toString())))
             .andExpect(jsonPath("$.[*].controlDependenceOptions").value(hasItem(DEFAULT_CONTROL_DEPENDENCE_OPTIONS.toString())));
@@ -283,18 +294,14 @@ public class SliceResourceIT {
         sliceRepository.save(slice);
 
         // Get the slice
-        restSliceMockMvc.perform(get("/api/slice/{id}", slice.getId()))
+        System.out.println(slice.getId());
+        restSliceMockMvc.perform(get("/api/slices/{id}", slice.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(slice.getId()))
             .andExpect(jsonPath("$.androidVersion").value(DEFAULT_ANDROID_VERSION))
-            .andExpect(jsonPath("$.androidClassName").value(DEFAULT_ANDROID_CLASS_NAME))
-            .andExpect(jsonPath("$.entryMethods").value(DEFAULT_ENTRY_METHODS.toString()))
-            .andExpect(jsonPath("$.seedStatements").value(DEFAULT_SEED_STATEMENTS.toString()))
-            .andExpect(jsonPath("$.slice").value(DEFAULT_SLICE.toString()))
-            .andExpect(jsonPath("$.log").value(DEFAULT_LOG.toString()))
-            .andExpect(jsonPath("$.threadId").value(DEFAULT_THREAD_ID))
-            .andExpect(jsonPath("$.running").value(DEFAULT_RUNNING.booleanValue()))
+            .andExpect(jsonPath("$.cfaType").value(DEFAULT_CFA_TYPE.toString()))
+            .andExpect(jsonPath("$.cfaLevel").value(DEFAULT_CFA_LEVEL))
             .andExpect(jsonPath("$.reflectionOptions").value(DEFAULT_REFLECTION_OPTIONS.toString()))
             .andExpect(jsonPath("$.dataDependenceOptions").value(DEFAULT_DATA_DEPENDENCE_OPTIONS.toString()))
             .andExpect(jsonPath("$.controlDependenceOptions").value(DEFAULT_CONTROL_DEPENDENCE_OPTIONS.toString()));
@@ -303,19 +310,19 @@ public class SliceResourceIT {
     @Test
     public void getNonExistingSlice() throws Exception {
         // Get the slice
-        restSliceMockMvc.perform(get("/api/slice/{id}", Long.MAX_VALUE))
+        restSliceMockMvc.perform(get("/api/slices/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
     @Test
     public void deleteSlice() throws Exception {
         // Initialize the database
-        sliceService.save(slice);
+        sliceRepository.save(slice);
 
         int databaseSizeBeforeDelete = sliceRepository.findAll().size();
 
         // Delete the slice
-        restSliceMockMvc.perform(delete("/api/slice/{id}", slice.getId())
+        restSliceMockMvc.perform(delete("/api/slices/{id}", slice.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 

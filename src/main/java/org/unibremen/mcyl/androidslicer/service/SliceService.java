@@ -120,7 +120,7 @@ public class SliceService {
                     slice.getEntryMethods(), 
                     slice.getSeedStatements(),
                     slice.getCfaType(),
-                    slice.getcfaLevel(),
+                    slice.getCfaLevel(),
                     slice.getReflectionOptions(), 
                     slice.getDataDependenceOptions(),
                     slice.getControlDependenceOptions(), 

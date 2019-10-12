@@ -36,7 +36,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: elemDefault });
       });
 
-      it('should update a SlicerSetting', async () => {
+      it('should update a SlicerSetting', () => {
         const returnedFromService = Object.assign(
           {
             key: 'BBBBBB',

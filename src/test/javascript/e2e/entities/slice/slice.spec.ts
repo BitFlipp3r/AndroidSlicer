@@ -1,16 +1,22 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { SliceComponentsPage, SliceDeleteDialog, SliceMakePage } from './slice.page-object';
+import * as path from 'path';
 
 const expect = chai.expect;
 
 describe('Slice e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let sliceMakePage: SliceMakePage;
   let sliceComponentsPage: SliceComponentsPage;
+  let sliceMakePage: SliceMakePage;
   let sliceDeleteDialog: SliceDeleteDialog;
+  const fileNameToUpload = 'logo-jhipster.png';
+  const fileToUpload = '../../../../../../src/main/webapp/content/images/' + fileNameToUpload;
+  const absolutePath = path.resolve(__dirname, fileToUpload);
 
   before(async () => {
     await browser.get('/');
@@ -43,11 +49,8 @@ describe('Slice e2e test', () => {
       sliceMakePage.setAndroidClassNameInput('androidClassName'),
       sliceMakePage.setEntryMethodsInput('entryMethods'),
       sliceMakePage.setSeedStatementsInput('seedStatements'),
-      sliceMakePage.setSliceInput('slice'),
-      sliceMakePage.setLogInput('log'),
-      sliceMakePage.setThreadIdInput('threadId'),
       sliceMakePage.cfaTypeSelectLastOption(),
-      sliceMakePage.setcfaLevelInput('5'),
+      sliceMakePage.setCfaLevelInput('5'),
       sliceMakePage.reflectionOptionsSelectLastOption(),
       sliceMakePage.dataDependenceOptionsSelectLastOption(),
       sliceMakePage.controlDependenceOptionsSelectLastOption()
@@ -62,18 +65,7 @@ describe('Slice e2e test', () => {
       'seedStatements',
       'Expected SeedStatements value to be equals to seedStatements'
     );
-    expect(await sliceMakePage.getSliceInput()).to.eq('slice', 'Expected Slice value to be equals to slice');
-    expect(await sliceMakePage.getLogInput()).to.eq('log', 'Expected Log value to be equals to log');
-    expect(await sliceMakePage.getThreadIdInput()).to.eq('threadId', 'Expected ThreadId value to be equals to threadId');
-    const selectedRunning = sliceMakePage.getRunningInput();
-    if (await selectedRunning.isSelected()) {
-      await sliceMakePage.getRunningInput().click();
-      expect(await sliceMakePage.getRunningInput().isSelected(), 'Expected running not to be selected').to.be.false;
-    } else {
-      await sliceMakePage.getRunningInput().click();
-      expect(await sliceMakePage.getRunningInput().isSelected(), 'Expected running to be selected').to.be.true;
-    }
-    expect(await sliceMakePage.getcfaLevelInput()).to.eq('5', 'Expected cfaLevel value to be equals to 5');
+    expect(await sliceMakePage.getCfaLevelInput()).to.eq('5', 'Expected cfaLevel value to be equals to 5');
     await sliceMakePage.save();
     expect(await sliceMakePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

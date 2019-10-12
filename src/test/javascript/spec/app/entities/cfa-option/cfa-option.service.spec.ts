@@ -1,11 +1,9 @@
-/* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { CFAOptionService } from 'app/entities/cfa-option/cfa-option.service';
-import { ICFAOption, CFAOption, CFAType } from 'app/shared/model/cfa-option.model';
+import { ICFAOption, CFAOption } from 'app/shared/model/cfa-option.model';
+import { CFAType } from 'app/shared/model/enumerations/cfa-type.model';
 
 describe('Service Tests', () => {
   describe('CFAOption Service', () => {
@@ -27,7 +25,7 @@ describe('Service Tests', () => {
     });
 
     describe('Service methods', () => {
-      it('should find an element', async () => {
+      it('should find an element', () => {
         const returnedFromService = Object.assign({}, elemDefault);
         service
           .find('123')
@@ -39,7 +37,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: elemDefault });
       });
 
-      it('should update a CFAOption', async () => {
+      it('should update a CFAOption', () => {
         const returnedFromService = Object.assign(
           {
             type: 'BBBBBB',
@@ -59,7 +57,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: expected });
       });
 
-      it('should return a list of CFAOption', async () => {
+      it('should return a list of CFAOption', () => {
         const returnedFromService = Object.assign(
           {
             type: 'BBBBBB',

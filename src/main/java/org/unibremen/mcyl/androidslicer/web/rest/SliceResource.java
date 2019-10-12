@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,9 +26,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.unibremen.mcyl.androidslicer.config.Constants;
 import org.unibremen.mcyl.androidslicer.domain.Slice;
-import org.unibremen.mcyl.androidslicer.domain.SlicerSetting;
 import org.unibremen.mcyl.androidslicer.repository.SliceRepository;
 import org.unibremen.mcyl.androidslicer.service.SliceService;
 import org.unibremen.mcyl.androidslicer.web.rest.errors.BadRequestAlertException;
@@ -129,12 +128,20 @@ public class SliceResource {
         log.debug("REST request to delete Slice : {}", id);
         if (id != null && !id.isEmpty()) {
             Slice slice = sliceRepository.findById(id).get();
-            Thread slicerThread = Thread.getAllStackTraces().keySet().stream()
-                    .filter(thread -> thread.getName().equals(slice.getThreadId())).findFirst().orElse(null);
-            if (slicerThread != null && slicerThread.isAlive()) {
-                slicerThread.interrupt();
+
+            // stop any running thread first
+            String threadID = slice.getThreadId();
+                if (threadID != null && !threadID.isEmpty()){
+                Thread slicerThread = Thread.getAllStackTraces().keySet().stream()
+                        .filter(thread -> thread.getName().equals(slice.getThreadId())).findFirst().orElse(null);
+                if (slicerThread != null && slicerThread.isAlive()) {
+                    slicerThread.interrupt();
+                }
             }
+
+            // delete slice
             sliceRepository.deleteById(id);
+
         }
         return ResponseEntity.noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();

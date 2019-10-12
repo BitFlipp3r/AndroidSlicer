@@ -1,8 +1,7 @@
-import { CFAType } from './cfa-option.model';
-
 import { ReflectionOptions } from 'app/shared/model/enumerations/reflection-options.model';
 import { DataDependenceOptions } from 'app/shared/model/enumerations/data-dependence-options.model';
 import { ControlDependenceOptions } from 'app/shared/model/enumerations/control-dependence-options.model';
+import { CFAType } from './enumerations/cfa-type.model';
 
 export interface ISlicedClass {
   className?: string;

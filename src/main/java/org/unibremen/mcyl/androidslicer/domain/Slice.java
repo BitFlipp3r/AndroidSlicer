@@ -221,7 +221,7 @@ public class Slice implements Serializable {
         this.cfaType = cfaType;
     }
 
-    public Integer getcfaLevel() {
+    public Integer getCfaLevel() {
         return cfaLevel;
     }
 
@@ -298,7 +298,7 @@ public class Slice implements Serializable {
             ", threadId='" + getThreadId() + "'" +
             ", running='" + isRunning() + "'" +
             ", cfaType='" + getCfaType() + "'" +
-            ", cfaLevel=" + getcfaLevel() +
+            ", cfaLevel=" + getCfaLevel() +
             ", reflectionOptions='" + getReflectionOptions() + "'" +
             ", dataDependenceOptions='" + getDataDependenceOptions() + "'" +
             ", controlDependenceOptions='" + getControlDependenceOptions() + "'" +
