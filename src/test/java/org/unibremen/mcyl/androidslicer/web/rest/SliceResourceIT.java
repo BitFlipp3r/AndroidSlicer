@@ -294,7 +294,6 @@ public class SliceResourceIT {
         sliceRepository.save(slice);
 
         // Get the slice
-        System.out.println(slice.getId());
         restSliceMockMvc.perform(get("/api/slices/{id}", slice.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))

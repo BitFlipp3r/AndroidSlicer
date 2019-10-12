@@ -4,7 +4,6 @@ import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { SliceComponentsPage, SliceDeleteDialog, SliceMakePage } from './slice.page-object';
-import * as path from 'path';
 
 const expect = chai.expect;
 
@@ -14,9 +13,6 @@ describe('Slice e2e test', () => {
   let sliceComponentsPage: SliceComponentsPage;
   let sliceMakePage: SliceMakePage;
   let sliceDeleteDialog: SliceDeleteDialog;
-  const fileNameToUpload = 'logo-jhipster.png';
-  const fileToUpload = '../../../../../../src/main/webapp/content/images/' + fileNameToUpload;
-  const absolutePath = path.resolve(__dirname, fileToUpload);
 
   before(async () => {
     await browser.get('/');
@@ -83,7 +79,7 @@ describe('Slice e2e test', () => {
     expect(await sliceComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
   });
 
-  after(async () => {
-    await navBarPage.autoSignOut();
-  });
+  // after(async () => {
+  //   await navBarPage.autoSignOut();
+  // });
 });

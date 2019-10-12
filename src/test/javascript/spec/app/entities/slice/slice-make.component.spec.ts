@@ -41,10 +41,10 @@ describe('Component Tests', () => {
 
         comp.createForm.get(['androidVersion']).patchValue('8');
         comp.createForm.get(['androidClassName']).patchValue('Lcom/android/server/AlarmManagerService');
-        comp.createForm.get(['entryMethods']).patchValue(['set', 'setTime']);
-        comp.createForm.get(['seedStatements']).patchValue(['checkPermission', 'enforcePermisson']);
+        comp.createForm.get(['entryMethods']).patchValue([]);
+        comp.createForm.get(['seedStatements']).patchValue([]);
         comp.createForm.get(['cfaOptions']).patchValue(CFAType.ZERO_CONTAINER_CFA);
-        comp.createForm.get(['cfaLevel']).patchValue(null);
+        comp.createForm.get(['cfaLevel']).patchValue(undefined);
         comp.createForm.get(['reflectionOptions']).patchValue(ReflectionOptions.FULL);
         comp.createForm.get(['dataDependenceOptions']).patchValue(DataDependenceOptions.FULL);
         comp.createForm.get(['controlDependenceOptions']).patchValue(ControlDependenceOptions.FULL);
