@@ -1,9 +1,8 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
-import { AndroidSlicerSharedModule } from 'app/shared';
-import { CFAOptionComponent, CFAOptionDetailComponent, CFAOptionUpdateComponent, cFAOptionRoute } from './';
+import { AndroidSlicerSharedModule } from 'app/shared/shared.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { CFAOptionComponent, CFAOptionDetailComponent, cFAOptionRoute, CFAOptionUpdateComponent } from './';
 
 const ENTITY_STATES = [...cFAOptionRoute];
 

@@ -72,7 +72,7 @@ class SlicerOptionGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "type":"ReflectionOptions"
+                , "type":"REFLECTION_OPTION"
                 , "key":"SAMPLE_TEXT"
                 , "description":null
                 , "isDefault":null

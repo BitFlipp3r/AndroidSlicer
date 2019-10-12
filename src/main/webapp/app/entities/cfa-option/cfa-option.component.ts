@@ -1,14 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
-
+import { AccountService } from 'app/core/auth/account.service';
+import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { ICFAOption } from 'app/shared/model/cfa-option.model';
-import { AccountService } from 'app/core';
-
-import { ITEMS_PER_PAGE } from 'app/shared';
+import { JhiAlertService, JhiDataUtils, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { Subscription } from 'rxjs';
 import { CFAOptionService } from './cfa-option.service';
 
 @Component({
@@ -94,7 +91,7 @@ export class CFAOptionComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().then(account => {
+    this.accountService.identity().subscribe(account => {
       this.currentAccount = account;
     });
     this.registerChangeInCFAOptions();

@@ -1,18 +1,16 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { JhiDataUtils, JhiAlertService } from 'ng-jhipster';
-
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ISlice } from 'app/shared/model/slice.model';
+import { AndroidOptionsService } from 'app/shared/services/android-options.service';
+import { saveAs } from 'file-saver';
+import * as JSZip from 'jszip';
+import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
+import { DiffEditorModel } from 'ngx-monaco-editor';
+import { MenuItem } from 'primeng/api';
 import { interval } from 'rxjs';
 import { startWith, switchMap, takeWhile } from 'rxjs/operators';
-import { SliceService } from '.';
-import { AndroidOptionsService } from 'app/shared/services/android-options.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { DiffEditorModel } from 'ngx-monaco-editor';
-
-import { MenuItem } from 'primeng/api';
-import * as JSZip from 'jszip';
-import { saveAs } from 'file-saver';
+import { SliceService } from './slice.service';
 
 @Component({
   selector: 'jhi-slice-detail',
@@ -207,7 +205,6 @@ export class SliceDetailComponent implements OnInit {
       .openIDE(this.slice.id)
       .subscribe(
         (res: any) => {
-          console.log(res.body);
           const win = window.open(res.body, '_blank');
           win.focus();
         },

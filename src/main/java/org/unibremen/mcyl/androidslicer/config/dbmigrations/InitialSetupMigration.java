@@ -67,13 +67,13 @@ public class InitialSetupMigration {
         SlicerSetting codeServerDir = new SlicerSetting();
         codeServerDir.setKey(Constants.CODE_SERVER_DIR_KEY);
         codeServerDir.setValue("code-server");
-        codeServerDir.setDescription("");
+        codeServerDir.setDescription("Path to the code server binaries. Should contain three subfolders named `win`, `lin` and `mac` for the corresponding platforms.");
         mongoTemplate.save(codeServerDir);
 
         SlicerSetting codeServerPort = new SlicerSetting();
         codeServerPort.setKey(Constants.CODE_SERVER_PORT_KEY);
         codeServerPort.setValue("8081");
-        codeServerPort.setDescription("");
+        codeServerPort.setDescription("Starting port of the code server IDE.");
         mongoTemplate.save(codeServerPort);
 
         SlicerSetting exclusionList = new SlicerSetting();
@@ -81,9 +81,6 @@ public class InitialSetupMigration {
         StringBuilder result = new StringBuilder("");
 
         // Get file from resources folder
-        // ClassLoader classLoader = getClass().getClassLoader();
-        // File file = new
-        // File(classLoader.getResource("wala/ExclusionFile.txt").getFile());
         InputStream inputStream = null;
         try {
             ClassPathResource classPathResource = new ClassPathResource("wala/ExclusionFile.txt");

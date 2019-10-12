@@ -15,7 +15,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
         {
           path: 'admin',
           data: {
-            authorities: ['ROLE_ADMIN']
+            //authorities: ['ROLE_ADMIN'] // uncomment to enable authentication
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule)

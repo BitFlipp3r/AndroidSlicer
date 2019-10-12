@@ -1,5 +1,5 @@
 export const enum SlicerOptionType {
-  ReflectionOption = 'ReflectionOption',
-  DataDependenceOption = 'DataDependenceOption',
-  ControlDependenceOption = 'ControlDependenceOption'
+  REFLECTION_OPTION = 'REFLECTION_OPTION',
+  DATA_DEPENDENCE_OPTION = 'DATA_DEPENDENCE_OPTION',
+  CONTROL_DEPENDENCE_OPTION = 'CONTROL_DEPENDENCE_OPTION'
 }

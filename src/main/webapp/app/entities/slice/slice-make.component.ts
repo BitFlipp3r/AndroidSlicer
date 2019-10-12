@@ -1,19 +1,23 @@
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
-import { ISlice, Slice, ReflectionOptions, DataDependenceOptions, ControlDependenceOptions } from 'app/shared/model/slice.model';
-import { SliceService } from './slice.service';
-import { ISlicerOption, SlicerOptionType } from 'app/shared/model/slicer-option.model';
-import { SlicerOptionService } from 'app/entities/slicer-option';
-import { IAndroidVersion } from 'app/shared/model/android-version.model';
-import { IAndroidClass, AndroidClass } from 'app/shared/model/android-class.model';
-import { AndroidOptionsService } from 'app/shared/services/android-options.service';
-import { SelectItem } from 'primeng/components/common/selectitem';
-import { ICFAOption, CFAType } from 'app/shared/model/cfa-option.model';
 import { CFAOptionService } from 'app/entities/cfa-option';
+import { IAndroidClass } from 'app/shared/model/android-class.model';
+import { IAndroidVersion } from 'app/shared/model/android-version.model';
+import { CFAType, ICFAOption } from 'app/shared/model/cfa-option.model';
+import { ControlDependenceOptions } from 'app/shared/model/enumerations/control-dependence-options.model';
+import { DataDependenceOptions } from 'app/shared/model/enumerations/data-dependence-options.model';
+import { ReflectionOptions } from 'app/shared/model/enumerations/reflection-options.model';
+import { SlicerOptionType } from 'app/shared/model/enumerations/slicer-option-type.model';
+import { ISlice, Slice } from 'app/shared/model/slice.model';
+import { ISlicerOption } from 'app/shared/model/slicer-option.model';
+import { AndroidOptionsService } from 'app/shared/services/android-options.service';
+import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
+import { SelectItem } from 'primeng/components/common/selectitem';
+import { Observable } from 'rxjs';
+import { SlicerOptionService } from '../slicer-option/slicer-option.service';
+import { SliceService } from './slice.service';
 
 @Component({
   selector: 'jhi-slice-make',
@@ -277,7 +281,7 @@ export class SliceMakeComponent implements OnInit {
 
   private addMultiSelectOption(event, options, selectedOptions) {
     if (event.key === 'Enter') {
-      const tokenInput = event.srcElement || (event.target as any);
+      const tokenInput = event.srcElement || event.target;
       if (tokenInput.value) {
         // add value to available options
         if (!options.includes(tokenInput.value)) {

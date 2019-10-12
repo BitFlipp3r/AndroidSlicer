@@ -2,8 +2,11 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { take, map } from 'rxjs/operators';
 import { SliceService } from 'app/entities/slice/slice.service';
-import { ISlice, Slice, ReflectionOptions, DataDependenceOptions, ControlDependenceOptions } from 'app/shared/model/slice.model';
+import { ISlice, Slice } from 'app/shared/model/slice.model';
 import { CFAType } from 'app/shared/model/cfa-option.model';
+import { ReflectionOptions } from 'app/shared/model/enumerations/reflection-options.model';
+import { DataDependenceOptions } from 'app/shared/model/enumerations/data-dependence-options.model';
+import { ControlDependenceOptions } from 'app/shared/model/enumerations/control-dependence-options.model';
 
 describe('Service Tests', () => {
   describe('Slice Service', () => {

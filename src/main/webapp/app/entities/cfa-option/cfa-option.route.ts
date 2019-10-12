@@ -1,16 +1,15 @@
-import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
-import { UserRouteAccessService } from 'app/core';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Routes } from '@angular/router';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
+import { CFAOption, ICFAOption } from 'app/shared/model/cfa-option.model';
+import { JhiResolvePagingParams } from 'ng-jhipster';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { CFAOption } from 'app/shared/model/cfa-option.model';
-import { CFAOptionService } from './cfa-option.service';
-import { CFAOptionComponent } from './cfa-option.component';
 import { CFAOptionDetailComponent } from './cfa-option-detail.component';
 import { CFAOptionUpdateComponent } from './cfa-option-update.component';
-import { ICFAOption } from 'app/shared/model/cfa-option.model';
+import { CFAOptionComponent } from './cfa-option.component';
+import { CFAOptionService } from './cfa-option.service';
 
 @Injectable({ providedIn: 'root' })
 export class CFAOptionResolve implements Resolve<ICFAOption> {
