@@ -233,7 +233,7 @@ public class InitialSetupMigration {
         dataDependenceOptions_NO_BASE_PTRS.setType(SlicerOptionType.DATA_DEPENDENCE_OPTION);
         dataDependenceOptions_NO_BASE_PTRS.setKey("NO_BASE_PTRS");
         dataDependenceOptions_NO_BASE_PTRS.setDescription(
-                "Ignore data dependence edges that define base pointers for indirect memory access. Base pointers are more commonly known as 'frame pointers' which point to the location where the stack pointer was, just before a method call moved the stack pointer to the methods own local variables. This is mostly relevant for forward slicing algorithms. WALA gives the example of not tracking forward dependencies from definitions (i.e. set instrustions) of x to y=x.f ");
+                "Ignore flow dependences due to the use of a pointer in a field dereference (e.g. y = x.f or p.f = q).");
         dataDependenceOptions_NO_BASE_PTRS.setIsDefault(false);
         mongoTemplate.save(dataDependenceOptions_NO_BASE_PTRS);
 
