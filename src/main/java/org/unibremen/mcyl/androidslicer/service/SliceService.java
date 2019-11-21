@@ -299,7 +299,7 @@ public class SliceService {
                 if(vsCodeServerProcess == null){
                     String dataDir = vsCodeBinaryPathSetting.getValue() + File.separator + osPath + File.separator;
                     String installCommand = vsCodeBinary.getAbsolutePath() + " --install-extension=redhat.java --user-data-dir=" + dataDir;
-                    String startCommand = vsCodeBinary.getAbsolutePath() + " --port=" + vsCodePortSetting.getValue() + " --no-auth --allow-http --disable-telemetry --user-data-dir=" + dataDir;
+                    String startCommand = vsCodeBinary.getAbsolutePath() + " --port=" + vsCodePortSetting.getValue() + " --auth none --allow-http --disable-telemetry --user-data-dir=" + dataDir;
 
                     // install java extension for vs code (see https://marketplace.visualstudio.com/items?itemName=redhat.java)
                     System.out.println("Running: " + installCommand);
