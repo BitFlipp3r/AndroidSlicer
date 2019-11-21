@@ -308,6 +308,9 @@ public class SliceService {
                     // start server
                     System.out.println("Running: " + startCommand);
                     vsCodeServerProcess = Runtime.getRuntime().exec(startCommand);
+
+                    // allow code server to fully start
+                    Thread.sleep(3000);
                 }
 
                 return "http://" + hostname + ":" + vsCodePortSetting.getValue().toString() +"/?folder=" + outputDirectory.getAbsolutePath();
